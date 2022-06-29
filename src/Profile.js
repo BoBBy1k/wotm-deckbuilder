@@ -1,6 +1,4 @@
-import React from 'react'
-import {useState,} from 'react'
-import {flushSync} from 'react-dom'
+import React, {useState} from 'react'
 import DisplayProfiles from './DisplayProfiles.js'
 import DisplayTanks from './DisplayTanks.js'
 import DisplayCards from './DisplayCards.js'

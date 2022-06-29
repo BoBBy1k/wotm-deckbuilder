@@ -27,6 +27,7 @@ function DisplayTanks(props) {
             {/* {wave: 0, nation: "Germany", name: "PZ KPFW IV AUSF H",  type: "Medium",  cost: 35, firepower: 4, survivability: 1, mobility: 2, initiative: 5, hp : 4, criticalHP: 1, special:null, crew:"commander, gunner, driver, radio, loader"}, */}
             <p>Tank Crew Cards Attached</p>
             <p>Other Attached Cards</p>
+            <div>Tanks</div>
             {ListTanks.map((tank, index)=>{
               if (props.currentSelectedTankCard.name === tank.name) {
                 return <button className="currentDeckTankListItem-change-selected" key={index} onClick={(e)=>{props.handleTankChange(e,tank.name)}}>{tank.name}</button>
