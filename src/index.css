@@ -76,6 +76,16 @@ code {
   cursor: pointer;
 }
 
+.bi-arrow-left-square:hover {
+  color: red;
+}
+
+.bi-arrow-right-square:hover {
+  color: red;
+}
+
+
+
 .currentDeckTankList {
   border: 5px solid black;
   height: 220px;

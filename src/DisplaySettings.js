@@ -1,36 +1,55 @@
 import React, {useState } from 'react'
 
 function DisplaySettings (props) {
-    //State that holds if the settings cog is highlighted
+  //State that holds the current settings cog icon (toggles when hovered)
   const [settingsIcon, setSettingsIcon]=useState("bi bi-gear");
-  //State that holds if the settings cog is clicked
+  //State of the settings cog highlighting (changes when active)
   const [settingsIconHighlight, setSettingsIconHighlight]=useState({color: ""});
+    //State of the settings cog highlighting (changes when active)
+  const [settingsArrowHighlight, setSettingsArrowHighlight]=useState({color: ""});
 
     //Handle Settings Modal
-    //This entire thing needs to be looked over
-    const handleSettingsClick = (e) => {
-      e.preventDefault();
-      console.log(e.target)
-      setSettingsIconHighlight( {color: "red"} )
-      // Get the modal
-      var settingsModal = document.getElementById("settings-modal");
-      // Get the <span> element that closes the modal
-      var settingsClose = document.getElementsByClassName("settings-modal-close")[0];
-      // When the user clicks on the button, open the modal
-      settingsModal.style.display = "block";
-      // When the user clicks on <span> (x), close the modal
-      settingsClose.onclick = function() {
+  const handleSettingsClick = (e) => {
+    setSettingsIconHighlight( {color: "red"} )
+    // Get the modal
+    var settingsModal = document.getElementById("settings-modal");
+    // Opens the modal
+    settingsModal.style.display = "block";
+    // Close the modal when X is clicked
+    document.getElementsByClassName("settings-modal-close")[0].onclick = function() {
+      settingsModal.style.display = "none";
+      setSettingsIconHighlight( {color: ""} )
+    }
+    // Close the modal when mouse clicks outside the box
+    window.onclick = function(e){
+      if (e.target == settingsModal) {
         settingsModal.style.display = "none";
         setSettingsIconHighlight( {color: ""} )
       }
-      // When the user clicks anywhere outside of the modal, close it
-      window.onclick = function(e){
-        if (e.target == settingsModal) {
-          settingsModal.style.display = "none";
-          setSettingsIconHighlight( {color: ""} )
-        }
-      }
     }
+  }
+  //Subtracts from the total cards available
+  const handleArrowMinus =(e) => {
+    let target=e.target.parentElement.attributes.pack.nodeValue;
+    let value=props.settingsAvailableDecks[target];
+    if (value !== 0) {value--}
+    props.setSettingsAvailableDecks((prevState)=> ({
+      ...prevState,
+        [target]: value
+      })
+    )
+  }
+
+  //Adds to the total cards available
+  const handleArrowPlus = (e) => {
+    let target=e.target.parentElement.attributes.pack.nodeValue;
+    let value=props.settingsAvailableDecks[target];
+    props.setSettingsAvailableDecks((prevState)=> ({
+      ...prevState,
+        [target]: value++
+      })
+    )
+  }
 
   return (
     <span>
@@ -47,8 +66,20 @@ function DisplaySettings (props) {
             <p>This Settings Modal</p>
             <p>Exp Pack Filters</p>
             {/* Needs flex box columns and < and > for incrementing */}
-            {Object.entries(props.settingsAvailableDecks).map( ([pack, count], index, array) => { return <div className="" key={index}>{pack + " " + count}  </div> } ) }
-            {/* Adds  */}
+            {/* (TODO: Edge case for starter's 4 cards "PZ KPFW IV AUSF H": 0, "T-34": 0, "M4A1 Sherman": 0, "Cromwell": 0) */}
+            {Object.entries(props.settingsAvailableDecks).map( ([pack, count], index) =>
+                { return (
+                  <div className="" key={index} pack={pack}>
+                     { pack + " "}
+                     <i class="bi bi-arrow-left-square" onClick={handleArrowMinus}></i>
+                     {" " + count + " "}
+                     <i class="bi bi-arrow-right-square" onClick={handleArrowPlus}></i>
+                  </div>
+                  )
+                }
+              )
+            }
+            {/* Something here? I forget what  */}
             <p>Misc Settings</p>
           </div>
         </div>
