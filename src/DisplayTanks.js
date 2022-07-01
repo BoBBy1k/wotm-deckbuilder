@@ -2,7 +2,8 @@ import React, {useState } from 'react'
 import ListTanks from './ListTanks.js'
 
 function DisplayTanks(props) {
-
+  //Initialize tankCrew variable for incase props.display.crew is empty breaking later mapping function
+  let tankCrew = props.display.crew ? tankCrew = props.display.crew : tankCrew=[]
   return (
     <div className="currentDeckTankList">
         {/* <!-- The Modal --> */}
@@ -16,24 +17,48 @@ function DisplayTanks(props) {
             <span>{props.display.nation + " "}</span>
             <span>{props.display.type}</span>
             <span>{" Wave: " + props.display.wave}</span>
-            <div>{"Firepower: " + props.display.firepower}</div>
-            <div>{"Survivability: " +props.display.survivability}</div>
-            <div>{"Mobility: " + props.display.mobility}</div>
-            <div>{"Initiative: " + props.display.initiative}</div>
-            <div>{"HP: " + props.display.hp}</div>
-            <div>{"Critical HP: " + props.display.criticalHP}</div>
+            <div></div>
+            <span>{"Firepower: " + props.display.firepower}</span>
+            <span>{" Survivability: " + props.display.survivability}</span>
+            <span>{" Mobility: " + props.display.mobility}</span>
+            <span>{" Initiative: " + props.display.initiative}</span>
+            <div></div>
+            <span>{"HP / Critical HP: " + props.display.hp}</span>
+            <span>{" / " + props.display.criticalHP}</span>
             <div>{"Special Traits: " + props.display.special}</div>
-            <div>{"Crew: " + props.display.crew}</div>
-            {/* {wave: 0, nation: "Germany", name: "PZ KPFW IV AUSF H",  type: "Medium",  cost: 35, firepower: 4, survivability: 1, mobility: 2, initiative: 5, hp : 4, criticalHP: 1, special:null, crew:"commander, gunner, driver, radio, loader"}, */}
-            <p>Tank Crew Cards Attached</p>
-            <p>Other Attached Cards</p>
-            <div>Tanks</div>
-            {ListTanks.map((tank, index)=>{
+            {/* TODO: Componentize */}
+            {/* Changes current Tank's Crew Cards */}
+            <div>Crew Slots</div>
+            <div>{tankCrew.map( (crew)=> {return <button>{crew}</button>})}</div>
+            {/* Changes Current Tank's attached Cards */}
+            {/* TODO: Componentize */}
+            <div>Equipment / Consumables</div>
+            {/* Changes Current Selected Tank */}
+            {/* TODO: Componentize */}
+            <div>Change Tanks</div>
+            {ListTanks.map((tank, index, array)=>{
+              //Create new line if array[index] is larger than array[index-1] but not if array[index] === 0
               if (props.currentSelectedTankCard.name === tank.name) {
-                return <button className="currentDeckTankListItem-change-selected" key={index} onClick={(e)=>{props.handleTankChange(e,tank.name)}}>{tank.name}</button>
+                if(index === 0) {
+                  return <><button className="currentDeckTankListItem-change-selected" key={index} onClick={(e)=>{props.handleTankChange(e,tank.name)}}>{tank.name}</button><div>{""}</div></>
+                }
+                if (array[index].wave > array[index-1].wave) {
+                  return <><div>{""}</div><button className="currentDeckTankListItem-change-selected" key={index} onClick={(e)=>{props.handleTankChange(e,tank.name)}}>{tank.name}</button></>
+                }
+                else {
+                  return <button className="currentDeckTankListItem-change-selected" key={index} onClick={(e)=>{props.handleTankChange(e,tank.name)}}>{tank.name}</button>
+                }
               }
               else {
-                return <button className="currentDeckTankListItem-change" key={index} onClick={(e)=>{props.handleTankChange(e,tank.name)}}>{tank.name}</button>
+                if(index === 0) {
+                  return <><button className="currentDeckTankListItem-change" key={index} onClick={(e)=>{props.handleTankChange(e,tank.name)}}>{tank.name}</button><div>{""}</div></>
+                }
+                if (array[index].wave > array[index-1].wave) {
+                  return <><div>{""}</div><button className="currentDeckTankListItem-change" key={index} onClick={(e)=>{props.handleTankChange(e,tank.name)}}>{tank.name}</button></>
+                }
+                else {
+                  return <button className="currentDeckTankListItem-change" key={index} onClick={(e)=>{props.handleTankChange(e,tank.name)}}>{tank.name}</button>
+                }
               }
             })
             }

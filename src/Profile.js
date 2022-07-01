@@ -3,37 +3,36 @@ import DisplayProfiles from './DisplayProfiles.js'
 import DisplayTanks from './DisplayTanks.js'
 import DisplayCards from './DisplayCards.js'
 import ListTanks from './ListTanks.js'
+import DisplaySettings from './DisplaySettings.js'
 
 function Profile() {
-  //State that holds profiles
+  //State that holds saved profiles
   const [savedProfiles, setSavedProfiles]=useState([])
   //State that keeps track of used IDs for new profiles
   const [usedProfileId, setUsedProfileId]=useState(1)
   //State that keeps track of the current profile being operated on
   const [currentProfile, setCurrentProfile]=useState(0);
-  //State that keeps track of the profile selected in the profile display box
+  //State that keeps track of the profile selected in the profile display box (For CRUD)
   const [currentSelectedProfile, setCurrentSelectedProfile]=useState(0);
-  //State that holds the name of the current profile
+  //State that holds the name of the current profile (TODO: Probably dont need this one)
   const [profileName, setProfileName]=useState("Big Tonks");
-  //State that holds the current profile's tank cards
+  //State that holds the current profile's tank cards (Used to display on UI)
   const [profileTankCards, setProfileTankCards]=useState(["PZ KPFW IV AUSF H","T-34","M4A1 Sherman","Cromwell","-","-","-","-"]);
-  //State that holds the current profile's tank cards
-  const [currentSelectedTankCard, setCurrentSelectedTankCard]=useState({name:"", id: null});
-  //State that holds the current displayed card
+  //State that holds the current displayed card (To display in modal for modification)
   const [display, setDisplay] = useState({});
-  //State that holds the profie description
+  //State that holds the current displayed card modal's selected card
+  const [currentSelectedTankCard, setCurrentSelectedTankCard]=useState({name:"", id: null});
+  //State that holds the profie description (TODO: Functionality)
   const [profileDescription, setProfileDescription]=useState("Description");
-  //State that holds the total cost points of the current profile
+  //State that holds the total cost points of the current profile (TODO: Functionality)
   const [deckPoints, setDeckPoints]=useState(100);
-  //State that holds if the settings cog is highlighted
-  const [settingsIcon, setSettingsIcon]=useState("bi bi-gear");
-  //State that holds if the settings cog is clicked
-  const [settingsIconHighlight, setSettingsIconHighlight]=useState({color: ""});
+  //State that holds which decks have been filtered out and how many cards have been used (TODO: Edge case for starter's 4 cards ("PZ KPFW IV AUSF H": 0, "T-34": 0, "M4A1 Sherman": 0, "Cromwell": 0))
+  const [settingsAvailableDecks, setSettingsAvailableDecks]=useState({"Starter": 0, "STUG III Ausf G": 0, "SU-100": 0, "M3 Lee": 0, "Valentine": 0, "PZ KPFW IV AUSF H (II)": 0, "T-34 (II)": 0, "M4A1 Sherman (II)": 0, "Cromwell (II)": 0, "PZ KPFW III AUSF J": 0, "KV-1S": 0, "M10 Wolverine": 0, "Sherman VC Firefly": 0, "Tiger I": 0, "IS-2": 0, "M26 Pershing": 0, "Comet": 0, "Panther": 0, "ISU-152": 0, "M4A1 Sherman (76mm)": 0, "Churchill VII": 0, "Jagdpanzer 38(t) Hetzer": 0, "T-70": 0, "M24 Chaffee": 0, "Crusader": 0, "Tiger II": 0, "T-34-85": 0, "M4A3E8 Sherman": 0, "Challenger": 0});
 
+  //Function that saves current selected profiles
   const handleSave = (e) => {
     e.preventDefault();
     if (currentSelectedProfile == 0) {
-      //Create New Profile
       setSavedProfiles([...savedProfiles, {profileName:profileName, id: usedProfileId, tankCards: profileTankCards}])
       console.log("Saving " + profileName + " to profile: " + usedProfileId)
     }
@@ -57,6 +56,7 @@ function Profile() {
       //TODO: Should only increment with create new profile, but caused some bug so its here.
       setUsedProfileId(usedProfileId+1);
   }
+  //Function that loads the selected profile
   const handleLoad = (e) => {
     savedProfiles.forEach((profile)=> {
       if (profile.id == currentSelectedProfile) {
@@ -68,8 +68,8 @@ function Profile() {
     })
     console.log(savedProfiles);
   }
+  //Function that creates a new blank Profile
   const handleNew = (e) => {
-    //Creates new Profile
     e.preventDefault();
     setProfileName("New Profile")
     console.log(savedProfiles)
@@ -81,6 +81,7 @@ function Profile() {
     console.log(savedProfiles);
     setUsedProfileId(usedProfileId+1);
    }
+  //Function that deletes currently selected profile
   const handleDelete = (e) => {
     e.preventDefault();
     // console.log("Deleting " + savedProfiles[currentSelectedProfile].profileName + " from profile: " + currentSelectedProfile)
@@ -90,6 +91,7 @@ function Profile() {
     setCurrentSelectedProfile(0);
     console.log(savedProfiles)
   }
+  //Event handler that changes to selected profile
   const handleProfileButton = (e) => {
     e.preventDefault();
     console.log(e.target)
@@ -98,7 +100,7 @@ function Profile() {
     console.log(savedProfiles)
   }
 
-  //Extra button handler for the "+" New Profile Button. If it needs to have expanded functionality later
+  //Extra event handler for the "+" New Profile Button. If it needs to have expanded functionality later
   const handleProfileNewButton = (e) => {
     e.preventDefault();
     console.log(e.target)
@@ -106,32 +108,7 @@ function Profile() {
     console.log(savedProfiles)
   }
 
-  //Handle Settings Modal
-  //This entire thing needs to be looked over
-  const handleSettingsClick = (e) => {
-    e.preventDefault();
-    console.log(e.target)
-    setSettingsIconHighlight( {color: "red"} )
-    // Get the modal
-    var settingsModal = document.getElementById("settings-modal");
-    // Get the <span> element that closes the modal
-    var settingsClose = document.getElementsByClassName("settings-modal-close")[0];
-    // When the user clicks on the button, open the modal
-    settingsModal.style.display = "block";
-    // When the user clicks on <span> (x), close the modal
-    settingsClose.onclick = function() {
-      settingsModal.style.display = "none";
-      setSettingsIconHighlight( {color: ""} )
-    }
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(e){
-      if (e.target == settingsModal) {
-        settingsModal.style.display = "none";
-        setSettingsIconHighlight( {color: ""} )
-      }
-    }
-  }
-
+  //Event handler that opens a modification modal when a tank card is clicked
   const handleTankClick = (e,index,cardName) => {
     e.preventDefault();
     console.log(e.target)
@@ -154,6 +131,7 @@ function Profile() {
       }
     }
   }
+  //Event handler that handles the changes when a new tank is selected in the modification modal
   const handleTankChange = (e,tankName) => {
     e.preventDefault();
     setProfileTankCards((cards)=> cards.map((card,index)=> index === currentSelectedTankCard.id ? tankName : card))
@@ -162,6 +140,8 @@ function Profile() {
   }
   return (
     <div>
+      {/* The Name Bar */}
+      {/* TODO: Componentize */}
       <input
         type="text"
         required
@@ -169,28 +149,16 @@ function Profile() {
         value={profileName} onChange={ (e)=>{setProfileName(e.target.value)}}
       />
       {/* <div className="currentDeckName">{profileName}</div> */}
+      {/* TODO: Total Points of the current profile */}
+      {/* TODO: Componentize */}
       <div className="currentDeckPoints">
         {deckPoints === 1 ? deckPoints + " Point" : deckPoints + " Points"}
-        {/* Settings Modal */}
-        <i class={settingsIcon} style={settingsIconHighlight} onClick={handleSettingsClick}
-        onMouseEnter={() => {setSettingsIcon("bi bi-gear-fill")}}
-        onMouseLeave={() => {setSettingsIcon("bi bi-gear")}}
-        />
-        {/* <!-- The Modal --> */}
-        <div id="settings-modal" className="settings-modal">
-        {/* <!-- Modal content --> */}
-          <div className="settings-modal-content">
-            <span className="settings-modal-close">&times;</span>
-            <p>This Settings Modal</p>
-            <p>Exp pack filters</p>
-            <p>Tank Filters</p>
-            <p>Card Filters</p>
-            <p>Misc Settings</p>
-          </div>
-        </div>
       </div>
+      <DisplaySettings settingsAvailableDecks={settingsAvailableDecks} setSettingsAvailableDecks={setSettingsAvailableDecks}/>
       <DisplayTanks tankCards={profileTankCards} handleTankClick={handleTankClick} currentSelectedTankCard={currentSelectedTankCard} handleTankChange={handleTankChange} display={display} />
-      {/* Replace this input field with something more dynamic that can hold large amounts of text */}
+      {/* Profile Description */}
+      {/* TODO: Componentize */}
+      {/* TODO: Replace this input field with something more dynamic that can hold large amounts of text */}
       <input
         type="text"
         required
@@ -201,7 +169,8 @@ function Profile() {
       {/* <div className="currentDeckDescription">{"description"}</div> */}
       <DisplayCards />
       <DisplayProfiles savedProfiles={savedProfiles} handleProfileButton={handleProfileButton} handleProfileNewButton={handleProfileNewButton} currentSelectedProfile={currentSelectedProfile}/>
-
+      {/* Profile CRUD buttons */}
+      {/* TODO: Componentize */}
       <div className="btn-group">
         <button onClick={handleSave}>Save</button>
         <button onClick={handleLoad}>Load</button>
