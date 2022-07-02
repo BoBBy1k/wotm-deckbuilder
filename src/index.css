@@ -52,11 +52,11 @@ code {
 
 /* Modal Content/Box */
 .settings-modal-content {
-  background-color: white;
+  background-color: whitesmoke;
   margin: 15% auto; /* 15% from the top and centered */
   padding: 20px;
   border: 1px solid #888;
-  width: 80%; /* Could be more or less, depending on screen size */
+  width: 60%; /* Could be more or less, depending on screen size */
   color: black;
   z-index: 1; /* Sit on top */
 }
@@ -84,7 +84,11 @@ code {
   color: red;
 }
 
-
+.flex-container {
+  column-count:2;
+  column-gap: normal;
+  column-width: 50%;
+}
 
 .currentDeckTankList {
   border: 5px solid black;

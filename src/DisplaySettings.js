@@ -30,7 +30,7 @@ function DisplaySettings (props) {
   }
   //Subtracts from the total cards available
   const handleArrowMinus =(e) => {
-    let target=e.target.parentElement.attributes.pack.nodeValue;
+    let target=e.target.parentElement.parentElement.attributes.pack.nodeValue;
     let value=props.settingsAvailableDecks[target];
     if (value !== 0) {value--}
     props.setSettingsAvailableDecks((prevState)=> ({
@@ -42,11 +42,13 @@ function DisplaySettings (props) {
 
   //Adds to the total cards available
   const handleArrowPlus = (e) => {
-    let target=e.target.parentElement.attributes.pack.nodeValue;
+    console.log(e)
+    let target=e.target.parentElement.parentElement.attributes.pack.nodeValue;
     let value=props.settingsAvailableDecks[target];
+    value++;
     props.setSettingsAvailableDecks((prevState)=> ({
       ...prevState,
-        [target]: value++
+        [target]: value
       })
     )
   }
@@ -63,17 +65,19 @@ function DisplaySettings (props) {
           {/* <!-- Modal content --> */}
           <div className="settings-modal-content">
             <span className="settings-modal-close">&times;</span>
-            <p>This Settings Modal</p>
-            <p>Exp Pack Filters</p>
-            {/* Needs flex box columns and < and > for incrementing */}
+            <div>Expansion Pack Filters</div>
+            {/* Needs flex box columns and < and > for incrementing - click handlers need to be modified. It current works off of its parent div */}
             {/* (TODO: Edge case for starter's 4 cards "PZ KPFW IV AUSF H": 0, "T-34": 0, "M4A1 Sherman": 0, "Cromwell": 0) */}
             {Object.entries(props.settingsAvailableDecks).map( ([pack, count], index) =>
                 { return (
-                  <div className="" key={index} pack={pack}>
-                     { pack + " "}
+                  <div className="flex-container" key={index} pack={pack}>
+                    {/* //onhover display contents of pack */}
+                     <div className="">{ pack + " "}</div>
+                     <div className="">
                      <i class="bi bi-arrow-left-square" onClick={handleArrowMinus}></i>
                      {" " + count + " "}
                      <i class="bi bi-arrow-right-square" onClick={handleArrowPlus}></i>
+                     </div>
                   </div>
                   )
                 }

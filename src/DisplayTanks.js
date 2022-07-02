@@ -10,6 +10,36 @@ function DisplayTanks(props) {
     keyCounter++;
     return keyCounter;
   }
+  //Event handler that opens a modification modal when a tank card is clicked
+  const handleTankClick = (e,index,cardName) => {
+    e.preventDefault();
+    console.log(e.target)
+    props.setCurrentSelectedTankCard({name: e.target.innerHTML, id: index})
+    props.setDisplay(ListTanks.find(item => item.name === e.target.innerHTML));
+    // Get the modal
+    var tankCardModal = document.getElementById("currentDeckTankListItem-modal");
+    // Get the <span> element that closes the modal
+    var tankCardClose = document.getElementsByClassName("currentDeckTankListItem-modal-close")[0];
+    // When the user clicks on the button, open the modal
+    tankCardModal.style.display = "block";
+    // When the user clicks on <span> (x), close the modal
+    tankCardClose.onclick = function() {
+      tankCardModal.style.display = "none";
+    }
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(e){
+      if (e.target == tankCardModal) {
+        tankCardModal.style.display = "none";
+      }
+    }
+  }
+  //Event handler that handles the changes when a new tank is selected in the modification modal
+  const handleTankChange = (e,tankName) => {
+    e.preventDefault();
+    props.setProfileTankCards((cards)=> cards.map((card,index)=> index === props.currentSelectedTankCard.id ? tankName : card))
+    props.setCurrentSelectedTankCard(prevState => {return {...prevState, name: tankName}})
+    props.setDisplay(ListTanks.find(item => item.name === e.target.innerHTML));
+  }
 
   return (
     <div className="currentDeckTankList">
@@ -47,24 +77,24 @@ function DisplayTanks(props) {
               //Create new line if array[index] is larger than array[index-1] but not if array[index] === 0
               if (props.currentSelectedTankCard.name === tank.name) {
                 if(index === 0) {
-                  return <React.Fragment key={fixKey()}><button className="currentDeckTankListItem-change-selected" key={fixKey()} onClick={(e)=>{props.handleTankChange(e,tank.name)}}>{tank.name}</button><div key={fixKey()}>{""}</div></React.Fragment>
+                  return <React.Fragment key={fixKey()}><button className="currentDeckTankListItem-change-selected" key={fixKey()} onClick={(e)=>{handleTankChange(e,tank.name)}}>{tank.name}</button><div key={fixKey()}>{""}</div></React.Fragment>
                 }
                 if (array[index].wave > array[index-1].wave) {
-                  return <React.Fragment key={fixKey()}><div key={fixKey()}>{""}</div><button className="currentDeckTankListItem-change-selected" key={fixKey()} onClick={(e)=>{props.handleTankChange(e,tank.name)}}>{tank.name}</button></React.Fragment>
+                  return <React.Fragment key={fixKey()}><div key={fixKey()}>{""}</div><button className="currentDeckTankListItem-change-selected" key={fixKey()} onClick={(e)=>{handleTankChange(e,tank.name)}}>{tank.name}</button></React.Fragment>
                 }
                 else {
-                  return <button className="currentDeckTankListItem-change-selected" key={fixKey()} onClick={(e)=>{props.handleTankChange(e,tank.name)}}>{tank.name}</button>
+                  return <button className="currentDeckTankListItem-change-selected" key={fixKey()} onClick={(e)=>{handleTankChange(e,tank.name)}}>{tank.name}</button>
                 }
               }
               else {
                 if(index === 0) {
-                  return <React.Fragment key={fixKey()}><button className="currentDeckTankListItem-change" key={fixKey()} onClick={(e)=>{props.handleTankChange(e,tank.name)}}>{tank.name}</button><div key={fixKey()}>{""}</div></React.Fragment>
+                  return <React.Fragment key={fixKey()}><button className="currentDeckTankListItem-change" key={fixKey()} onClick={(e)=>{handleTankChange(e,tank.name)}}>{tank.name}</button><div key={fixKey()}>{""}</div></React.Fragment>
                 }
                 if (array[index].wave > array[index-1].wave) {
-                  return <React.Fragment key={fixKey()}><div key={fixKey()}>{""}</div><button className="currentDeckTankListItem-change" key={fixKey()} onClick={(e)=>{props.handleTankChange(e,tank.name)}}>{tank.name}</button></React.Fragment>
+                  return <React.Fragment key={fixKey()}><div key={fixKey()}>{""}</div><button className="currentDeckTankListItem-change" key={fixKey()} onClick={(e)=>{handleTankChange(e,tank.name)}}>{tank.name}</button></React.Fragment>
                 }
                 else {
-                  return <button className="currentDeckTankListItem-change" key={fixKey()} onClick={(e)=>{props.handleTankChange(e,tank.name)}}>{tank.name}</button>
+                  return <button className="currentDeckTankListItem-change" key={fixKey()} onClick={(e)=>{handleTankChange(e,tank.name)}}>{tank.name}</button>
                 }
               }
             })
@@ -73,10 +103,10 @@ function DisplayTanks(props) {
         </div>
         {props.tankCards.map((tank, index)=>{
               if (tank === "") {
-                return <span className="currentDeckTankListItem" onClick={(e)=>{props.handleTankClick(e, index, props.currentSelectedTankCard.name)}} key={fixKey()}></span>
+                return <span className="currentDeckTankListItem" onClick={(e)=>{handleTankClick(e, index, props.currentSelectedTankCard.name)}} key={fixKey()}></span>
               }
               else {
-                return <span className="currentDeckTankListItem" onClick={(e)=>{props.handleTankClick(e, index, props.currentSelectedTankCard.name)}} key={fixKey()}>{tank}</span>
+                return <span className="currentDeckTankListItem" onClick={(e)=>{handleTankClick(e, index, props.currentSelectedTankCard.name)}} key={fixKey()}>{tank}</span>
               }
             })
             }
