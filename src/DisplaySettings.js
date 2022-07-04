@@ -1,6 +1,6 @@
-import React, {useState } from 'react'
+import React, { useState } from 'react'
 
-function DisplaySettings (props) {
+function DisplaySettings ( {settingsAvailableDecks, setSettingsAvailableDecks}) {
   //State that holds the current settings cog icon (toggles when hovered)
   const [settingsIcon, setSettingsIcon]=useState("bi bi-gear");
   //State of the settings cog highlighting (changes when active)
@@ -31,9 +31,9 @@ function DisplaySettings (props) {
   //Subtracts from the total cards available
   const handleArrowMinus =(e) => {
     let target=e.target.parentElement.parentElement.attributes.pack.nodeValue;
-    let value=props.settingsAvailableDecks[target];
+    let value=settingsAvailableDecks[target];
     if (value !== 0) {value--}
-    props.setSettingsAvailableDecks((prevState)=> ({
+    setSettingsAvailableDecks((prevState)=> ({
       ...prevState,
         [target]: value
       })
@@ -44,9 +44,9 @@ function DisplaySettings (props) {
   const handleArrowPlus = (e) => {
     console.log(e)
     let target=e.target.parentElement.parentElement.attributes.pack.nodeValue;
-    let value=props.settingsAvailableDecks[target];
+    let value=settingsAvailableDecks[target];
     value++;
-    props.setSettingsAvailableDecks((prevState)=> ({
+    setSettingsAvailableDecks((prevState)=> ({
       ...prevState,
         [target]: value
       })
@@ -68,7 +68,7 @@ function DisplaySettings (props) {
             <div>Expansion Pack Filters</div>
             {/* Needs flex box columns and < and > for incrementing - click handlers need to be modified. It current works off of its parent div */}
             {/* (TODO: Edge case for starter's 4 cards "PZ KPFW IV AUSF H": 0, "T-34": 0, "M4A1 Sherman": 0, "Cromwell": 0) */}
-            {Object.entries(props.settingsAvailableDecks).map( ([pack, count], index) =>
+            {Object.entries(settingsAvailableDecks).map( ([pack, count], index) =>
                 { return (
                   <div className="flex-container" key={index} pack={pack}>
                     {/* //onhover display contents of pack */}

@@ -1,9 +1,10 @@
 import React, {useState } from 'react'
 import ListTanks from './ListTanks.js'
 
-function DisplayTanks(props) {
+
+function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCards, setProfileTankCards, currentSelectedTankCard, settingsAvailableDecks, settingsUsedDecks, setSettingsUsedDecks } ) {
   //Initialize tankCrew variable for incase props.display.crew is empty breaking later mapping function
-  let tankCrew = props.display.crew ? tankCrew = props.display.crew : tankCrew=[]
+  let tankCrew = display.crew ? tankCrew = display.crew : tankCrew=[]
   //STUPID FRAGMENTS CAUSING A UNQIUE KEY ERROR. TODO: Figure out how to make it look more elegant
   let keyCounter = 0;
   function fixKey() {
@@ -12,10 +13,9 @@ function DisplayTanks(props) {
   }
   //Event handler that opens a modification modal when a tank card is clicked
   const handleTankClick = (e,index,cardName) => {
-    e.preventDefault();
     console.log(e.target)
-    props.setCurrentSelectedTankCard({name: e.target.innerHTML, id: index})
-    props.setDisplay(ListTanks.find(item => item.name === e.target.innerHTML));
+    setCurrentSelectedTankCard({name: e.target.innerHTML, id: index})
+    setDisplay(ListTanks.find(item => item.name === e.target.innerHTML));
     // Get the modal
     var tankCardModal = document.getElementById("currentDeckTankListItem-modal");
     // Get the <span> element that closes the modal
@@ -35,10 +35,38 @@ function DisplayTanks(props) {
   }
   //Event handler that handles the changes when a new tank is selected in the modification modal
   const handleTankChange = (e,tankName) => {
-    e.preventDefault();
-    props.setProfileTankCards((cards)=> cards.map((card,index)=> index === props.currentSelectedTankCard.id ? tankName : card))
-    props.setCurrentSelectedTankCard(prevState => {return {...prevState, name: tankName}})
-    props.setDisplay(ListTanks.find(item => item.name === e.target.innerHTML));
+    console.log(display.name + " is current tank ")
+    console.log(tankName + " is new tank ")
+    let currentTank = display.name;
+    let newTank = tankName;
+    //Not the same button pressed
+    if (currentTank != newTank) {
+      //If Adding a new tank from blank
+      if (currentTank ===  "-") {
+        let newValue=settingsUsedDecks[newTank];
+        newValue++;
+        setSettingsUsedDecks((prevState) => {return {...prevState, [newTank]: newValue}})
+      }
+      //If replacing an existing tank with blank
+      if (newTank === "-") {
+        let newValue=settingsUsedDecks[currentTank];
+        currentTank--;
+        setSettingsUsedDecks((prevState) => {return {...prevState, [currentTank]: newValue}})
+      }
+      //Only other case is replacing existing tank with new tank
+      else {
+        let oldValue=settingsUsedDecks[currentTank];
+        let newValue=settingsUsedDecks[newTank];
+        oldValue--;
+        newValue++;
+        setSettingsUsedDecks((prevState) => {return {...prevState, [currentTank]: oldValue, [newTank]: newValue}})
+      }
+    }
+    //Set UI to new tanks
+    setProfileTankCards((cards)=> cards.map((card,index)=> index === currentSelectedTankCard.id ? newTank : card))
+    setCurrentSelectedTankCard(prevState => {return {...prevState, name: newTank}})
+    setDisplay(ListTanks.find(item => item.name === e.target.innerHTML));
+    console.log(settingsUsedDecks)
   }
 
   return (
@@ -49,20 +77,20 @@ function DisplayTanks(props) {
           <div className="currentDeckTankListItem-modal-content">
             <span className="currentDeckTankListItem-modal-close">&times;</span>
             {/* <span>{display.name}</span> */}
-            <div>{props.display.name}</div>
-            <div>{props.display.cost +" Points"}</div>
-            <span>{props.display.nation + " "}</span>
-            <span>{props.display.type}</span>
-            <span>{" Wave: " + props.display.wave}</span>
+            <div>{display.name}</div>
+            <div>{display.cost +" Points"}</div>
+            <span>{display.nation + " "}</span>
+            <span>{display.type}</span>
+            <span>{" Wave: " + display.wave}</span>
             <div></div>
-            <span>{"Firepower: " + props.display.firepower}</span>
-            <span>{" Survivability: " + props.display.survivability}</span>
-            <span>{" Mobility: " + props.display.mobility}</span>
-            <span>{" Initiative: " + props.display.initiative}</span>
+            <span>{"Firepower: " + display.firepower}</span>
+            <span>{" Survivability: " + display.survivability}</span>
+            <span>{" Mobility: " + display.mobility}</span>
+            <span>{" Initiative: " + display.initiative}</span>
             <div></div>
-            <span>{"HP / Critical HP: " + props.display.hp}</span>
-            <span>{" / " + props.display.criticalHP}</span>
-            <div>{"Special Traits: " + props.display.special}</div>
+            <span>{"HP / Critical HP: " + display.hp}</span>
+            <span>{" / " + display.criticalHP}</span>
+            <div>{"Special Traits: " + display.special}</div>
             {/* TODO: Componentize */}
             {/* Changes current Tank's Crew Cards */}
             <div>Crew Slots</div>
@@ -75,7 +103,7 @@ function DisplayTanks(props) {
             <div>Change Tanks</div>
             {ListTanks.map((tank, index, array)=>{
               //Create new line if array[index] is larger than array[index-1] but not if array[index] === 0
-              if (props.currentSelectedTankCard.name === tank.name) {
+              if (currentSelectedTankCard.name === tank.name) {
                 if(index === 0) {
                   return <React.Fragment key={fixKey()}><button className="currentDeckTankListItem-change-selected" key={fixKey()} onClick={(e)=>{handleTankChange(e,tank.name)}}>{tank.name}</button><div key={fixKey()}>{""}</div></React.Fragment>
                 }
@@ -101,12 +129,12 @@ function DisplayTanks(props) {
             }
           </div>
         </div>
-        {props.tankCards.map((tank, index)=>{
+        {tankCards.map((tank, index)=>{
               if (tank === "") {
-                return <span className="currentDeckTankListItem" onClick={(e)=>{handleTankClick(e, index, props.currentSelectedTankCard.name)}} key={fixKey()}></span>
+                return <span className="currentDeckTankListItem" onClick={(e)=>{handleTankClick(e, index, currentSelectedTankCard.name)}} key={fixKey()}></span>
               }
               else {
-                return <span className="currentDeckTankListItem" onClick={(e)=>{handleTankClick(e, index, props.currentSelectedTankCard.name)}} key={fixKey()}>{tank}</span>
+                return <span className="currentDeckTankListItem" onClick={(e)=>{handleTankClick(e, index, currentSelectedTankCard.name)}} key={fixKey()}>{tank}</span>
               }
             })
             }
