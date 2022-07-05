@@ -1,22 +1,10 @@
-import React from 'react'
-
-var getTanks = function(prop) {
-  // switch (prop) {
-  //     case 0: return require('./assets/empty.png');
-  //     case 1: return require('./assets/vest/01-3M.png');
-  //     case 2: return require('./assets/vest/02-PACA.png');
-  //     default: return require('./assets/empty.png');
-  // }
-  alert("This doesn't do anything yet")
-}
-
 const ListTanks = [
 {wave: "", nation: "", name: "-",  type: "",  cost: 0, special:"", firepower:"", survivability:"", mobility:"", initiative:"", hp :"", criticalHP:"", crew:""},
 {wave: 0, nation: "Germany", name: "PZ KPFW IV AUSF H",       type: "Medium Tank",    cost: 35, firepower: 4, survivability: 1, mobility: 2, initiative: 5, hp : 4, criticalHP: 1, special:[], crew:["Commander", "Gunner", "Driver", "Radio", "Loader"]},
 {wave: 0, nation: "USSR",    name: "T-34",                    type: "Medium Tank",    cost: 40, firepower: 4, survivability: 1, mobility: 3, initiative: 6, hp : 4, criticalHP: 1, special:[], crew:["Commander/Gunner", "Driver", "Radio", "Loader"]}, //Commander/Gunner
 {wave: 0, nation: "USA",     name: "M4A1 Sherman",            type: "Medium Tank",    cost: 37, firepower: 4, survivability: 1, mobility: 2, initiative: 6, hp : 4, criticalHP: 1, special:[], crew:["Commander", "Gunner", "Driver", "Radio", "Loader"]},
 {wave: 0, nation: "UK",      name: "Cromwell",                type: "Medium Tank",    cost: 47, firepower: 4, survivability: 1, mobility: 3, initiative: 8, hp : 5, criticalHP: 1, special:[], crew:["Commander", "Gunner", "Driver", "Radio", "Loader"]},
-{wave: 1, nation: "Germany", name: "STUG III Ausf G",         type: "Medium Tank",    cost: 38, firepower: 4, survivability: 2, mobility: 2, initiative: 5, hp : 4, criticalHP: 1, special:["Assault-Gun", "Light-Flank"], crew:["Commander", "Gunner", "Driver", "Loader/Radio"]},//Loader/Radio
+{wave: 1, nation: "Germany", name: "Stug III Ausf G",         type: "Medium Tank",    cost: 38, firepower: 4, survivability: 2, mobility: 2, initiative: 5, hp : 4, criticalHP: 1, special:["Assault-Gun", "Light-Flank"], crew:["Commander", "Gunner", "Driver", "Loader/Radio"]},//Loader/Radio
 {wave: 1, nation: "USSR",    name: "SU-100",                  type: "Tank Destroyer", cost: 51, firepower: 6, survivability: 2, mobility: 2, initiative: 5, hp : 4, criticalHP: 1, special:["Assault-Gun", "Light-Flank"], crew:["Commander/Radio", "Gunner", "Driver", "Loader"]},//Commander/Radio
 {wave: 1, nation: "USA",     name: "M3 Lee",                  type: "Medium Tank",    cost: 33, firepower: 4, survivability: 1, mobility: 2, initiative: 4, hp : 4, criticalHP: 1, special:["Assualt-Gun"], crew:["Commander", "Gunner", "Gunner", "Driver", "Radio", "Loader"]},//Double Gunner
 {wave: 1, nation: "UK",      name: "Valentine",               type: "Light Tank",     cost: 33, firepower: 4, survivability: 1, mobility: 1, initiative: 4, hp : 4, criticalHP: 1, special:["Arrow-Shot, Fortress"], crew:["Commander/Gunner/Radio", "Driver", "Loader"]}, //Commander/Gunner/Radio

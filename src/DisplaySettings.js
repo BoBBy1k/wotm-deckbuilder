@@ -22,35 +22,63 @@ function DisplaySettings ( {settingsAvailableDecks, setSettingsAvailableDecks}) 
     }
     // Close the modal when mouse clicks outside the box
     window.onclick = function(e){
-      if (e.target == settingsModal) {
+      if (e.target === settingsModal) {
         settingsModal.style.display = "none";
         setSettingsIconHighlight( {color: ""} )
       }
     }
   }
+
   //Subtracts from the total cards available
   const handleArrowMinus =(e) => {
     let target=e.target.parentElement.parentElement.attributes.pack.nodeValue;
     let value=settingsAvailableDecks[target];
+    //Handle the 4 tanks in the starter kit
     if (value !== 0) {value--}
-    setSettingsAvailableDecks((prevState)=> ({
-      ...prevState,
-        [target]: value
-      })
-    )
+    if (target==="Starter") {
+      setSettingsAvailableDecks((prevState)=> ({
+        ...prevState,
+          [target]: value,
+          ["PZ KPFW IV AUSF H"]: value,
+          ["T-34"]: value,
+          ["M4A1 Sherman"]: value,
+          ["Cromwell"]: value
+        })
+      )
+    }
+    else {
+      setSettingsAvailableDecks((prevState)=> ({
+        ...prevState,
+          [target]: value
+        })
+      )
+    }
   }
-
   //Adds to the total cards available
   const handleArrowPlus = (e) => {
-    console.log(e)
+
     let target=e.target.parentElement.parentElement.attributes.pack.nodeValue;
     let value=settingsAvailableDecks[target];
     value++;
-    setSettingsAvailableDecks((prevState)=> ({
-      ...prevState,
-        [target]: value
-      })
-    )
+    if (target==="Starter") {
+      setSettingsAvailableDecks((prevState)=> ({
+        ...prevState,
+          [target]: value,
+          ["PZ KPFW IV AUSF H"]: value,
+          ["T-34"]: value,
+          ["M4A1 Sherman"]: value,
+          ["Cromwell"]: value
+        })
+      )
+    }
+    else {
+      setSettingsAvailableDecks((prevState)=> ({
+        ...prevState,
+          [target]: value
+        })
+      )
+    }
+    console.log(settingsAvailableDecks)
   }
 
   return (
@@ -67,19 +95,27 @@ function DisplaySettings ( {settingsAvailableDecks, setSettingsAvailableDecks}) 
             <span className="settings-modal-close">&times;</span>
             <div>Expansion Pack Filters</div>
             {/* Needs flex box columns and < and > for incrementing - click handlers need to be modified. It current works off of its parent div */}
-            {/* (TODO: Edge case for starter's 4 cards "PZ KPFW IV AUSF H": 0, "T-34": 0, "M4A1 Sherman": 0, "Cromwell": 0) */}
+            {/* TODO: Why "Unnecessarily computed property" warning */}
             {Object.entries(settingsAvailableDecks).map( ([pack, count], index) =>
-                { return (
-                  <div className="flex-container" key={index} pack={pack}>
-                    {/* //onhover display contents of pack */}
-                     <div className="">{ pack + " "}</div>
-                     <div className="">
-                     <i class="bi bi-arrow-left-square" onClick={handleArrowMinus}></i>
-                     {" " + count + " "}
-                     <i class="bi bi-arrow-right-square" onClick={handleArrowPlus}></i>
-                     </div>
-                  </div>
-                  )
+                {
+                  if (pack !== "PZ KPFW IV AUSF H" && pack !== "T-34" && pack !== "M4A1 Sherman" && pack !== "Cromwell") {
+                    return (
+                      <div className="flex-container" key={index} pack={pack}>
+                        {/* //TODO: onhover tooltip to display equipment contents of pack */}
+                        {pack === "Starter"
+                          ? <div className="starterHoverInfo">{ pack + " "}
+                              <span className="starterHoverInfoText">PZ KPFW IV AUSF H, T-34, M4A1 Sherman, Cromwell</span>
+                            </div>
+                          : <div className="">{ pack + " "}</div>
+                        }
+                        <div className="">
+                          <i class="bi bi-arrow-left-square" onClick={handleArrowMinus}></i>
+                          {" " + count + " "}
+                          <i class="bi bi-arrow-right-square" onClick={handleArrowPlus}></i>
+                        </div>
+                      </div>
+                    )
+                  }
                 }
               )
             }

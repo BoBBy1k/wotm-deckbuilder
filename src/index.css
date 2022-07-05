@@ -56,7 +56,7 @@ code {
   margin: 15% auto; /* 15% from the top and centered */
   padding: 20px;
   border: 1px solid #888;
-  width: 60%; /* Could be more or less, depending on screen size */
+  width: 50%; /* Could be more or less, depending on screen size */
   color: black;
   z-index: 1; /* Sit on top */
 }
@@ -82,6 +82,43 @@ code {
 
 .bi-arrow-right-square:hover {
   color: red;
+}
+
+.starterHoverInfo {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.starterHoverInfo .starterHoverInfoText {
+  visibility: hidden;
+  width: 200px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  left: 110%;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.starterHoverInfo .starterHoverInfoText::after {
+  content: "";
+  position: absolute;
+  top: 15%;
+  right: 100%;
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent #555 transparent transparent;
+}
+
+.starterHoverInfo:hover .starterHoverInfoText {
+  visibility: visible;
+  opacity: 1;
 }
 
 .flex-container {
@@ -164,6 +201,46 @@ code {
   float: right;
   font-size: 28px;
   font-weight: bold;
+}
+
+ /* The Modal (background) */
+ .equip-modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 2; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.equip-modal-content {
+  background-color: whitesmoke;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 60%; /* Could be more or less, depending on screen size */
+  color: black;
+  z-index: 1; /* Sit on top */
+}
+
+/* The Close Button */
+.equip-modal-close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.equip-modal-close:hover,
+.equip-modal-close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .currentDeckDescription{

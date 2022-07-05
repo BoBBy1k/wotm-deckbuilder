@@ -4,8 +4,8 @@ function DisplayPoints({ deckPoints }) {
 
   return (
     <div className="currentDeckPoints">
-    {deckPoints === 1 ? deckPoints + " Point" : deckPoints + " Points"}
-  </div>
+      {deckPoints === 1 ? deckPoints + " Point" : deckPoints + " Points"}
+    </div>
   )
 }
 

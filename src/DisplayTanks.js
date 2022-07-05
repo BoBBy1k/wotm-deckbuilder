@@ -1,10 +1,10 @@
 import React, {useState } from 'react'
 import ListTanks from './ListTanks.js'
+import DisplayTanksEquip from './DisplayTanksEquip.js'
 
-
-function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCards, setProfileTankCards, currentSelectedTankCard, settingsAvailableDecks, settingsUsedDecks, setSettingsUsedDecks } ) {
+function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCards, setProfileTankCards, currentSelectedTankCard, settingsAvailableDecks, settingsUsedDecks, setSettingsUsedDecks, settingsAvailableDeckCards, setSettingsAvailableDeckCards, settingsUsedDeckCards, setSettingsUsedDeckCards }) {
   //Initialize tankCrew variable for incase props.display.crew is empty breaking later mapping function
-  let tankCrew = display.crew ? tankCrew = display.crew : tankCrew=[]
+  let tankCrew = display.crew ? display.crew : []
   //STUPID FRAGMENTS CAUSING A UNQIUE KEY ERROR. TODO: Figure out how to make it look more elegant
   let keyCounter = 0;
   function fixKey() {
@@ -28,7 +28,7 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
     }
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function(e){
-      if (e.target == tankCardModal) {
+      if (e.target === tankCardModal) {
         tankCardModal.style.display = "none";
       }
     }
@@ -40,7 +40,7 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
     let currentTank = display.name;
     let newTank = tankName;
     //Not the same button pressed
-    if (currentTank != newTank) {
+    if (currentTank !== newTank) {
       //If Adding a new tank from blank
       if (currentTank ===  "-") {
         let newValue=settingsUsedDecks[newTank];
@@ -97,7 +97,7 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
             <div>{tankCrew.map( (crew, index)=> {return <button key={fixKey()}>{crew}</button>})}</div>
             {/* Changes Current Tank's attached Cards */}
             {/* TODO: Componentize */}
-            <div>Equipment / Consumables</div>
+            <DisplayTanksEquip settingsAvailableDecks={settingsAvailableDecks} settingsAvailableDeckCards={settingsAvailableDeckCards} setSettingsAvailableDeckCards={setSettingsAvailableDeckCards} settingsUsedDeckCards={settingsUsedDeckCards} setSettingsUsedDeckCards={setSettingsUsedDeckCards}/>
             {/* Changes Current Selected Tank */}
             {/* TODO: Componentize */}
             <div>Change Tanks</div>
