@@ -69,6 +69,22 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
     console.log(settingsUsedDecks)
   }
 
+  // {for (let key in settingsUsedDeckCards)
+  //   {
+  //     console.log("INSIDE FOR")
+  //     if (settingsUsedDeckCards[key]["attached"]["length"] > 0) {
+  //       console.log("INSIDE 1st IF")
+  //       if(settingsUsedDeckCards[key]["attached"][0]["id"] === currentSelectedTankCard.id) {
+  //         console.log("INSIDE 2nd IF")
+  //         for (let i=0; i < settingsUsedDeckCards[key]["attached"]["length"]; i++) {
+  //           console.log("INSIDE 2nd FOR")
+  //           console.log(settingsUsedDeckCards[key]["attached"][i])
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
+
   return (
     <div className="currentDeckTankList">
         {/* <!-- The Modal --> */}
@@ -88,16 +104,27 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
             <span>{" Mobility: " + display.mobility}</span>
             <span>{" Initiative: " + display.initiative}</span>
             <div></div>
-            <span>{"HP / Critical HP: " + display.hp}</span>
-            <span>{" / " + display.criticalHP}</span>
+            <span>{"HP " + display.hp}</span>
+            {/* <span>{" / " + display.criticalHP}</span> */}
             <div>{"Special Traits: " + display.special}</div>
             {/* TODO: Componentize */}
             {/* Changes current Tank's Crew Cards */}
             <div>Crew Slots</div>
             <div>{tankCrew.map( (crew, index)=> {return <button key={fixKey()}>{crew}</button>})}</div>
-            {/* Changes Current Tank's attached Cards */}
-            {/* TODO: Componentize */}
-            <DisplayTanksEquip settingsAvailableDecks={settingsAvailableDecks} settingsAvailableDeckCards={settingsAvailableDeckCards} setSettingsAvailableDeckCards={setSettingsAvailableDeckCards} settingsUsedDeckCards={settingsUsedDeckCards} setSettingsUsedDeckCards={setSettingsUsedDeckCards}/>
+            {/* Modal that Changes the Current Tank's attached Cards */}
+            <DisplayTanksEquip settingsAvailableDecks={settingsAvailableDecks} settingsAvailableDeckCards={settingsAvailableDeckCards} setSettingsAvailableDeckCards={setSettingsAvailableDeckCards} settingsUsedDeckCards={settingsUsedDeckCards} setSettingsUsedDeckCards={setSettingsUsedDeckCards} currentSelectedTankCard={currentSelectedTankCard}/>
+            {/* Display attached Cards*/}
+            <div className="DisplayTanksEquipCardList">
+            {Object.entries(settingsUsedDeckCards).map( ( item )=>{
+              if (item[1]["attached"]["length"] > 0) {
+                return (item[1]["attached"].map( (equip) => {
+                  if(equip["id"] === currentSelectedTankCard.id) {
+                    return (<div key={fixKey()} className="DisplayTanksEquipCardListItem">{item[0]}</div>)
+                  }
+                }))
+                }
+            })}
+            </div>
             {/* Changes Current Selected Tank */}
             {/* TODO: Componentize */}
             <div>Change Tanks</div>

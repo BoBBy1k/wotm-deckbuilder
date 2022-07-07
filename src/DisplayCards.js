@@ -1,6 +1,7 @@
 import React from 'react'
 
-function DisplayCards(props) {
+function DisplayCards( { settingsAvailableDeckCards, settingsUsedDeckCards } ) {
+
   return (
     <div className="currentCardList">
         {/* {props.savedProfiles.map((profile)=>(

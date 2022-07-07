@@ -203,6 +203,10 @@ code {
   font-weight: bold;
 }
 
+.equipment-button {
+  margin-bottom: 10px;
+}
+
  /* The Modal (background) */
  .equip-modal {
   display: none; /* Hidden by default */
@@ -241,6 +245,41 @@ code {
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+
+.DisplayTanksEquipCardList{
+  border: 5px solid black;
+  height: auto;
+  width: 390px;
+  border-radius: 20px;
+  padding-right: 10px;
+  padding-left: 10px;
+  padding-bottom: 4px;
+  padding-top: 4px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  row-gap: 0px;
+  column-gap: 6px;
+  margin: auto;
+  word-wrap: break-word;
+}
+
+.DisplayTanksEquipCardListItem{
+  border: 5px solid black;
+  height: 80px;
+  width: 80px;
+  border-radius: 20px;
+  padding-right: 1px;
+  padding-left: 1px;
+  padding-top: 10px;
+  padding-bottom: 5px;
+  margin-top: 5px;
+  margin-bottom: 1px;
+  margin-right: 0px;
+  margin-left: 0px;
+  font-size: 15px;
 }
 
 .currentDeckDescription{

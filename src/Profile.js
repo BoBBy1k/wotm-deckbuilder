@@ -1,11 +1,10 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import DisplayProfiles from './DisplayProfiles.js'
 import DisplayTanks from './DisplayTanks.js'
 import DisplayCards from './DisplayCards.js'
 import DisplaySettings from './DisplaySettings.js'
 import DisplayDescription from './DisplayDescription.js'
 import DisplayPoints from './DisplayPoints.js'
-import ListTanks from './ListTanks.js'
 import ListEquipment from './ListEquipment.js'
 
 function Profile() {
@@ -35,6 +34,13 @@ function Profile() {
   const [settingsAvailableDeckCards, setSettingsAvailableDeckCards]=useState({});
   const [settingsUsedDeckCards, setSettingsUsedDeckCards]=useState({});
 
+
+  //TODO: This needs to change to the new object structure to keep track of which tank the card is equipped to
+  //All functions that rely on count being the only element need to be adjust to take object.equipmentName.count
+  // Ex. object={repair: {count:1; attached:"Stug" slot:"0"}
+  //             medkit: {count:1; attached:"Stug" slot:"0"}
+  //            }
+
   const checkAvailableDeckCards = (e) => {
     let availableCards = {};
     let usedCards ={};
@@ -49,7 +55,7 @@ function Profile() {
           ListEquipment.map((item) => {
             if (item.source===key) {
               availableCards[item.name] = settingsAvailableDecks[key]
-              usedCards[item.name] = 0;
+              usedCards[item.name] = {count: 0, attached: []}
             }
           })
         }
@@ -124,9 +130,14 @@ function Profile() {
     console.log(savedProfiles)
   }
 
+  //Used to set the available/used deck cards of the default display
+  useEffect(()=>{
+    checkAvailableDeckCards()
+    }, [])
+
   return (
     <div>
-      <div><button onClick={checkAvailableDeckCards}>test</button></div>
+      <div><button onClick={()=>{console.log(settingsUsedDeckCards)}}>test</button></div>
       {/* The Name Bar */}
       {/* TODO: Componentize */}
       <input
@@ -141,7 +152,7 @@ function Profile() {
       {/* TODO: Integrate description into CRUD */}
       {/* TODO: Replace this input field with something more dynamic that can hold large amounts of text */}
       <DisplayDescription profileDescription={profileDescription} setProfileDescription={setProfileDescription} />
-      <DisplayCards />
+      <DisplayCards settingsAvailableDeckCards={settingsAvailableDeckCards} settingsUsedDeckCards={settingsUsedDeckCards} />
       <DisplayProfiles savedProfiles={savedProfiles} currentSelectedProfile={currentSelectedProfile} setCurrentSelectedProfile={setCurrentSelectedProfile} />
       {/* Profile CRUD buttons */}
       {/* TODO: Componentize - First attempt ran into unknown issue with saving/loading */}

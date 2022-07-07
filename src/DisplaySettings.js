@@ -116,6 +116,7 @@ function DisplaySettings ( {settingsAvailableDecks, setSettingsAvailableDecks}) 
                       </div>
                     )
                   }
+                  else {return null}
                 }
               )
             }
