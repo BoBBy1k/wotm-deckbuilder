@@ -1,30 +1,21 @@
 import React from 'react'
 
+//This component displays used equipment/consumables/crew cards on the main page
 function DisplayCards( { settingsAvailableDeckCards, settingsUsedDeckCards } ) {
-
+  //Sets placeholders for the card display box
+  let placeholders = 16;
   return (
     <div className="currentCardList">
-        {/* {props.savedProfiles.map((profile)=>(
-          profile.id == props.currentSelectedProfile ?
-            <button className="profileListItemSelected" key={profile.id} id={profile.id}  onClick={props.handleProfileButton}>{profile.profileName}</button>
-            :
-          <button className="profileListItem" key={profile.id} id={profile.id}  onClick={props.handleProfileButton}>{profile.profileName}</button>
-        ))} */}
-        <span className="currentCardListItem">{"Card"}</span>
-        <span className="currentCardListItem">{"Card"}</span>
-        <span className="currentCardListItem">{"Card"}</span>
-        <span className="currentCardListItem">{"Card"}</span>
-        <span className="currentCardListItem">{"Card"}</span>
-        <span className="currentCardListItem">{"Card"}</span>
-        <span className="currentCardListItem">{"Card"}</span>
-        <span className="currentCardListItem">{"Card"}</span>
-        <span className="currentCardListItem">{"Card"}</span>
-        <span className="currentCardListItem">{"Card"}</span>
-        <span className="currentCardListItem">{"Card"}</span>
-        <span className="currentCardListItem">{"Card"}</span>
-        <span className="currentCardListItem">{"Card"}</span>
-        <span className="currentCardListItem">{"Card"}</span>
-        <span className="currentCardListItem">{"Card"}</span>
+        {Object.entries(settingsUsedDeckCards).map( ( item )=>{
+          if (item[1]["attached"]["length"] > 0) {
+            return (item[1]["attached"].map( (equip) => {
+              placeholders--;
+              return (<div className="currentCardListItem">{item[0]}</div>)
+            }))
+            }
+        })}
+        {/* This is a work around to use map to create a variable range of elements */}
+        {[...Array(placeholders)].map((item, index) => <span className="currentCardListItem" key={index}>{""}</span>)}
       </div>
   )
 }

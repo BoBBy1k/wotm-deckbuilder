@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 
+//This component allows the addition of expansion packs for availablity calculation and misc settings
 function DisplaySettings ( {settingsAvailableDecks, setSettingsAvailableDecks}) {
   //State that holds the current settings cog icon (toggles when hovered)
   const [settingsIcon, setSettingsIcon]=useState("bi bi-gear");
@@ -56,7 +57,6 @@ function DisplaySettings ( {settingsAvailableDecks, setSettingsAvailableDecks}) 
   }
   //Adds to the total cards available
   const handleArrowPlus = (e) => {
-
     let target=e.target.parentElement.parentElement.attributes.pack.nodeValue;
     let value=settingsAvailableDecks[target];
     value++;
@@ -83,18 +83,17 @@ function DisplaySettings ( {settingsAvailableDecks, setSettingsAvailableDecks}) 
 
   return (
     <span>
-        {/* Settings Modal */}
+        {/* Settings Modal Button */}
         <i class={settingsIcon} style={settingsIconHighlight} onClick={handleSettingsClick}
         onMouseEnter={() => {setSettingsIcon("bi bi-gear-fill")}}
         onMouseLeave={() => {setSettingsIcon("bi bi-gear")}}
         />
-        {/* <!-- The Modal --> */}
+        {/* <!-- The Settings Modal --> */}
         <div id="settings-modal" className="settings-modal">
-          {/* <!-- Modal content --> */}
+          {/* <!-- Settings Modal content --> */}
           <div className="settings-modal-content">
             <span className="settings-modal-close">&times;</span>
             <div>Expansion Pack Filters</div>
-            {/* Needs flex box columns and < and > for incrementing - click handlers need to be modified. It current works off of its parent div */}
             {/* TODO: Why "Unnecessarily computed property" warning */}
             {Object.entries(settingsAvailableDecks).map( ([pack, count], index) =>
                 {
@@ -120,7 +119,7 @@ function DisplaySettings ( {settingsAvailableDecks, setSettingsAvailableDecks}) 
                 }
               )
             }
-            {/* Something here? I forget what  */}
+            {/* TODO: Add Misc settings here  */}
             <p>Misc Settings</p>
           </div>
         </div>

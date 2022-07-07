@@ -1,3 +1,5 @@
+/* Monolithic CSS file was a lazy choice, but not worth the effort in splitting at this point  */
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -183,16 +185,12 @@ code {
   margin: 15% auto; /* 15% from the top and centered */
   padding: 20px;
   border: 1px solid #888;
-  width: 80%; /* Could be more or less, depending on screen size */
+  width: 50%; /* Could be more or less, depending on screen size */
   color: black
 }
 
 .currentDeckTankListItem-change-selected {
   border: 3px solid red;
-}
-
-.currentDeckTankListItem-change {
-
 }
 
 /* The Close Button */
@@ -227,7 +225,7 @@ code {
   margin: 15% auto; /* 15% from the top and centered */
   padding: 20px;
   border: 1px solid #888;
-  width: 60%; /* Could be more or less, depending on screen size */
+  width: 50%; /* Could be more or less, depending on screen size */
   color: black;
   z-index: 1; /* Sit on top */
 }
@@ -297,31 +295,35 @@ code {
 .currentCardList {
   border: 5px solid black;
   /* height: 240px; */
-  width: 320px;
+  width: 340px;
   border-radius: 20px;
-  padding-right: 10px;
-  padding-left: 10px;
+  padding-right: 1px;
+  padding-left: 1px;
   padding-top: 4px;
   padding-bottom: 4px;
   margin-bottom: 10px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  row-gap: 4px;
-  column-gap: 5px;
+  row-gap: 0px;
+  column-gap: 2px;
 }
 
 .currentCardListItem {
   border: 5px solid black;
-  height: 60px;
-  width: 45px;
+  height: 40px;
+  width: 69px;
   border-radius: 20px;
-  padding-right: 10px;
-  padding-left: 10px;
-  padding-top: 10px;
-  padding-bottom: 4px;
+  padding-right: 1px;
+  padding-left: 1px;
+  padding-top: 5px;
+  padding-bottom: 10px;
   margin-top: 5px;
   margin-bottom: 1px;
+  margin-right: 0px;
+  margin-left: 2px;
+  font-size: 11px;
+  word-wrap:break-word;
 }
 
 .profileList {

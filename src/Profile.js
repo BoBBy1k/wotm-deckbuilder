@@ -70,6 +70,7 @@ function Profile() {
 
   //Function that saves current selected profiles
   //TODO: Needs to save equipment cards
+  //TODO: Needs to save description
   const handleSave = (e) => {
     if (currentSelectedProfile === 0) {
       setSavedProfiles([...savedProfiles, {profileName:profileName, id: usedProfileId, tankCards: profileTankCards}])
@@ -97,6 +98,7 @@ function Profile() {
   }
   //Function that loads the selected profile
   //TODO: Needs to run a function that compares saved equipment and tank cards to the availability list
+  //TODO: Needs to load description
   const handleLoad = (e) => {
     savedProfiles.forEach((profile)=> {
       if (profile.id == currentSelectedProfile) {
@@ -110,6 +112,7 @@ function Profile() {
   }
   //Function that creates a new blank Profile
   //TODO: Needs to reset availablity
+  //TODO: Needs reset description
   const handleNew = (e) => {
     setProfileName("New Profile")
     setSavedProfiles([...savedProfiles, {profileName:"New Profile", id: usedProfileId, tankCards: ["-","-","-","-","-","-","-","-"]}]);
@@ -124,6 +127,7 @@ function Profile() {
   const handleDelete = (e) => {
     //TODO: Needs to reset availablity
     //Note: nonstrict comparsion is required because of profile.id is a string from being read from html tag. TODO: Maybe fix it?
+    //TODO: Needs to reset description
     setSavedProfiles(savedProfiles.filter((profile) => profile.id == currentSelectedProfile ? false: true))
     setCurrentProfile(0);
     setCurrentSelectedProfile(0);
@@ -146,6 +150,7 @@ function Profile() {
         className="currentDeckName"
         value={profileName} onChange={ (e)=>{setProfileName(e.target.value)}}
       />
+      {/* TODO: Needs to actually calculate points */}
       <DisplayPoints deckPoints={deckPoints} />
       <DisplaySettings settingsAvailableDecks={settingsAvailableDecks} setSettingsAvailableDecks={setSettingsAvailableDecks} />
       <DisplayTanks tankCards={profileTankCards} currentSelectedTankCard={currentSelectedTankCard} display={display} setDisplay={setDisplay} setCurrentSelectedTankCard={setCurrentSelectedTankCard} setProfileTankCards={setProfileTankCards} settingsAvailableDecks={settingsAvailableDecks} settingsUsedDecks={settingsUsedDecks} setSettingsUsedDecks={setSettingsUsedDecks} settingsAvailableDeckCards={settingsAvailableDeckCards} setSettingsAvailableDeckCards={setSettingsAvailableDeckCards} settingsUsedDeckCards={settingsUsedDeckCards} setSettingsUsedDeckCards={setSettingsUsedDeckCards} />

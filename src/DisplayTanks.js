@@ -2,27 +2,49 @@ import React, {useState } from 'react'
 import ListTanks from './ListTanks.js'
 import DisplayTanksEquip from './DisplayTanksEquip.js'
 
+//This component allows the modification of tanks and their attached cards from the main page
 function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCards, setProfileTankCards, currentSelectedTankCard, settingsAvailableDecks, settingsUsedDecks, setSettingsUsedDecks, settingsAvailableDeckCards, setSettingsAvailableDeckCards, settingsUsedDeckCards, setSettingsUsedDeckCards }) {
   //Initialize tankCrew variable for incase props.display.crew is empty breaking later mapping function
   let tankCrew = display.crew ? display.crew : []
-  //STUPID FRAGMENTS CAUSING A UNQIUE KEY ERROR. TODO: Figure out how to make it look more elegant
+  //FRAGMENTS CAUSING A UNQIUE KEY ERROR! TODO: Figure out how to make it look more elegant
   let keyCounter = 0;
   function fixKey() {
     keyCounter++;
     return keyCounter;
   }
+
+  //Wipe equipped cards from current tank by searching settingsUsedDeckCards for currentSelectedTankCard.id
+  const wipeUsedCards = () => {
+    let wipeUsedCards=settingsUsedDeckCards
+    for (let key in wipeUsedCards) {
+      console.log(wipeUsedCards[key])
+      if (wipeUsedCards[key]["count"] > 0){
+        for (let i=0; i < wipeUsedCards[key]["attached"].length; i++) {
+          if (wipeUsedCards[key]["attached"][i]["id"] === currentSelectedTankCard.id){
+            wipeUsedCards[key]["attached"][i] = {};
+            wipeUsedCards[key]["count"]--;
+          }
+        }
+      }
+    }
+    setSettingsUsedDecks(wipeUsedCards)
+    console.log("CARDS WIPED")
+    console.log(settingsUsedDecks)
+  }
+
   //Event handler that opens a modification modal when a tank card is clicked
   const handleTankClick = (e,index,cardName) => {
-    console.log(e.target)
+    // console.log(e.target)
+    //Set state to display selected tank
     setCurrentSelectedTankCard({name: e.target.innerHTML, id: index})
     setDisplay(ListTanks.find(item => item.name === e.target.innerHTML));
     // Get the modal
     var tankCardModal = document.getElementById("currentDeckTankListItem-modal");
-    // Get the <span> element that closes the modal
+    // Get the element that closes the modal
     var tankCardClose = document.getElementsByClassName("currentDeckTankListItem-modal-close")[0];
     // When the user clicks on the button, open the modal
     tankCardModal.style.display = "block";
-    // When the user clicks on <span> (x), close the modal
+    // Closes the modal when X is clicked
     tankCardClose.onclick = function() {
       tankCardModal.style.display = "none";
     }
@@ -35,11 +57,11 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
   }
   //Event handler that handles the changes when a new tank is selected in the modification modal
   const handleTankChange = (e,tankName) => {
-    console.log(display.name + " is current tank ")
-    console.log(tankName + " is new tank ")
+    // console.log(display.name + " is current tank ")
+    // console.log(tankName + " is new tank ")
     let currentTank = display.name;
     let newTank = tankName;
-    //Not the same button pressed
+    //Check if the same button was pressed (Do nothing)
     if (currentTank !== newTank) {
       //If Adding a new tank from blank
       if (currentTank ===  "-") {
@@ -50,8 +72,9 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
       //If replacing an existing tank with blank
       if (newTank === "-") {
         let newValue=settingsUsedDecks[currentTank];
-        currentTank--;
+        newValue--;
         setSettingsUsedDecks((prevState) => {return {...prevState, [currentTank]: newValue}})
+        wipeUsedCards();
       }
       //Only other case is replacing existing tank with new tank
       else {
@@ -60,6 +83,8 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
         oldValue--;
         newValue++;
         setSettingsUsedDecks((prevState) => {return {...prevState, [currentTank]: oldValue, [newTank]: newValue}})
+        wipeUsedCards();
+        //TODO: Implement feature to move over valid cards
       }
     }
     //Set UI to new tanks
@@ -69,22 +94,6 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
     console.log(settingsUsedDecks)
   }
 
-  // {for (let key in settingsUsedDeckCards)
-  //   {
-  //     console.log("INSIDE FOR")
-  //     if (settingsUsedDeckCards[key]["attached"]["length"] > 0) {
-  //       console.log("INSIDE 1st IF")
-  //       if(settingsUsedDeckCards[key]["attached"][0]["id"] === currentSelectedTankCard.id) {
-  //         console.log("INSIDE 2nd IF")
-  //         for (let i=0; i < settingsUsedDeckCards[key]["attached"]["length"]; i++) {
-  //           console.log("INSIDE 2nd FOR")
-  //           console.log(settingsUsedDeckCards[key]["attached"][i])
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
-
   return (
     <div className="currentDeckTankList">
         {/* <!-- The Modal --> */}
@@ -92,7 +101,6 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
         {/* <!-- Modal content --> */}
           <div className="currentDeckTankListItem-modal-content">
             <span className="currentDeckTankListItem-modal-close">&times;</span>
-            {/* <span>{display.name}</span> */}
             <div>{display.name}</div>
             <div>{display.cost +" Points"}</div>
             <span>{display.nation + " "}</span>
@@ -104,12 +112,13 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
             <span>{" Mobility: " + display.mobility}</span>
             <span>{" Initiative: " + display.initiative}</span>
             <div></div>
-            <span>{"HP " + display.hp}</span>
+            <span>{"HP: " + display.hp}</span>
             {/* <span>{" / " + display.criticalHP}</span> */}
             <div>{"Special Traits: " + display.special}</div>
             {/* TODO: Componentize */}
             {/* Changes current Tank's Crew Cards */}
             <div>Crew Slots</div>
+            {/* {TODO: Tank crew functionality} */}
             <div>{tankCrew.map( (crew, index)=> {return <button key={fixKey()}>{crew}</button>})}</div>
             {/* Modal that Changes the Current Tank's attached Cards */}
             <DisplayTanksEquip settingsAvailableDecks={settingsAvailableDecks} settingsAvailableDeckCards={settingsAvailableDeckCards} setSettingsAvailableDeckCards={setSettingsAvailableDeckCards} settingsUsedDeckCards={settingsUsedDeckCards} setSettingsUsedDeckCards={setSettingsUsedDeckCards} currentSelectedTankCard={currentSelectedTankCard}/>
@@ -156,6 +165,9 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
             }
           </div>
         </div>
+        {/* Display buttons for all possible tanks choices */}
+        {/* TODO: Already organized by wave but create a label */}
+          {/* TODO: Change active highlight to different color so red can be used for over-capacity selections */}
         {tankCards.map((tank, index)=>{
               if (tank === "") {
                 return <span className="currentDeckTankListItem" onClick={(e)=>{handleTankClick(e, index, currentSelectedTankCard.name)}} key={fixKey()}></span>
