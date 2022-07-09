@@ -1,4 +1,4 @@
-import React, {useState } from 'react'
+import React from 'react'
 import ListTanks from './ListTanks.js'
 import DisplayTanksEquip from './DisplayTanksEquip.js'
 
@@ -111,10 +111,26 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
             <span>{display.type}</span>
             <span>{" Wave: " + display.wave}</span>
             <div></div>
-            <span>{"Firepower: " + display.firepower}</span>
-            <span>{" Survivability: " + display.survivability}</span>
-            <span>{" Mobility: " + display.mobility}</span>
-            <span>{" Initiative: " + display.initiative}</span>
+            <span className="statHoverInfo">
+              <img width="30" height="30" src={require('./icons/firepower.jpg')} />
+              <span className="statHoverInfoText">Firepower</span>
+              <span>{": " + display.firepower + " "}</span>
+            </span>
+            <span className="statHoverInfo">
+              <img width="30" height="30" src={require('./icons/survivability.jpg')} />
+              <span className="statHoverInfoText">Survivability</span>
+              <span>{": " + display.survivability + " "}</span>
+            </span>
+            <span className="statHoverInfo">
+              <img width="30" height="30" src={require('./icons/mobility.jpg')} />
+              <span className="statHoverInfoText">Mobility</span>
+              <span>{": " + display.mobility + " "}</span>
+            </span>
+            <span className="statHoverInfo">
+              <img width="30" height="30" src={require('./icons/initiative.jpg')} />
+              <span className="statHoverInfoText">Initiative</span>
+              <span>{": " + display.initiative + " "}</span>
+            </span>
             <div></div>
             <span>{"HP: " + display.hp}</span>
             {/* <span>{" / " + display.criticalHP}</span> */}

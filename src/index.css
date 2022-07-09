@@ -145,10 +145,6 @@ code {
   opacity: 1;
 }
 
-
-
-
-
 .flex-container {
   column-count:2;
   column-gap: normal;
@@ -225,6 +221,35 @@ code {
   float: right;
   font-size: 28px;
   font-weight: bold;
+}
+
+.statHoverInfo {
+  position: relative;
+  display: inline-block;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.statHoverInfo .statHoverInfoText {
+  visibility: hidden;
+  height: 110%;
+  width: 175%;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  top: -155%;
+  left: -45%;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.statHoverInfo:hover .statHoverInfoText {
+  visibility: visible;
+  opacity: 1;
 }
 
 .equipment-button {

@@ -7,12 +7,12 @@ function DisplaySettings ( {settingsAvailableDecks, setSettingsAvailableDecks, c
   const [settingsIcon, setSettingsIcon]=useState("bi bi-gear");
   //State of the settings cog highlighting (changes when active)
   const [settingsIconHighlight, setSettingsIconHighlight]=useState({color: ""});
-    //State of the settings cog highlighting (changes when active)
-  const [settingsArrowHighlight, setSettingsArrowHighlight]=useState({color: ""});
 
   //Handle Settings Modal
   const handleSettingsClick = (e) => {
-    setSettingsIconHighlight( {color: "red"} )
+    //Highlight the modal button when active
+    setSettingsIconHighlight( {color: "green"} )
+    //Grab the modal element
     var settingsModal = document.getElementById("settings-modal");
     // Opens the modal
     settingsModal.style.display = "block";
@@ -42,14 +42,15 @@ function DisplaySettings ( {settingsAvailableDecks, setSettingsAvailableDecks, c
       setSettingsAvailableDecks((prevState)=> ({
         ...prevState,
           [target]: value,
-          ["PZ KPFW IV AUSF H"]: value,
-          ["T-34"]: value,
-          ["M4A1 Sherman"]: value,
-          ["Cromwell"]: value
+          "PZ KPFW IV AUSF H": value,
+          "T-34": value,
+          "M4A1 Sherman": value,
+          "Cromwell": value
         })
       )
     }
     else {
+      //Handle regular cases
       setSettingsAvailableDecks((prevState)=> ({
         ...prevState,
           [target]: value
@@ -71,14 +72,15 @@ function DisplaySettings ( {settingsAvailableDecks, setSettingsAvailableDecks, c
       setSettingsAvailableDecks((prevState)=> ({
         ...prevState,
           [target]: value,
-          ["PZ KPFW IV AUSF H"]: value,
-          ["T-34"]: value,
-          ["M4A1 Sherman"]: value,
-          ["Cromwell"]: value
+          "PZ KPFW IV AUSF H": value,
+          "T-34": value,
+          "M4A1 Sherman": value,
+          "Cromwell": value
         })
       )
     }
     else {
+      //Handle regular cases
       setSettingsAvailableDecks((prevState)=> ({
         ...prevState,
           [target]: value
@@ -105,14 +107,15 @@ function DisplaySettings ( {settingsAvailableDecks, setSettingsAvailableDecks, c
             <div className="starterHoverInfo">Available Expansion Packs
               <span className="starterHoverInfoHelpText">All expansion tanks can be selected regardless if the expansion has been added. Adding an expansion will allow access to that pack's equipment cards and keeps track of how many total are available / being used</span>
             </div>
-            {/* TODO: Why "Unnecessarily computed property" warning */}
             {Object.entries(settingsAvailableDecks).map( ([pack, count], index) =>
                 {
+                  //Dont display the tanks included with the starter deck
                   if (pack !== "PZ KPFW IV AUSF H" && pack !== "T-34" && pack !== "M4A1 Sherman" && pack !== "Cromwell") {
-                    let currentTank = ListTanks.find(tank => tank.name == pack)
+                    let currentTank = ListTanks.find(tank => tank.name === pack)
                     return (
                       <div className="flex-container" key={index} pack={pack}>
                         {/* //TODO: onhover tooltip to display equipment contents of pack */}
+                        {/* //TODO: onhover tooltip to displays basic information the of pack */}
                         {pack === "Starter"
                           ? <div className="starterHoverInfo">{ pack + " "}
                               <span className="starterHoverInfoText">PZ KPFW IV AUSF H, T-34, M4A1 Sherman, Cromwell</span>
@@ -134,7 +137,6 @@ function DisplaySettings ( {settingsAvailableDecks, setSettingsAvailableDecks, c
                       </div>
                     )
                   }
-                  else {return null}
                 }
               )
             }
