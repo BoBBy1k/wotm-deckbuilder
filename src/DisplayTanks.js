@@ -33,12 +33,7 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
   }
 
   //Event handler that opens a modification modal when a tank card is clicked
-  const handleTankClick = (e,index,cardName) => {
-    // console.log(e.target)
-    //Set state to display selected tank
-    setCurrentSelectedTankCard({name: e.target.innerHTML, id: index})
-    setDisplay(ListTanks.find(item => item.name === e.target.innerHTML));
-    // Get the modal
+  const handleTankModal = () => {
     var tankCardModal = document.getElementById("currentDeckTankListItem-modal");
     // Get the element that closes the modal
     var tankCardClose = document.getElementsByClassName("currentDeckTankListItem-modal-close")[0];
@@ -54,6 +49,15 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
         tankCardModal.style.display = "none";
       }
     }
+  }
+
+  const handleTankClick = (e,index,cardName) => {
+    // console.log(e.target)
+    //Set state to display selected tank
+    setCurrentSelectedTankCard({name: e.target.innerHTML, id: index})
+    setDisplay(ListTanks.find(item => item.name === e.target.innerHTML));
+    // Get the modal
+    handleTankModal()
   }
   //Event handler that handles the changes when a new tank is selected in the modification modal
   const handleTankChange = (e,tankName) => {
@@ -121,7 +125,7 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
             {/* {TODO: Tank crew functionality} */}
             <div>{tankCrew.map( (crew, index)=> {return <button key={fixKey()}>{crew}</button>})}</div>
             {/* Modal that Changes the Current Tank's attached Cards */}
-            <DisplayTanksEquip settingsAvailableDecks={settingsAvailableDecks} settingsAvailableDeckCards={settingsAvailableDeckCards} setSettingsAvailableDeckCards={setSettingsAvailableDeckCards} settingsUsedDeckCards={settingsUsedDeckCards} setSettingsUsedDeckCards={setSettingsUsedDeckCards} currentSelectedTankCard={currentSelectedTankCard}/>
+            <DisplayTanksEquip settingsAvailableDecks={settingsAvailableDecks} settingsAvailableDeckCards={settingsAvailableDeckCards} setSettingsAvailableDeckCards={setSettingsAvailableDeckCards} settingsUsedDeckCards={settingsUsedDeckCards} setSettingsUsedDeckCards={setSettingsUsedDeckCards} currentSelectedTankCard={currentSelectedTankCard} handleTankModal={handleTankModal}/>
             {/* Display attached Cards*/}
             <div className="DisplayTanksEquipCardList">
             {Object.entries(settingsUsedDeckCards).map( ( item )=>{

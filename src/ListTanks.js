@@ -1,3 +1,5 @@
+//Double Check list. Error was found
+
 const ListTanks = [
 {wave: "", nation: "", name: "-",  type: "",  cost: 0, special:"", firepower:"", survivability:"", mobility:"", initiative:"", hp :"", criticalHP:"", crew:""},
 {wave: 0, nation: "Germany", name: "PZ KPFW IV AUSF H",       type: "Medium Tank",    cost: 35, firepower: 4, survivability: 1, mobility: 2, initiative: 5, hp : 4, criticalHP: 1, special:[], crew:["Commander", "Gunner", "Driver", "Radio", "Loader"]},

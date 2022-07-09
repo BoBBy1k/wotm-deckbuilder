@@ -123,6 +123,32 @@ code {
   opacity: 1;
 }
 
+.starterHoverInfo .starterHoverInfoHelpText {
+  visibility: hidden;
+  height: 600%;
+  width: 150%;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  top: 120%;
+  left: -25%;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.starterHoverInfo:hover .starterHoverInfoHelpText {
+  visibility: visible;
+  opacity: 1;
+}
+
+
+
+
+
 .flex-container {
   column-count:2;
   column-gap: normal;
@@ -243,6 +269,41 @@ code {
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+
+.equipHoverInfo {
+  position: relative;
+  display: inline-block;
+}
+
+.equipHoverInfo .equipHoverInfoText {
+  visibility: hidden;
+  width: 350px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  left: 110%;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.equipHoverInfo .equipHoverInfoText::after {
+  content: "";
+  position: absolute;
+  top: 42%;
+  right: 100%;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent #555 transparent transparent;
+}
+
+.equipHoverInfo:hover .equipHoverInfoText {
+  visibility: visible;
+  opacity: 1;
 }
 
 .DisplayTanksEquipCardList{
@@ -367,7 +428,7 @@ code {
   margin-right: auto;
 }
 
-.btn-group button {
+.profile-button-group button {
   background-color: gray; /* Green background */
   border: 1px solid black; /* Green border */
   border-radius: 10px;
@@ -379,20 +440,28 @@ code {
   float: left; /* Float the buttons side by side */
 }
 
-.btn-group button:not(:last-child) {
+.profile-button-group button:not(:last-child) {
   border-right: none; /* Prevent double borders */
 }
 
 /* Clear floats (clearfix hack) */
-.btn-group:after {
+.profile-button-group:after {
   content: "";
   clear: both;
   display: table;
 }
 
 /* Add a background color on hover */
-.btn-group button:hover {
+.profile-button-group button:hover {
+  background: rgba(135, 206, 250, 0.500);
+}
+
+.profile-button-new button:hover{
   background-color: #3e8e41;
+}
+
+.profile-button-delete button:hover{
+  background: red
 }
 
 .card {

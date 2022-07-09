@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
+import ListTanks from './ListTanks.js'
 
-//This component allows the addition of expansion packs for availablity calculation and misc settings
-function DisplaySettings ( {settingsAvailableDecks, setSettingsAvailableDecks}) {
+//This component allows the addition of expansion packs for availablity calculation and also toggles misc settings
+function DisplaySettings ( {settingsAvailableDecks, setSettingsAvailableDecks, checkAvailableDeckCards}) {
   //State that holds the current settings cog icon (toggles when hovered)
   const [settingsIcon, setSettingsIcon]=useState("bi bi-gear");
   //State of the settings cog highlighting (changes when active)
@@ -9,10 +10,9 @@ function DisplaySettings ( {settingsAvailableDecks, setSettingsAvailableDecks}) 
     //State of the settings cog highlighting (changes when active)
   const [settingsArrowHighlight, setSettingsArrowHighlight]=useState({color: ""});
 
-    //Handle Settings Modal
+  //Handle Settings Modal
   const handleSettingsClick = (e) => {
     setSettingsIconHighlight( {color: "red"} )
-    // Get the modal
     var settingsModal = document.getElementById("settings-modal");
     // Opens the modal
     settingsModal.style.display = "block";
@@ -32,10 +32,12 @@ function DisplaySettings ( {settingsAvailableDecks, setSettingsAvailableDecks}) 
 
   //Subtracts from the total cards available
   const handleArrowMinus =(e) => {
+    //Grab the name displayed on the UI for which target tank to access
     let target=e.target.parentElement.parentElement.attributes.pack.nodeValue;
     let value=settingsAvailableDecks[target];
-    //Handle the 4 tanks in the starter kit
+    //Dont allow value to be lower than 0
     if (value !== 0) {value--}
+    //Handle the 4 tanks in the starter kit
     if (target==="Starter") {
       setSettingsAvailableDecks((prevState)=> ({
         ...prevState,
@@ -54,12 +56,17 @@ function DisplaySettings ( {settingsAvailableDecks, setSettingsAvailableDecks}) 
         })
       )
     }
+    //Set the available equipment cards after the change
+    checkAvailableDeckCards()
   }
+
   //Adds to the total cards available
   const handleArrowPlus = (e) => {
+    //Grab the name displayed on the UI for which target tank to access
     let target=e.target.parentElement.parentElement.attributes.pack.nodeValue;
     let value=settingsAvailableDecks[target];
     value++;
+    //Handle the 4 tanks in the starter kit
     if (target==="Starter") {
       setSettingsAvailableDecks((prevState)=> ({
         ...prevState,
@@ -78,8 +85,10 @@ function DisplaySettings ( {settingsAvailableDecks, setSettingsAvailableDecks}) 
         })
       )
     }
-    console.log(settingsAvailableDecks)
+    //Set the available equipment cards after the change
+    checkAvailableDeckCards()
   }
+
 
   return (
     <span>
@@ -88,16 +97,19 @@ function DisplaySettings ( {settingsAvailableDecks, setSettingsAvailableDecks}) 
         onMouseEnter={() => {setSettingsIcon("bi bi-gear-fill")}}
         onMouseLeave={() => {setSettingsIcon("bi bi-gear")}}
         />
-        {/* <!-- The Settings Modal --> */}
+        {/* The Settings Modal */}
         <div id="settings-modal" className="settings-modal">
-          {/* <!-- Settings Modal content --> */}
+          {/* Settings Modal content */}
           <div className="settings-modal-content">
             <span className="settings-modal-close">&times;</span>
-            <div>Expansion Pack Filters</div>
+            <div className="starterHoverInfo">Available Expansion Packs
+              <span className="starterHoverInfoHelpText">All expansion tanks can be selected regardless if the expansion has been added. Adding an expansion will allow access to that pack's equipment cards and keeps track of how many total are available / being used</span>
+            </div>
             {/* TODO: Why "Unnecessarily computed property" warning */}
             {Object.entries(settingsAvailableDecks).map( ([pack, count], index) =>
                 {
                   if (pack !== "PZ KPFW IV AUSF H" && pack !== "T-34" && pack !== "M4A1 Sherman" && pack !== "Cromwell") {
+                    let currentTank = ListTanks.find(tank => tank.name == pack)
                     return (
                       <div className="flex-container" key={index} pack={pack}>
                         {/* //TODO: onhover tooltip to display equipment contents of pack */}
@@ -105,8 +117,15 @@ function DisplaySettings ( {settingsAvailableDecks, setSettingsAvailableDecks}) 
                           ? <div className="starterHoverInfo">{ pack + " "}
                               <span className="starterHoverInfoText">PZ KPFW IV AUSF H, T-34, M4A1 Sherman, Cromwell</span>
                             </div>
-                          : <div className="">{ pack + " "}</div>
+                          : <div className="starterHoverInfo">{ pack + " "}
+                              <span className="starterHoverInfoText">{  }
+                              <div>{"Wave "+ currentTank["wave"]}</div>
+                              <div>{currentTank["nation"]}</div>
+                              <div>{currentTank["type"]}</div>
+                              </span>
+                            </div>
                         }
+                        {/* Buttons to Add/Remove an expansion set */}
                         <div className="">
                           <i class="bi bi-arrow-left-square" onClick={handleArrowMinus}></i>
                           {" " + count + " "}

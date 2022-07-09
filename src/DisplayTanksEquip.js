@@ -1,7 +1,8 @@
 import React from 'react'
+import ListEquipment from './ListEquipment.js'
 
 //This component handles equipping cards to tanks
-function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards, settingsUsedDeckCards, setSettingsUsedDeckCards, currentSelectedTankCard} ) {
+function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards, settingsUsedDeckCards, setSettingsUsedDeckCards, currentSelectedTankCard, handleTankModal} ) {
   function handleEquipmentClick(){
     // Get the modal
     var equipModal = document.getElementById("equip-modal");
@@ -15,6 +16,8 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
     window.onclick = function(e){
       if (e.target == equipModal) {
         equipModal.style.display = "none";
+      //Set ability to close previous modal
+      handleTankModal()
       }
     }
   }
@@ -55,6 +58,9 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
     console.log(settingsUsedDeckCards)
   }
 
+
+
+
   return (
     <span>
         {/* Tank Equip Modal */}
@@ -64,15 +70,29 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
           {/* <!-- Modal content --> */}
           <div className="equip-modal-content">
             <span className="equip-modal-close">&times;</span>
-            {/* { TODO: On Hover display per type card limits} */}
-            <div>{" Equip Tank "}</div>
+            {/* { TODO: Cost total} */}
+            <div>{" Equipment Cost: "}</div>
             {Object.entries(settingsAvailableDeckCards).map( ([item,newCount], index) =>
               {
                 let checkCount = settingsUsedDeckCards[item].count > newCount ? {color: 'red'}: {color: 'black'}
+                let currentEquip = ListEquipment.find(equip => equip.name == item)
                 return (
                   <div className="flex-container" key={index} item={item}>
-                    {/* TODO: onhover display stats info */}
-                     <div className="">{ item + " "}</div>
+                    {/* TODO: wave: 0, source: "", name: "", requirement: "",  type1: "", type2:"", unique:false,  exclude:[],*/}
+                    {
+                     <div className="equipHoverInfo">{ item + " "}
+                      <span className="equipHoverInfoText">
+                        <div>{ "Pack: "+ currentEquip["source"]}</div>
+                        <span>{ "Type: "+ currentEquip["type1"]}</span>
+                        <span>{ currentEquip["type2"] !=="" ? " "+ currentEquip["type2"]: null }</span>
+                        <div>{ "Cost: "+ currentEquip["Cost"]}</div>
+                        <div>{ currentEquip["effect"]}</div>
+                      </span>
+                     </div>
+                    }
+
+
+                     {/* <div className="">{ item + " "}</div> */}
                      <div className="">
                      <i class="bi bi-arrow-left-square" onClick={handleEquipMinus}></i>
                      <span style={checkCount}>{" " + settingsUsedDeckCards[item].count}</span> {" / " + newCount + " "}
@@ -88,5 +108,15 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
   )
 }
 
+
+// <div className="flex-container" key={index} item={item}>
+// {/* TODO: onhover display stats info */}
+//  <div className="">{ item + " "}</div>
+//  <div className="">
+//  <i class="bi bi-arrow-left-square" onClick={handleEquipMinus}></i>
+//  <span style={checkCount}>{" " + settingsUsedDeckCards[item].count}</span> {" / " + newCount + " "}
+//  <i class="bi bi-arrow-right-square" onClick={handleEquipPlus}></i>
+//  </div>
+// </div>
 
 export default DisplayTanksEquip

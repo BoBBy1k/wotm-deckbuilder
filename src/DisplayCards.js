@@ -9,7 +9,7 @@ function DisplayCards( { settingsAvailableDeckCards, settingsUsedDeckCards } ) {
         {Object.entries(settingsUsedDeckCards).map( ( item )=>{
           if (item[1]["attached"]["length"] > 0) {
             return (item[1]["attached"].map( (equip) => {
-              placeholders--;
+              if (placeholders > 0){placeholders--;}
               return (<div className="currentCardListItem">{item[0]}</div>)
             }))
             }

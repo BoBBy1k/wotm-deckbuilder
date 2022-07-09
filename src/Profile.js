@@ -45,11 +45,11 @@ function Profile() {
     let availableCards = {};
     let usedCards ={};
     console.log(settingsAvailableDecks)
-    //For each avaiable deck. Add all of the corresponding cards that share the same source from ListEquipment to setSettingsAvailableDeckCards
+    //For each available expansion. Add all of the corresponding cards that share the same source from ListEquipment to setSettingsAvailableDeckCards
     for (let key in settingsAvailableDecks) {
       //If the tanks aren't the ones from the starter kit or no tank placeholder
       if (key !== "PZ KPFW IV AUSF H" && key !== "T-34" && key !== "M4A1 Sherman" && key !== "Cromwell") {
-      //If there is atleast 1 tank set available
+      //If there is atleast 1 tank expansion set available
         if (settingsAvailableDecks[key] >= 1) {
           //Look for the tank kit's items and include them in the state
           ListEquipment.map((item) => {
@@ -152,7 +152,7 @@ function Profile() {
       />
       {/* TODO: Needs to actually calculate points */}
       <DisplayPoints deckPoints={deckPoints} />
-      <DisplaySettings settingsAvailableDecks={settingsAvailableDecks} setSettingsAvailableDecks={setSettingsAvailableDecks} />
+      <DisplaySettings settingsAvailableDecks={settingsAvailableDecks} setSettingsAvailableDecks={setSettingsAvailableDecks} checkAvailableDeckCards={checkAvailableDeckCards}/>
       <DisplayTanks tankCards={profileTankCards} currentSelectedTankCard={currentSelectedTankCard} display={display} setDisplay={setDisplay} setCurrentSelectedTankCard={setCurrentSelectedTankCard} setProfileTankCards={setProfileTankCards} settingsAvailableDecks={settingsAvailableDecks} settingsUsedDecks={settingsUsedDecks} setSettingsUsedDecks={setSettingsUsedDecks} settingsAvailableDeckCards={settingsAvailableDeckCards} setSettingsAvailableDeckCards={setSettingsAvailableDeckCards} settingsUsedDeckCards={settingsUsedDeckCards} setSettingsUsedDeckCards={setSettingsUsedDeckCards} />
       {/* TODO: Integrate description into CRUD */}
       {/* TODO: Replace this input field with something more dynamic that can hold large amounts of text */}
@@ -161,12 +161,11 @@ function Profile() {
       <DisplayProfiles savedProfiles={savedProfiles} currentSelectedProfile={currentSelectedProfile} setCurrentSelectedProfile={setCurrentSelectedProfile} />
       {/* Profile CRUD buttons */}
       {/* TODO: Componentize - First attempt ran into unknown issue with saving/loading */}
-      <div className="btn-group">
-
+      <div className="profile-button-group">
         <button onClick={handleSave}>Save</button>
         <button onClick={handleLoad}>Load</button>
-        <button onClick={handleNew}>New</button>
-        <button onClick={handleDelete}>Delete</button>
+        <span className="profile-button-new"><button onClick={handleNew}>New</button></span>
+        <span className="profile-button-delete"><button onClick={handleDelete}>Delete</button></span>
       </div>
     </div>
   )
