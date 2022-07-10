@@ -28,18 +28,18 @@ function Profile() {
   const [profileDescription, setProfileDescription]=useState("Description");
   //State that holds the total cost points of the current profile (TODO: Functionality)
   const [deckPoints, setDeckPoints]=useState(100);
-  //State that holds which decks have been filtered out and how many cards have been used
+  //State that holds how many of each expansion is avaiable (Only effects equipment cards)
   const [settingsAvailableDecks, setSettingsAvailableDecks]=useState({"Starter": 1,"PZ KPFW IV AUSF H": 1, "T-34": 1, "M4A1 Sherman": 1, "Cromwell": 1, "Stug III Ausf G": 0, "SU-100": 0, "M3 Lee": 0, "Valentine": 0, "PZ KPFW IV AUSF H (II)": 0, "T-34 (II)": 0, "M4A1 Sherman (II)": 0, "Cromwell (II)": 0, "PZ KPFW III AUSF J": 0, "KV-1S": 0, "M10 Wolverine": 0, "Sherman VC Firefly": 0, "Tiger I": 0, "IS-2": 0, "M26 Pershing": 0, "Comet": 0, "Panther": 0, "ISU-152": 0, "M4A1 Sherman (76mm)": 0, "Churchill VII": 0, "Jagdpanzer 38(t) Hetzer": 0, "T-70": 0, "M24 Chaffee": 0, "Crusader": 0, "Tiger II": 0, "T-34-85": 0, "M4A3E8 Sherman": 0, "Challenger": 0});
+  //State that keeps track of tanks used
   const [settingsUsedDecks, setSettingsUsedDecks]=useState({"Starter": 0,"PZ KPFW IV AUSF H": 1, "T-34": 1, "M4A1 Sherman": 1, "Cromwell": 1, "Stug III Ausf G": 0, "SU-100": 0, "M3 Lee": 0, "Valentine": 0, "PZ KPFW IV AUSF H (II)": 0, "T-34 (II)": 0, "M4A1 Sherman (II)": 0, "Cromwell (II)": 0, "PZ KPFW III AUSF J": 0, "KV-1S": 0, "M10 Wolverine": 0, "Sherman VC Firefly": 0, "Tiger I": 0, "IS-2": 0, "M26 Pershing": 0, "Comet": 0, "Panther": 0, "ISU-152": 0, "M4A1 Sherman (76mm)": 0, "Churchill VII": 0, "Jagdpanzer 38(t) Hetzer": 0, "T-70": 0, "M24 Chaffee": 0, "Crusader": 0, "Tiger II": 0, "T-34-85": 0, "M4A3E8 Sherman": 0, "Challenger": 0});
+  //State that keeps track of what equipment cards are available to pick
   const [settingsAvailableDeckCards, setSettingsAvailableDeckCards]=useState({});
+  //State that keeps track of which equipment cards have been used
   const [settingsUsedDeckCards, setSettingsUsedDeckCards]=useState({});
-
-
-  //TODO: This needs to change to the new object structure to keep track of which tank the card is equipped to
-  //All functions that rely on count being the only element need to be adjust to take object.equipmentName.count
-  // Ex. object={repair: {count:1; attached:"Stug" slot:"0"}
-  //             medkit: {count:1; attached:"Stug" slot:"0"}
-  //            }
+  //State that makes the example equipment seed only happen once
+  const [example, setExample]=useState(false);
+  //State that highlights the tank slot the hovered-over equipment card is equipped to
+  const [currentDeckTankListItemHighlight,setCurrentDeckTankListItemHighlight]=useState({});
 
   const checkAvailableDeckCards = (e) => {
     let availableCards = {};
@@ -55,7 +55,14 @@ function Profile() {
           ListEquipment.map((item) => {
             if (item.source===key) {
               availableCards[item.name] = settingsAvailableDecks[key]
-              usedCards[item.name] = {count: 0, attached: []}
+              //Set example equipment
+              if (example === false && item.name === "Small Repair Kit") {
+                usedCards[item.name] = {count: 1, attached: [{ id: 0, name: "PZ KPFW IV AUSF H" }]}
+                setExample(true)
+              }
+              else {
+                usedCards[item.name] = {count: 0, attached: []}
+              }
             }
           })
         }
@@ -153,11 +160,11 @@ function Profile() {
       {/* TODO: Needs to actually calculate points */}
       <DisplayPoints deckPoints={deckPoints} />
       <DisplaySettings settingsAvailableDecks={settingsAvailableDecks} setSettingsAvailableDecks={setSettingsAvailableDecks} checkAvailableDeckCards={checkAvailableDeckCards}/>
-      <DisplayTanks tankCards={profileTankCards} currentSelectedTankCard={currentSelectedTankCard} display={display} setDisplay={setDisplay} setCurrentSelectedTankCard={setCurrentSelectedTankCard} setProfileTankCards={setProfileTankCards} settingsAvailableDecks={settingsAvailableDecks} settingsUsedDecks={settingsUsedDecks} setSettingsUsedDecks={setSettingsUsedDecks} settingsAvailableDeckCards={settingsAvailableDeckCards} setSettingsAvailableDeckCards={setSettingsAvailableDeckCards} settingsUsedDeckCards={settingsUsedDeckCards} setSettingsUsedDeckCards={setSettingsUsedDeckCards} />
+      <DisplayTanks tankCards={profileTankCards} currentSelectedTankCard={currentSelectedTankCard} display={display} setDisplay={setDisplay} setCurrentSelectedTankCard={setCurrentSelectedTankCard} setProfileTankCards={setProfileTankCards} settingsAvailableDecks={settingsAvailableDecks} settingsUsedDecks={settingsUsedDecks} setSettingsUsedDecks={setSettingsUsedDecks} settingsAvailableDeckCards={settingsAvailableDeckCards} setSettingsAvailableDeckCards={setSettingsAvailableDeckCards} settingsUsedDeckCards={settingsUsedDeckCards} setSettingsUsedDeckCards={setSettingsUsedDeckCards} currentDeckTankListItemHighlight={currentDeckTankListItemHighlight}/>
       {/* TODO: Integrate description into CRUD */}
       {/* TODO: Replace this input field with something more dynamic that can hold large amounts of text */}
       <DisplayDescription profileDescription={profileDescription} setProfileDescription={setProfileDescription} />
-      <DisplayCards settingsAvailableDeckCards={settingsAvailableDeckCards} settingsUsedDeckCards={settingsUsedDeckCards} />
+      <DisplayCards settingsAvailableDeckCards={settingsAvailableDeckCards} settingsUsedDeckCards={settingsUsedDeckCards} setCurrentDeckTankListItemHighlight={setCurrentDeckTankListItemHighlight}/>
       <DisplayProfiles savedProfiles={savedProfiles} currentSelectedProfile={currentSelectedProfile} setCurrentSelectedProfile={setCurrentSelectedProfile} />
       {/* Profile CRUD buttons */}
       {/* TODO: Componentize - First attempt ran into unknown issue with saving/loading */}

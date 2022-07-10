@@ -3,7 +3,7 @@ import ListTanks from './ListTanks.js'
 import DisplayTanksEquip from './DisplayTanksEquip.js'
 
 //This component allows the modification of tanks and their attached cards from the main page
-function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCards, setProfileTankCards, currentSelectedTankCard, settingsAvailableDecks, settingsUsedDecks, setSettingsUsedDecks, settingsAvailableDeckCards, setSettingsAvailableDeckCards, settingsUsedDeckCards, setSettingsUsedDeckCards }) {
+function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCards, setProfileTankCards, currentSelectedTankCard, settingsAvailableDecks, settingsUsedDecks, setSettingsUsedDecks, settingsAvailableDeckCards, setSettingsAvailableDeckCards, settingsUsedDeckCards, setSettingsUsedDeckCards, currentDeckTankListItemHighlight }) {
   //Initialize tankCrew variable for incase props.display.crew is empty breaking later mapping function
   let tankCrew = display.crew ? display.crew : []
   //FRAGMENTS CAUSING A UNQIUE KEY ERROR! TODO: Figure out how to make it look more elegant
@@ -190,10 +190,10 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
           {/* TODO: Change active highlight to different color so red can be used for over-capacity selections */}
         {tankCards.map((tank, index)=>{
               if (tank === "") {
-                return <span className="currentDeckTankListItem" onClick={(e)=>{handleTankClick(e, index, currentSelectedTankCard.name)}} key={fixKey()}></span>
+                return <span className={currentDeckTankListItemHighlight === index ? "currentDeckTankListItemHighlight" : "currentDeckTankListItem"} onClick={(e)=>{handleTankClick(e, index, currentSelectedTankCard.name)}} key={fixKey()}></span>
               }
               else {
-                return <span className="currentDeckTankListItem" onClick={(e)=>{handleTankClick(e, index, currentSelectedTankCard.name)}} key={fixKey()}>{tank}</span>
+                return <span className={currentDeckTankListItemHighlight === index ? "currentDeckTankListItemHighlight" : "currentDeckTankListItem"} onClick={(e)=>{handleTankClick(e, index, currentSelectedTankCard.name)}} key={fixKey()}>{tank}</span>
               }
             })
             }

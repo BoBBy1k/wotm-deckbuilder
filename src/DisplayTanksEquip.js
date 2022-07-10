@@ -54,6 +54,7 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
       [target]: {count: value, attached: newAttached}
       })
     )
+    console.log(settingsAvailableDeckCards)
     console.log(newAttached)
     console.log(settingsUsedDeckCards)
   }
@@ -90,14 +91,12 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
                       </span>
                      </div>
                     }
-
-
-                     {/* <div className="">{ item + " "}</div> */}
-                     <div className="">
-                     <i class="bi bi-arrow-left-square" onClick={handleEquipMinus}></i>
-                     <span style={checkCount}>{" " + settingsUsedDeckCards[item].count}</span> {" / " + newCount + " "}
-                     <i class="bi bi-arrow-right-square" onClick={handleEquipPlus}></i>
-                     </div>
+                    {/* <div className="">{ item + " "}</div> */}
+                    <div className="">
+                    <i class="bi bi-arrow-left-square" onClick={handleEquipMinus}></i>
+                    <span style={checkCount}>{" " + settingsUsedDeckCards[item].count}</span> {" / " + newCount + " "}
+                    <i class="bi bi-arrow-right-square" onClick={handleEquipPlus}></i>
+                    </div>
                   </div>
                   )
               }
