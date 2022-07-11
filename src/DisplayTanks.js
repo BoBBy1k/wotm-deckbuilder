@@ -112,22 +112,22 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
             <span>{" Wave: " + display.wave}</span>
             <div></div>
             <span className="statHoverInfo">
-              <img width="30" height="30" src={require('./icons/firepower.jpg')} />
+              <img width="30" height="30" src={require('./icons/firepower.jpg')} alt="Firepower" />
               <span className="statHoverInfoText">Firepower</span>
               <span>{": " + display.firepower + " "}</span>
             </span>
             <span className="statHoverInfo">
-              <img width="30" height="30" src={require('./icons/survivability.jpg')} />
+              <img width="30" height="30" src={require('./icons/survivability.jpg')} alt="Survivability"/>
               <span className="statHoverInfoText">Survivability</span>
               <span>{": " + display.survivability + " "}</span>
             </span>
             <span className="statHoverInfo">
-              <img width="30" height="30" src={require('./icons/mobility.jpg')} />
+              <img width="30" height="30" src={require('./icons/mobility.jpg')} alt="Mobility" />
               <span className="statHoverInfoText">Mobility</span>
               <span>{": " + display.mobility + " "}</span>
             </span>
             <span className="statHoverInfo">
-              <img width="30" height="30" src={require('./icons/initiative.jpg')} />
+              <img width="30" height="30" src={require('./icons/initiative.jpg')} alt="Initiative" />
               <span className="statHoverInfoText">Initiative</span>
               <span>{": " + display.initiative + " "}</span>
             </span>

@@ -1,5 +1,7 @@
 import React from 'react'
 
+//This component handles the description box
+//TODO: Improve to something more dynamic that can display longer messages
 function DisplayDescription({profileDescription, setProfileDescription}) {
 
   return (

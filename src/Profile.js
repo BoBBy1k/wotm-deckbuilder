@@ -6,6 +6,7 @@ import DisplaySettings from './DisplaySettings.js'
 import DisplayDescription from './DisplayDescription.js'
 import DisplayPoints from './DisplayPoints.js'
 import ListEquipment from './ListEquipment.js'
+import CRUDButtons from './CRUDButtons.js'
 
 function Profile() {
   //State that holds saved profiles
@@ -25,7 +26,7 @@ function Profile() {
   //State that holds the current displayed card modal's selected card
   const [currentSelectedTankCard, setCurrentSelectedTankCard]=useState({name:"", id: null});
   //State that holds the profie description (TODO: Functionality)
-  const [profileDescription, setProfileDescription]=useState("Description");
+  const [profileDescription, setProfileDescription]=useState("This is the default example deck using the starter tanks");
   //State that holds the total cost points of the current profile (TODO: Functionality)
   const [deckPoints, setDeckPoints]=useState(100);
   //State that holds how many of each expansion is avaiable (Only effects equipment cards)
@@ -75,72 +76,6 @@ function Profile() {
     //Double check if the starter deck's actual contents to see if it has duplicate cards
   }
 
-  //Function that saves current selected profiles
-  //TODO: Needs to save equipment cards
-  //TODO: Needs to save description
-  const handleSave = (e) => {
-    if (currentSelectedProfile === 0) {
-      setSavedProfiles([...savedProfiles, {profileName:profileName, id: usedProfileId, tankCards: profileTankCards}])
-      console.log("Saving " + profileName + " to profile: " + usedProfileId)
-    }
-    else {
-      //TODO: Overwrite Safety Prompt YES/NO
-      //Search state for selected existing profile ID and update it
-      let updateSave = savedProfiles.map(profile => {
-        if (currentSelectedProfile === profile.id) {
-          return { ...profile, profileName:profileName, id: usedProfileId}
-        }
-        return profile;
-      });
-      setSavedProfiles(updateSave);
-      console.log("Updating " + profileName + " to profile: " + usedProfileId)
-    }
-      //Select new profile
-      setCurrentSelectedProfile(usedProfileId);
-      //TODO: Check why im setting state with its current value?
-      setCurrentProfile(currentProfile);
-      //Increment Counter for profile IDs
-      //TODO: Should only increment with create new profile, but caused some bug so its here.
-      setUsedProfileId(usedProfileId+1);
-  }
-  //Function that loads the selected profile
-  //TODO: Needs to run a function that compares saved equipment and tank cards to the availability list
-  //TODO: Needs to load description
-  const handleLoad = (e) => {
-    savedProfiles.forEach((profile)=> {
-      if (profile.id == currentSelectedProfile) {
-        setCurrentProfile(currentSelectedProfile)
-        setProfileTankCards(profile.tankCards)
-        console.log(profile)
-        console.log("Loading " + profile.profileName + " from profile: " + currentSelectedProfile)
-      }
-    })
-    console.log(savedProfiles);
-  }
-  //Function that creates a new blank Profile
-  //TODO: Needs to reset availablity
-  //TODO: Needs reset description
-  const handleNew = (e) => {
-    setProfileName("New Profile")
-    setSavedProfiles([...savedProfiles, {profileName:"New Profile", id: usedProfileId, tankCards: ["-","-","-","-","-","-","-","-"]}]);
-    setCurrentProfile(usedProfileId)
-    setCurrentSelectedProfile(usedProfileId)
-    setProfileTankCards(["-","-","-","-","-","-","-","-"])
-    console.log("saving " + profileName + " to profile: " + usedProfileId)
-    console.log(savedProfiles);
-    setUsedProfileId(usedProfileId+1);
-   }
-  //Function that deletes currently selected profile
-  const handleDelete = (e) => {
-    //TODO: Needs to reset availablity
-    //Note: nonstrict comparsion is required because of profile.id is a string from being read from html tag. TODO: Maybe fix it?
-    //TODO: Needs to reset description
-    setSavedProfiles(savedProfiles.filter((profile) => profile.id == currentSelectedProfile ? false: true))
-    setCurrentProfile(0);
-    setCurrentSelectedProfile(0);
-    console.log(savedProfiles)
-  }
-
   //Used to set the available/used deck cards of the default display
   useEffect(()=>{
     checkAvailableDeckCards()
@@ -161,19 +96,10 @@ function Profile() {
       <DisplayPoints deckPoints={deckPoints} />
       <DisplaySettings settingsAvailableDecks={settingsAvailableDecks} setSettingsAvailableDecks={setSettingsAvailableDecks} checkAvailableDeckCards={checkAvailableDeckCards}/>
       <DisplayTanks tankCards={profileTankCards} currentSelectedTankCard={currentSelectedTankCard} display={display} setDisplay={setDisplay} setCurrentSelectedTankCard={setCurrentSelectedTankCard} setProfileTankCards={setProfileTankCards} settingsAvailableDecks={settingsAvailableDecks} settingsUsedDecks={settingsUsedDecks} setSettingsUsedDecks={setSettingsUsedDecks} settingsAvailableDeckCards={settingsAvailableDeckCards} setSettingsAvailableDeckCards={setSettingsAvailableDeckCards} settingsUsedDeckCards={settingsUsedDeckCards} setSettingsUsedDeckCards={setSettingsUsedDeckCards} currentDeckTankListItemHighlight={currentDeckTankListItemHighlight}/>
-      {/* TODO: Integrate description into CRUD */}
-      {/* TODO: Replace this input field with something more dynamic that can hold large amounts of text */}
       <DisplayDescription profileDescription={profileDescription} setProfileDescription={setProfileDescription} />
       <DisplayCards settingsAvailableDeckCards={settingsAvailableDeckCards} settingsUsedDeckCards={settingsUsedDeckCards} setCurrentDeckTankListItemHighlight={setCurrentDeckTankListItemHighlight}/>
       <DisplayProfiles savedProfiles={savedProfiles} currentSelectedProfile={currentSelectedProfile} setCurrentSelectedProfile={setCurrentSelectedProfile} />
-      {/* Profile CRUD buttons */}
-      {/* TODO: Componentize - First attempt ran into unknown issue with saving/loading */}
-      <div className="profile-button-group">
-        <button onClick={handleSave}>Save</button>
-        <button onClick={handleLoad}>Load</button>
-        <span className="profile-button-new"><button onClick={handleNew}>New</button></span>
-        <span className="profile-button-delete"><button onClick={handleDelete}>Delete</button></span>
-      </div>
+      <CRUDButtons currentSelectedProfile={currentSelectedProfile} setCurrentSelectedProfile={setCurrentSelectedProfile} currentProfile={currentProfile} setCurrentProfile={setCurrentProfile} setSavedProfiles={setSavedProfiles} savedProfiles={savedProfiles} profileName={profileName} setProfileName={setProfileName} usedProfileId={usedProfileId} setUsedProfileId={setUsedProfileId} profileTankCards={profileTankCards} setProfileTankCards={setProfileTankCards} profileDescription={profileDescription} setProfileDescription={setProfileDescription}/>
     </div>
   )
 }
