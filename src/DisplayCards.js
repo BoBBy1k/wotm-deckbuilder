@@ -20,7 +20,7 @@ function DisplayCards( { settingsAvailableDeckCards, settingsUsedDeckCards, setC
               onMouseLeave={() => { setCurrentDeckTankListItemHighlight("") } }>
               {
                 // Highlight tank the card is attached to
-                <div className="equipHoverInfo">{ item[0] + " "}
+                <div className="equipHoverInfo">{ item[0] }
                   <span className="equipHoverInfoText">
                     <div>{"Attached to: " + equip.name }</div>
                     <div>{ "Pack: "+ currentEquip["source"]}</div>
@@ -36,7 +36,7 @@ function DisplayCards( { settingsAvailableDeckCards, settingsUsedDeckCards, setC
           }))
         }
       })}
-      {/* This is a work around to use map to create a variable range of elements to make placeholders for 16 cards */}
+      {/* This is a work around to use map to create a variable range of elements to make placeholders for 16 default card slots */}
       {[...Array(placeholders)].map((item, index) => <span className="currentCardListItem" key={index}>{""}</span>)}
     </div>
   )

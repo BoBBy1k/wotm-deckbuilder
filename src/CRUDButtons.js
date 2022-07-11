@@ -2,7 +2,7 @@ import React from 'react'
 
 //This component handles CRUD operations. Save / Load / New / Delete Buttons
 function CRUDButtons( { currentSelectedProfile, setCurrentSelectedProfile, currentProfile, setCurrentProfile, setSavedProfiles, savedProfiles, profileName, setProfileName, usedProfileId, setUsedProfileId, profileTankCards, setProfileTankCards, tankCards, profileDescription, setProfileDescription} ) {
-
+  //Function that handles saving and updating of profiles
   const handleSave = (e) => {
     if (currentSelectedProfile === 0) {
       setSavedProfiles([...savedProfiles, {profileName:profileName, id: usedProfileId, tankCards: profileTankCards, description:profileDescription}])

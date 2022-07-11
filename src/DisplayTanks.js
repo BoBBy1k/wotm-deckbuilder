@@ -19,17 +19,20 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
     for (let key in wipeUsedCards) {
       console.log(wipeUsedCards[key])
       if (wipeUsedCards[key]["count"] > 0){
+        console.log("here")
         for (let i=0; i < wipeUsedCards[key]["attached"].length; i++) {
           if (wipeUsedCards[key]["attached"][i]["id"] === currentSelectedTankCard.id){
-            wipeUsedCards[key]["attached"][i] = {};
+            wipeUsedCards[key]["attached"].splice([i], 1);
             wipeUsedCards[key]["count"]--;
+            console.log(wipeUsedCards[key])
+            i--
           }
         }
       }
     }
-    setSettingsUsedDecks(wipeUsedCards)
+    setSettingsUsedDeckCards(wipeUsedCards)
     console.log("CARDS WIPED")
-    console.log(settingsUsedDecks)
+    console.log(wipeUsedCards)
   }
 
   //Event handler that opens a modification modal when a tank card is clicked
@@ -95,7 +98,6 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
     setProfileTankCards((cards)=> cards.map((card,index)=> index === currentSelectedTankCard.id ? newTank : card))
     setCurrentSelectedTankCard(prevState => {return {...prevState, name: newTank}})
     setDisplay(ListTanks.find(item => item.name === e.target.innerHTML));
-    console.log(settingsUsedDecks)
   }
 
   return (
