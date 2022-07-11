@@ -5,10 +5,12 @@ function CRUDButtons( { currentSelectedProfile, setCurrentSelectedProfile, curre
   //Function that handles saving and updating of profiles
   //TODO: double check usage of usedProfileID in this function
   const handleSave = (e) => {
-    let confirmProtect = false;
+    //Is the + button (add new profile button) selected?
     if (currentSelectedProfile === 0) {
       setSavedProfiles([...savedProfiles, {profileName:profileName, id: usedProfileId, tankCards: profileTankCards, description:profileDescription}])
       console.log("Saving " + profileName + " to profile: " + usedProfileId)
+      setCurrentSelectedProfile(usedProfileId);
+      setUsedProfileId(usedProfileId+1);
     }
     else {
       let updateSave = savedProfiles.map(profile => {
@@ -17,33 +19,20 @@ function CRUDButtons( { currentSelectedProfile, setCurrentSelectedProfile, curre
           if (profileName !== profile.profileName){
             //Confirm overwrite
             if ( window.confirm("Save has a different name! Are you sure you want to overwrite?") === true) {
-              console.log("Updating " + profileName + " at profile: " + usedProfileId)
-              return { ...profile, profileName:profileName, id: usedProfileId, tankCards: profileTankCards, description:profileDescription}
-            }
-            else {
-              confirmProtect=true;
+              console.log("Updating " + profileName + " at profile: " + profile.id)
+              return { ...profile, profileName:profileName, id: profile.id, tankCards: profileTankCards, description:profileDescription}
             }
           }
           //Everything is fine
           else {
-            console.log("Updating " + profileName + " at profile: " + usedProfileId)
-            return { ...profile, profileName:profileName, id: usedProfileId, tankCards: profileTankCards, description:profileDescription}
+            console.log("Updating " + profileName + " at profile: " + profile.id)
+            return { ...profile, profileName:profileName, id: profile.id, tankCards: profileTankCards, description:profileDescription}
           }
         }
         return profile;
       });
       setSavedProfiles(updateSave);
 
-    }
-    //Check if stuff has actually changed
-    if (confirmProtect === false){
-      //Select new profile
-      setCurrentSelectedProfile(usedProfileId);
-      //TODO: Check why im setting state with its current value?
-      setCurrentProfile(currentProfile);
-      //Increment Counter for profile IDs
-      //TODO: Should only increment with create new profile, but caused some bug so its here.
-      setUsedProfileId(usedProfileId+1);
     }
   }
   //Function that loads the selected profile
@@ -57,7 +46,6 @@ function CRUDButtons( { currentSelectedProfile, setCurrentSelectedProfile, curre
         console.log("Loading " + profile.profileName + " from profile: " + currentSelectedProfile)
       }
     })
-    console.log(savedProfiles);
   }
   //Function that creates a new blank Profile and sets everything back to default
   //TODO: Needs to reset availablity
