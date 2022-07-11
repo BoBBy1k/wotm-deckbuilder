@@ -13,26 +13,25 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
     return keyCounter;
   }
 
-  //Wipe equipped cards from current tank by searching settingsUsedDeckCards for currentSelectedTankCard.id
+  //Wipe equipped cards from current tank
   const wipeUsedCards = () => {
-    let wipeUsedCards=settingsUsedDeckCards
+    let wipeUsedCards=settingsUsedDeckCards;
+    //Search settingsUsedDeckCards for cards that are being used
     for (let key in wipeUsedCards) {
-      console.log(wipeUsedCards[key])
       if (wipeUsedCards[key]["count"] > 0){
-        console.log("here")
+        //Search through the used cards for one that's attached to target tank
         for (let i=0; i < wipeUsedCards[key]["attached"].length; i++) {
           if (wipeUsedCards[key]["attached"][i]["id"] === currentSelectedTankCard.id){
+            //Splice him up
             wipeUsedCards[key]["attached"].splice([i], 1);
             wipeUsedCards[key]["count"]--;
-            console.log(wipeUsedCards[key])
-            i--
+            //Adjust for the change in index
+            i--;
           }
         }
       }
     }
     setSettingsUsedDeckCards(wipeUsedCards)
-    console.log("CARDS WIPED")
-    console.log(wipeUsedCards)
   }
 
   //Event handler that opens a modification modal when a tank card is clicked
@@ -64,8 +63,6 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
   }
   //Event handler that handles the changes when a new tank is selected in the modification modal
   const handleTankChange = (e,tankName) => {
-    // console.log(display.name + " is current tank ")
-    // console.log(tankName + " is new tank ")
     let currentTank = display.name;
     let newTank = tankName;
     //Check if the same button was pressed (Do nothing)

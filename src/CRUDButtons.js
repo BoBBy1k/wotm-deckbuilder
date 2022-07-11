@@ -3,23 +3,40 @@ import React from 'react'
 //This component handles CRUD operations. Save / Load / New / Delete Buttons
 function CRUDButtons( { currentSelectedProfile, setCurrentSelectedProfile, currentProfile, setCurrentProfile, setSavedProfiles, savedProfiles, profileName, setProfileName, usedProfileId, setUsedProfileId, profileTankCards, setProfileTankCards, tankCards, profileDescription, setProfileDescription} ) {
   //Function that handles saving and updating of profiles
+  //TODO: double check usage of usedProfileID in this function
   const handleSave = (e) => {
+    let confirmProtect = false;
     if (currentSelectedProfile === 0) {
       setSavedProfiles([...savedProfiles, {profileName:profileName, id: usedProfileId, tankCards: profileTankCards, description:profileDescription}])
       console.log("Saving " + profileName + " to profile: " + usedProfileId)
     }
     else {
-      //TODO: Overwrite Safety Prompt YES/NO
-      //Search state for selected existing profile ID and update it
       let updateSave = savedProfiles.map(profile => {
         if (currentSelectedProfile === profile.id) {
-          return { ...profile, profileName:profileName, id: usedProfileId, tankCards: profileTankCards, description:profileDescription}
+          //Does the current profile have a different name than the saved one?
+          if (profileName !== profile.profileName){
+            //Confirm overwrite
+            if ( window.confirm("Save has a different name! Are you sure you want to overwrite?") === true) {
+              console.log("Updating " + profileName + " at profile: " + usedProfileId)
+              return { ...profile, profileName:profileName, id: usedProfileId, tankCards: profileTankCards, description:profileDescription}
+            }
+            else {
+              confirmProtect=true;
+            }
+          }
+          //Everything is fine
+          else {
+            console.log("Updating " + profileName + " at profile: " + usedProfileId)
+            return { ...profile, profileName:profileName, id: usedProfileId, tankCards: profileTankCards, description:profileDescription}
+          }
         }
         return profile;
       });
       setSavedProfiles(updateSave);
-      console.log("Updating " + profileName + " at profile: " + usedProfileId)
+
     }
+    //Check if stuff has actually changed
+    if (confirmProtect === false){
       //Select new profile
       setCurrentSelectedProfile(usedProfileId);
       //TODO: Check why im setting state with its current value?
@@ -27,10 +44,10 @@ function CRUDButtons( { currentSelectedProfile, setCurrentSelectedProfile, curre
       //Increment Counter for profile IDs
       //TODO: Should only increment with create new profile, but caused some bug so its here.
       setUsedProfileId(usedProfileId+1);
+    }
   }
   //Function that loads the selected profile
   //TODO: Needs to run a function that compares saved equipment and tank cards to the availability list
-  //TODO: Needs to load description
   const handleLoad = (e) => {
     savedProfiles.forEach((profile)=> {
       if (profile.id == currentSelectedProfile) {
@@ -46,7 +63,7 @@ function CRUDButtons( { currentSelectedProfile, setCurrentSelectedProfile, curre
   //TODO: Needs to reset availablity
   const handleNew = (e) => {
     setProfileName("New Profile")
-    setSavedProfiles([...savedProfiles, {profileName:"New Profile", id: usedProfileId, tankCards: ["-","-","-","-","-","-","-","-"]}]);
+    setSavedProfiles([...savedProfiles, {profileName:"New Profile", id: usedProfileId, tankCards: ["-","-","-","-","-","-","-","-"], description:profileDescription}]);
     setCurrentProfile(usedProfileId)
     setCurrentSelectedProfile(usedProfileId)
     setProfileTankCards(["-","-","-","-","-","-","-","-"])
@@ -55,16 +72,20 @@ function CRUDButtons( { currentSelectedProfile, setCurrentSelectedProfile, curre
     setUsedProfileId(usedProfileId+1);
    }
   //Function that deletes currently selected profile sets everything back to default
+  //TODO: Needs to reset availablity
   const handleDelete = (e) => {
-    //TODO: Needs to reset availablity
-    //Note: nonstrict comparsion is required because of profile.id is a string from being read from html tag. TODO: Maybe fix it?
-    //TODO: Needs to reset description
-    setSavedProfiles(savedProfiles.filter((profile) => profile.id == currentSelectedProfile ? false: true))
-    setCurrentProfile(0);
-    setCurrentSelectedProfile(0);
-    setProfileTankCards(["-","-","-","-","-","-","-","-"])
-    setProfileDescription("Description")
-    console.log("Deleting " + profileName + " frem profile: " + usedProfileId)
+    //If + (save to new profile) not selected
+    if (currentSelectedProfile !== 0) {
+      if (window.confirm("Are you sure you want to delete this profile? ( " + profileName + " )") === true){
+        //Note: nonstrict comparsion is required because of profile.id is a string from being read from html tag. TODO: Maybe fix it?
+        setSavedProfiles(savedProfiles.filter((profile) => profile.id == currentSelectedProfile ? false: true))
+        setCurrentProfile(0);
+        setCurrentSelectedProfile(0);
+        setProfileTankCards(["-","-","-","-","-","-","-","-"])
+        setProfileDescription("Description")
+        console.log("Deleting " + profileName + " frem profile: " + usedProfileId)
+      }
+    }
   }
 
   return (
