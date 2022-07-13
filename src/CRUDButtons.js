@@ -8,7 +8,7 @@ function CRUDButtons( { currentSelectedProfile, setCurrentSelectedProfile, curre
   //This function sets equipment cards for profiles
   //Bug doesnt delete entry for some reason
   const resetCards = () => {
-    let resetCards = settingsUsedDeckCards;
+    let resetCards = JSON.parse(JSON.stringify(settingsUsedDeckCards));
     for (let key in resetCards) {
 
       if (resetCards[key]["count"] > 0){
