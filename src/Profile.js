@@ -45,8 +45,6 @@ function Profile() {
   const checkAvailableDeckCards = (e) => {
     let availableCards = {};
     let usedCards ={};
-    console.log(settingsAvailableDecks)
-    console.log("CHECKING")
     //For each available expansion. Add all of the corresponding cards that share the same source from ListEquipment to setSettingsAvailableDeckCards
     for (let key in settingsAvailableDecks) {
       //If the tanks aren't the ones from the starter kit or no tank placeholder
@@ -99,7 +97,7 @@ function Profile() {
       <DisplayDescription profileDescription={profileDescription} setProfileDescription={setProfileDescription} />
       <DisplayCards settingsAvailableDeckCards={settingsAvailableDeckCards} settingsUsedDeckCards={settingsUsedDeckCards} setCurrentDeckTankListItemHighlight={setCurrentDeckTankListItemHighlight}/>
       <DisplayProfiles savedProfiles={savedProfiles} currentSelectedProfile={currentSelectedProfile} setCurrentSelectedProfile={setCurrentSelectedProfile} />
-      <CRUDButtons currentSelectedProfile={currentSelectedProfile} setCurrentSelectedProfile={setCurrentSelectedProfile} currentProfile={currentProfile} setCurrentProfile={setCurrentProfile} setSavedProfiles={setSavedProfiles} savedProfiles={savedProfiles} profileName={profileName} setProfileName={setProfileName} usedProfileId={usedProfileId} setUsedProfileId={setUsedProfileId} profileTankCards={profileTankCards} setProfileTankCards={setProfileTankCards} profileDescription={profileDescription} setProfileDescription={setProfileDescription} settingsUsedDeckCards={settingsUsedDeckCards} setSettingsUsedDeckCards={setSettingsUsedDeckCards} />
+      <CRUDButtons currentSelectedProfile={currentSelectedProfile} setCurrentSelectedProfile={setCurrentSelectedProfile} currentProfile={currentProfile} setCurrentProfile={setCurrentProfile} setSavedProfiles={setSavedProfiles} savedProfiles={savedProfiles} profileName={profileName} setProfileName={setProfileName} usedProfileId={usedProfileId} setUsedProfileId={setUsedProfileId} profileTankCards={profileTankCards} setProfileTankCards={setProfileTankCards} profileDescription={profileDescription} setProfileDescription={setProfileDescription} settingsUsedDeckCards={settingsUsedDeckCards} setSettingsUsedDeckCards={setSettingsUsedDeckCards} settingsUsedDecks={settingsUsedDecks} setSettingsUsedDecks={setSettingsUsedDecks}/>
     </div>
   )
 }
