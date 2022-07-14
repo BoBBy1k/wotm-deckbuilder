@@ -1,5 +1,6 @@
 import React from 'react'
 
+//This function displays the profile UI box
 function DisplayProfiles( {currentSelectedProfile, setCurrentSelectedProfile, savedProfiles}) {
   const handleProfileButton = (e) => {
     //Need to parseInt because the e.target saves the html id tag as a string
@@ -11,7 +12,7 @@ function DisplayProfiles( {currentSelectedProfile, setCurrentSelectedProfile, sa
           profile.id == currentSelectedProfile ?
             <button className="profileListItemSelected" key={profile.id} id={profile.id}  onClick={handleProfileButton}>{profile.profileName}</button>
             :
-          <button className="profileListItem" key={profile.id} id={profile.id}  onClick={handleProfileButton}>{profile.profileName}</button>
+          <button className="profileListItem" key={profile.id} id={profile.id} onClick={handleProfileButton}>{profile.profileName}</button>
         ))}
         {currentSelectedProfile == 0 ?
           <button className="profileListItemSelected" key={0} id={0}  onClick={handleProfileButton}>{"+"}</button>

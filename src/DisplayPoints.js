@@ -1,7 +1,6 @@
 import React from 'react'
 
 //This component display the calculated points total
-//TODO: Functionality
 function DisplayPoints({ deckPoints }) {
 
   return (

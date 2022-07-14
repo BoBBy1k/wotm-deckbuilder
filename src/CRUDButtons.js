@@ -2,35 +2,33 @@ import React from 'react'
 
 //This component handles CRUD operations. Save / Load / New / Delete Buttons
 function CRUDButtons( { currentSelectedProfile, setCurrentSelectedProfile, currentProfile, setCurrentProfile, setSavedProfiles, savedProfiles, profileName, setProfileName, usedProfileId, setUsedProfileId, profileTankCards, setProfileTankCards, tankCards, profileDescription, setProfileDescription, settingsUsedDeckCards, setSettingsUsedDeckCards, settingsUsedDecks, setSettingsUsedDecks} ) {
-  //Function that handles saving and updating of profiles
-  //TODO: double check usage of usedProfileID in this function
 
-  //This function sets equipment cards for profiles
-  //Bug doesnt delete entry for some reason
+  //This function clears equipment cards for profiles
   const resetCards = () => {
+    //Deep Cloning of settingsUsedDeckCards since it contains nested objects. Maybe convert to structuredClone() when compatable.
     let resetCards = JSON.parse(JSON.stringify(settingsUsedDeckCards));
+    //Search the settingsUsedDeckCards state
     for (let key in resetCards) {
-
+      //for cards that are attached to tanks
       if (resetCards[key]["count"] > 0){
-        console.log(resetCards[key])
+        //Look through the array of attached cards
         for (let i=0; i < resetCards[key]["attached"].length; i++) {
-            //Splice him up
+            //Splice the card out and subtract it from the count
             resetCards[key]["attached"].splice([i], 1);
             resetCards[key]["count"]--;
-            //Adjust for the change in index
+            //Adjust for the change in index to continue the check
             i--;
         }
-        console.log(resetCards[key])
       }
     }
-    console.log(resetCards)
     setSettingsUsedDeckCards(resetCards)
     return resetCards;
   }
   //This function wipes all used tanks
   const wipeUsedTanks = () => {
+    //Deep Cloning of settingsUsedDecks
     let wipeUsedTanks=JSON.parse(JSON.stringify(settingsUsedDecks));
-    //Search settingsUsedDecks for cards that are being used
+    //Search settingsUsedDecks for cards that are being used and remove them
     for (let key in settingsUsedDecks) {
       if (wipeUsedTanks[key] > 0) {
         console.log("Found " + key)
@@ -41,18 +39,18 @@ function CRUDButtons( { currentSelectedProfile, setCurrentSelectedProfile, curre
     return wipeUsedTanks;
   }
 
-  //TODO: Bug when saving. Both current profile and + (new profile) are written with same card data
+  //This Function handles the saving and updating of profiles
   const handleSave = (e) => {
-  //Is the + button (add new profile button) selected?
-  //Deep Cloning of settingsUsedDeckCards since it contains nested objects. Maybe convert to structuredClone() when compatable.
-  let deckCardClone = JSON.parse(JSON.stringify(settingsUsedDeckCards))
-  console.log(settingsUsedDecks)
+  //Deep Cloning of settingsUsedDeckCards
+    let deckCardClone = JSON.parse(JSON.stringify(settingsUsedDeckCards))
+    //Save - If the + button (add new profile button) is selected save all states to the savedProfiles array
     if (currentSelectedProfile === 0) {
       setSavedProfiles([...savedProfiles, {profileName:profileName, id: usedProfileId, tankCards: profileTankCards, usedTankCards:settingsUsedDecks, description:profileDescription, deckCards: deckCardClone}])
       console.log("Saving " + profileName + " to profile: " + usedProfileId)
       setCurrentSelectedProfile(usedProfileId);
       setUsedProfileId(usedProfileId+1);
     }
+    //Update - otherwise map through the savedProfiles and find the target profile (current one)
     else {
       let updateSave = savedProfiles.map(profile => {
         if (currentSelectedProfile === profile.id) {
@@ -64,7 +62,7 @@ function CRUDButtons( { currentSelectedProfile, setCurrentSelectedProfile, curre
               return { profileName:profileName, id: profile.id, tankCards: profileTankCards, usedTankCards:settingsUsedDecks, description:profileDescription, deckCards: deckCardClone}
             }
           }
-          //Everything is fine
+          //Otherwise everything is fine
           else {
             console.log("Updating " + profileName + " at profile: " + profile.id)
             return { profileName:profileName, id: profile.id, tankCards: profileTankCards, usedTankCards:settingsUsedDecks, description:profileDescription, deckCards: deckCardClone}
@@ -77,11 +75,10 @@ function CRUDButtons( { currentSelectedProfile, setCurrentSelectedProfile, curre
     console.log(savedProfiles)
   }
   //Function that loads the selected profile
-  //TODO: Needs to run a function that compares saved equipment and tank cards to the availability list
   const handleLoad = (e) => {
     //Do nothing if + (Save to new profile) is selected
     if (currentSelectedProfile !== 0) {
-      //Look for the selected profile by id from saved profiles
+      //Look for the selected profile by id from saved profiles then load everything from it into state
       savedProfiles.forEach((profile)=> {
         if ( profile.id == currentSelectedProfile) {
           setProfileName(profile.profileName)
@@ -95,9 +92,7 @@ function CRUDButtons( { currentSelectedProfile, setCurrentSelectedProfile, curre
       })
     }
   }
-  //Function that creates a new blank Profile and sets everything back to default
-  //TODO: Needs to reset availablity
-  //Bug applies wipeusedtank to previous profile?
+  //Function that creates a new blank Profile and sets UI back to blank defaults
   const handleNew = (e) => {
     setProfileName("New Profile")
     setProfileTankCards(["-","-","-","-","-","-","-","-"])
@@ -111,11 +106,10 @@ function CRUDButtons( { currentSelectedProfile, setCurrentSelectedProfile, curre
     setUsedProfileId(usedProfileId+1);
    }
   //Function that deletes currently selected profile sets everything back to default
-  //TODO: Needs to reset availablity
-  //TODO: Needs to reset cards
   const handleDelete = (e) => {
     //Do nothing if + (save to new profile button) is selected
     if (currentSelectedProfile !== 0) {
+      //Safety confirmation
       if (window.confirm("Are you sure you want to delete this profile?") === true){
         //Note: nonstrict comparsion is required because of profile.id is a string from being read from html tag. TODO: Maybe fix it?
         setSavedProfiles(savedProfiles.filter((profile) => profile.id == currentSelectedProfile ? false: true))
