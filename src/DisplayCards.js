@@ -20,8 +20,8 @@ function DisplayCards( { settingsAvailableDeckCards, settingsUsedDeckCards, setC
               onMouseLeave={() => { setCurrentDeckTankListItemHighlight("") } }>
               {
                 // Highlight tank the card is attached to
-                <div className="equipHoverInfo">{ item[0] }
-                  <span className="equipHoverInfoText">
+                <div className="cardHoverInfo">
+                  <span className="cardHoverInfoText">
                     <div>{"Attached to: " + equip.name }</div>
                     <div>{ "Pack: "+ currentEquip["source"]}</div>
                     <span>{ "Type: "+ currentEquip["type1"]}</span>
@@ -29,6 +29,7 @@ function DisplayCards( { settingsAvailableDeckCards, settingsUsedDeckCards, setC
                     <div>{ "Cost: "+ currentEquip["Cost"]}</div>
                     <div>{ currentEquip["effect"]}</div>
                   </span>
+                  { item[0] }
                 </div>
               }
               </div>
