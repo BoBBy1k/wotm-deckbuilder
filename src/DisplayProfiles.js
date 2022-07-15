@@ -8,7 +8,7 @@ function DisplayProfiles( {currentSelectedProfile, setCurrentSelectedProfile, sa
   }
   return (
     <div className="profileList">
-        {savedProfiles.map((profile)=>(
+        {savedProfiles.map((profile, index)=>(
           profile.id == currentSelectedProfile ?
             <button className="profileListItemSelected" key={profile.id} id={profile.id}  onClick={handleProfileButton}>{profile.profileName}</button>
             :

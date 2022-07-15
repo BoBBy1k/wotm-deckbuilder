@@ -59,9 +59,6 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
     console.log(settingsUsedDeckCards)
   }
 
-
-
-
   return (
     <span>
         {/* Tank Equip Modal */}
@@ -90,9 +87,9 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
                     }
                     {/* <div className="">{ item + " "}</div> */}
                     <div className="">
-                    <i class="bi bi-arrow-left-square" onClick={handleEquipMinus}></i>
+                    <i className="bi bi-arrow-left-square" onClick={handleEquipMinus}></i>
                     <span style={checkCount}>{" " + settingsUsedDeckCards[item].count}</span> {" / " + newCount + " "}
-                    <i class="bi bi-arrow-right-square" onClick={handleEquipPlus}></i>
+                    <i className="bi bi-arrow-right-square" onClick={handleEquipPlus}></i>
                     </div>
                   </div>
                   )
@@ -103,16 +100,5 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
     </span>
   )
 }
-
-
-// <div className="flex-container" key={index} item={item}>
-// {/* TODO: onhover display stats info */}
-//  <div className="">{ item + " "}</div>
-//  <div className="">
-//  <i class="bi bi-arrow-left-square" onClick={handleEquipMinus}></i>
-//  <span style={checkCount}>{" " + settingsUsedDeckCards[item].count}</span> {" / " + newCount + " "}
-//  <i class="bi bi-arrow-right-square" onClick={handleEquipPlus}></i>
-//  </div>
-// </div>
 
 export default DisplayTanksEquip

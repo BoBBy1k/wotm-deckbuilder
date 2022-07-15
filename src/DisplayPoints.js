@@ -6,23 +6,26 @@ import ListEquipment from './ListEquipment.js'
 function DisplayPoints({ profileTankCards, settingsUsedDeckCards }) {
   //State that holds the total cost points of the current profile
   const [totalPoints, setTotalPoints]=useState(0);
-  //TODO: This is a temp fix for "too many rerenderings"
-  var test=0
+  //TODO: This is a temp fix for "too many re-renders"
+  let test=0;
   const handlePoints = ( input ) => {
     test += input
     return input
   }
 
+  //The array of the origins of point usage that the tooltip will display
   let displayPointSource=[];
+  //Search through the used tanks cards and add them to the array
   profileTankCards.forEach((item, index)=>{
     if (item !== "-") {
       displayPointSource.push({id:index, name: item, attached: []})
     }
   })
+  //Search through the used equipment cards and add them to the array at the slot id that it contains
   Object.entries(settingsUsedDeckCards).forEach((item)=>{
     //This is the current equipment
     let currentEquipment=item[1]
-    //Is this equipment is attached to anything?
+    //Is this equipment attached to anything?
     if (currentEquipment["count"] > 0) {
       //Search through everything that it is attached to
       for (let i=0; i < currentEquipment["attached"].length; i++){
@@ -37,26 +40,28 @@ function DisplayPoints({ profileTankCards, settingsUsedDeckCards }) {
       }
     }
   })
-  const listCards = displayPointSource.map((item) =>
-    <div>
-      <span style={{fontSize: 22}}>
+  //Prep the render from the array
+  const listCards = displayPointSource.map((item,index) =>
+
+    <div key={index}>
+      <span style={{fontSize: 22}} key={index}>
         {item["name"] + " - " + handlePoints(ListTanks.find((tank) => item["name"] === tank["name"])["cost"])}
       </span>
-      {item["attached"].map( (item)=>
-        <li style={{fontSize: 16}}>
+      {item["attached"].map( (item,index)=>
+        <li style={{fontSize: 16}} key={index}>
           {item["name"] + " - " + handlePoints(ListEquipment.find((equip) => item["name"] === equip["name"])["cost"])}
         </li>
       )}
     </div>
   )
-  //TODO: Temp workaround to slow down rerenders
-  setTimeout(()=>{setTotalPoints(test); console.log("test")})
+  //TODO: Temp workaround to slow down re-renders. Figure it out later.
+  setTimeout(()=>{setTotalPoints(test); console.log("Calculating Points")})
   return (
     <div className="totalPoints">
       {
         <div className="pointHoverInfo">
-          {/* {test === 1 ? test + " Point" : test + " Points"} */}
-          {totalPoints === 1 ? totalPoints + " Point" : totalPoints + " Points"}
+          {test === 1 ? test + " Point" : test + " Points"}
+          {/* {totalPoints === 1 ? totalPoints + " Point" : totalPoints + " Points"} */}
             <span className="pointHoverInfoText">
               {listCards}
               {/* <div>{listTank}</div> */}

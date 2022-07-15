@@ -63,6 +63,7 @@ function DisplaySettings ( {settingsAvailableDecks, setSettingsAvailableDecks, c
   }
 
   //Adds to the total cards available
+  //TODO: Bug when adding exp decks. It removes all attached cards. Probably replaces the array.
   const handleArrowPlus = (e) => {
     //Grab the name displayed on the UI for which target tank to access
     let target=e.target.parentElement.parentElement.attributes.pack.nodeValue;
@@ -96,7 +97,7 @@ function DisplaySettings ( {settingsAvailableDecks, setSettingsAvailableDecks, c
   return (
     <span>
         {/* Settings Modal Button */}
-        <i class={settingsIcon} style={settingsIconHighlight} onClick={handleSettingsClick}
+        <i className={settingsIcon} style={settingsIconHighlight} onClick={handleSettingsClick}
         onMouseEnter={() => {setSettingsIcon("bi bi-gear-fill")}}
         onMouseLeave={() => {setSettingsIcon("bi bi-gear")}}
         />
@@ -131,9 +132,9 @@ function DisplaySettings ( {settingsAvailableDecks, setSettingsAvailableDecks, c
                         }
                         {/* Buttons to Add/Remove an expansion set */}
                         <div className="">
-                          <i class="bi bi-arrow-left-square" onClick={handleArrowMinus}></i>
+                          <i className="bi bi-arrow-left-square" onClick={handleArrowMinus}></i>
                           {" " + count + " "}
-                          <i class="bi bi-arrow-right-square" onClick={handleArrowPlus}></i>
+                          <i className="bi bi-arrow-right-square" onClick={handleArrowPlus}></i>
                         </div>
                       </div>
                     )

@@ -137,16 +137,16 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
             {/* Changes current Tank's Crew Cards */}
             <div>Crew Slots</div>
             {/* {TODO: Tank crew functionality} */}
-            <div>{tankCrew.map( (crew, index)=> {return <button key={fixKey()}>{crew}</button>})}</div>
+            <div>{tankCrew.map( (crew, index)=> {return <button key={index}>{crew}</button>})}</div>
             {/* Modal that Changes the Current Tank's attached Cards */}
             <DisplayTanksEquip settingsAvailableDecks={settingsAvailableDecks} settingsAvailableDeckCards={settingsAvailableDeckCards} setSettingsAvailableDeckCards={setSettingsAvailableDeckCards} settingsUsedDeckCards={settingsUsedDeckCards} setSettingsUsedDeckCards={setSettingsUsedDeckCards} currentSelectedTankCard={currentSelectedTankCard} handleTankModal={handleTankModal} setTotalPoints={setTotalPoints}/>
             {/* Display attached Cards*/}
             <div className="DisplayTanksEquipCardList">
             {Object.entries(settingsUsedDeckCards).map( ( item )=>{
               if (item[1]["attached"]["length"] > 0) {
-                return (item[1]["attached"].map( (equip) => {
+                return (item[1]["attached"].map( (equip, index) => {
                   if(equip["id"] === currentSelectedTankCard.id) {
-                    return (<div key={fixKey()} className="DisplayTanksEquipCardListItem">{item[0]}</div>)
+                    return (<div key={index} className="DisplayTanksEquipCardListItem">{item[0]}</div>)
                   }
                 }))
                 }

@@ -11,10 +11,10 @@ function DisplayCards( { settingsAvailableDeckCards, settingsUsedDeckCards, setC
       {Object.entries(settingsUsedDeckCards).map( ( item )=>{
         let currentEquip = ListEquipment.find(equip => item[0] == equip.name)
         if (item[1]["attached"]["length"] > 0) {
-          return (item[1]["attached"].map( (equip) => {
+          return (item[1]["attached"].map( (equip, index) => {
             if (placeholders > 0){placeholders--;}
             return (
-              <div className="currentCardListItem"
+              <div className="currentCardListItem" key={index}
               // Highlight tank the card is attached to
               onMouseEnter={() => { setCurrentDeckTankListItemHighlight(equip.id) }}
               onMouseLeave={() => { setCurrentDeckTankListItemHighlight("") } }>
