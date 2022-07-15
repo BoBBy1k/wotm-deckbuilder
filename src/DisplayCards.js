@@ -26,7 +26,7 @@ function DisplayCards( { settingsAvailableDeckCards, settingsUsedDeckCards, setC
                     <div>{ "Pack: "+ currentEquip["source"]}</div>
                     <span>{ "Type: "+ currentEquip["type1"]}</span>
                     <span>{ currentEquip["type2"] !=="" ? " "+ currentEquip["type2"]: null }</span>
-                    <div>{ "Cost: "+ currentEquip["Cost"]}</div>
+                    <div>{ "Cost: "+ currentEquip["cost"]}</div>
                     <div>{ currentEquip["effect"]}</div>
                   </span>
                   { item[0] }

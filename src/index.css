@@ -294,6 +294,13 @@ code {
   font-weight: bold;
 }
 
+.currentDeckTankListItem-modal-close:hover,
+.currentDeckTankListItem-modal-close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
 .statHoverInfo {
   position: relative;
   display: inline-block;

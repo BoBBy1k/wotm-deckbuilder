@@ -66,12 +66,9 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
     <span>
         {/* Tank Equip Modal */}
         <button onClick={handleEquipmentClick} className="equipment-button">Equipment / Consumables</button>
-        {/* <!-- The Modal --> */}
         <div id="equip-modal" className="equip-modal">
-          {/* <!-- Modal content --> */}
           <div className="equip-modal-content">
             <span className="equip-modal-close">&times;</span>
-            {/* { TODO: Cost total} */}
             <div>{" Equipment Cost: "}</div>
             {Object.entries(settingsAvailableDeckCards).map( ([item,newCount], index) =>
               {
@@ -86,7 +83,7 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
                         <div>{ "Pack: "+ currentEquip["source"]}</div>
                         <span>{ "Type: "+ currentEquip["type1"]}</span>
                         <span>{ currentEquip["type2"] !=="" ? " "+ currentEquip["type2"]: null }</span>
-                        <div>{ "Cost: "+ currentEquip["Cost"]}</div>
+                        <div>{ "Cost: "+ currentEquip["cost"]}</div>
                         <div>{ currentEquip["effect"]}</div>
                       </span>
                      </div>

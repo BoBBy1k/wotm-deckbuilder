@@ -99,9 +99,8 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
 
   return (
     <div className="currentDeckTankList">
-        {/* <!-- The Modal --> */}
+        {/* Tank Modal */}
         <div id="currentDeckTankListItem-modal" className="currentDeckTankListItem-modal">
-        {/* <!-- Modal content --> */}
           <div className="currentDeckTankListItem-modal-content">
             <span className="currentDeckTankListItem-modal-close">&times;</span>
             <div>{display.name}</div>
