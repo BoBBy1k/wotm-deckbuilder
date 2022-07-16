@@ -139,7 +139,7 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
             {/* {TODO: Tank crew functionality} */}
             <div>{tankCrew.map( (crew, index)=> {return <button key={index}>{crew}</button>})}</div>
             {/* Modal that Changes the Current Tank's attached Cards */}
-            <DisplayTanksEquip settingsAvailableDecks={settingsAvailableDecks} settingsAvailableDeckCards={settingsAvailableDeckCards} setSettingsAvailableDeckCards={setSettingsAvailableDeckCards} settingsUsedDeckCards={settingsUsedDeckCards} setSettingsUsedDeckCards={setSettingsUsedDeckCards} currentSelectedTankCard={currentSelectedTankCard} handleTankModal={handleTankModal} setTotalPoints={setTotalPoints}/>
+            <DisplayTanksEquip settingsAvailableDecks={settingsAvailableDecks} settingsAvailableDeckCards={settingsAvailableDeckCards} setSettingsAvailableDeckCards={setSettingsAvailableDeckCards} settingsUsedDeckCards={settingsUsedDeckCards} setSettingsUsedDeckCards={setSettingsUsedDeckCards} currentSelectedTankCard={currentSelectedTankCard} handleTankModal={handleTankModal} setTotalPoints={setTotalPoints} display={display}/>
             {/* Display attached Cards*/}
             <div className="DisplayTanksEquipCardList">
             {Object.entries(settingsUsedDeckCards).map( ( item )=>{
