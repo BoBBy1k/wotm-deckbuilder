@@ -80,7 +80,7 @@ function CRUDButtons( { currentSelectedProfile, setCurrentSelectedProfile, curre
     if (currentSelectedProfile !== 0) {
       //Look for the selected profile by id from saved profiles then load everything from it into state
       savedProfiles.forEach((profile)=> {
-        if ( profile.id == currentSelectedProfile) {
+        if ( profile.id === currentSelectedProfile) {
           setProfileName(profile.profileName)
           setCurrentProfile(currentSelectedProfile)
           setProfileTankCards(profile.tankCards)
@@ -112,7 +112,7 @@ function CRUDButtons( { currentSelectedProfile, setCurrentSelectedProfile, curre
       //Safety confirmation
       if (window.confirm("Are you sure you want to delete this profile?") === true){
         //Note: nonstrict comparsion is required because of profile.id is a string from being read from html tag. TODO: Maybe fix it?
-        setSavedProfiles(savedProfiles.filter((profile) => profile.id == currentSelectedProfile ? false: true))
+        setSavedProfiles(savedProfiles.filter((profile) => profile.id === currentSelectedProfile ? false: true))
         setCurrentProfile(0);
         setCurrentSelectedProfile(0);
         setProfileTankCards(["-","-","-","-","-","-","-","-"]);

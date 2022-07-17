@@ -14,7 +14,7 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
     }
     // Close the modal when mouse clicks outside the box
     window.onclick = function(e){
-      if (e.target == equipModal) {
+      if (e.target === equipModal) {
         equipModal.style.display = "none";
       //Set ability to close previous modal
       handleTankModal()
@@ -91,16 +91,15 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
       {
         // console.log(item)
         // console.log(count)
-        let currentEquip = ListEquipment.find(equip => equip.name == item)
+        let currentEquip = ListEquipment.find(equip => equip.name === item)
         // // TODO: 4th Priority - card not available
         // // else if (count === 0) {
         // //   eqNotAvailable.push({ item: count })
         //If there's a requirement callback and the current equipment/tank pair fails the compatibility test
         if (currentEquip["callback"] !== null && !currentEquip["callback"](display)) {
           eqNotCompatable.push({ [item]: count })
-          console.log("Not Compatable!")
-          console.log(currentEquip)
-          console.log(currentSelectedTankCard)
+          console.log(currentEquip["name"] + " - Not Compatable!")
+          // console.log(currentSelectedTankCard)
         }
         //If the current card is muturally exclusive with a currently equiped card)
         // else if () {
@@ -131,36 +130,40 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
     )
   }
 
-  handleEquipmentSort()
-  handleEquipmentPrep()
+  //Dont need to calculate in the cases where theres no tank
+  if (currentSelectedTankCard["name"] !== "" && currentSelectedTankCard["name"] !== "-") {handleEquipmentSort()}
+  if (currentSelectedTankCard["name"] !== "" && currentSelectedTankCard["name"] !== "-")  {handleEquipmentPrep()}
 
   function tempDisplay() {
-    return Object.entries(settingsAvailableDeckCards).map( ([item,newCount], index) =>
-      {
-        let checkCount = settingsUsedDeckCards[item].count > newCount ? {color: 'red'}: {color: 'black'}
-        let currentEquip = ListEquipment.find(equip => equip.name == item)
-        return (
-          <div className="flex-container" key={index} item={item}>
-            {
-             <div className="equipHoverInfo">{ item + " "}
-              <span className="equipHoverInfoText">
-                <div>{ "Pack: "+ currentEquip["source"]}</div>
-                <span>{ "Type: "+ currentEquip["type1"]}</span>
-                <span>{ currentEquip["type2"] !=="" ? " "+ currentEquip["type2"]: null }</span>
-                <div>{ "Cost: "+ currentEquip["cost"]}</div>
-                <div>{ currentEquip["effect"]}</div>
-              </span>
-             </div>
-            }
-            <div className="">
-            <i className="bi bi-arrow-left-square" onClick={handleEquipMinus}></i>
-            <span style={checkCount}>{" " + settingsUsedDeckCards[item].count}</span> {" / " + newCount + " "}
-            <i className="bi bi-arrow-right-square" onClick={handleEquipPlus}></i>
+    if (currentSelectedTankCard["name"] !== "" && currentSelectedTankCard["name"] !== "-") {
+      return Object.entries(settingsAvailableDeckCards).map( ([item,newCount], index) =>
+        {
+          let checkCount = settingsUsedDeckCards[item].count > newCount ? {color: 'red'}: {color: 'black'}
+          let currentEquip = ListEquipment.find(equip => equip.name === item)
+          return (
+            <div className="flex-container" key={index} item={item}>
+              {
+              <div className="equipHoverInfo">{ item + " "}
+                <span className="equipHoverInfoText">
+                  <div>{ "Pack: "+ currentEquip["source"]}</div>
+                  <span>{ "Type: "+ currentEquip["type1"]}</span>
+                  <span>{ currentEquip["type2"] !=="" ? " "+ currentEquip["type2"]: null }</span>
+                  <div>{ "Cost: "+ currentEquip["cost"]}</div>
+                  <div>{ currentEquip["effect"]}</div>
+                </span>
+              </div>
+              }
+              <div className="">
+              <i className="bi bi-arrow-left-square" onClick={handleEquipMinus}></i>
+              <span style={checkCount}>{" " + settingsUsedDeckCards[item].count}</span> {" / " + newCount + " "}
+              <i className="bi bi-arrow-right-square" onClick={handleEquipPlus}></i>
+              </div>
             </div>
-          </div>
-        )
-      }
-    )
+          )
+        }
+      )
+    }
+    else {return (<div>No Selected Tank!</div>)}
   }
 
 
@@ -172,7 +175,9 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
         <div id="equip-modal" className="equip-modal">
           <div className="equip-modal-content">
             <span className="equip-modal-close">&times;</span>
-            <div>{" Equipment Cost: "}</div>
+            <div>{" Equipment "}</div>
+            {/* TODO: Add functionality */}
+            {/* <div>{" Total Point Cost "}</div> */}
             {tempDisplay()}
           </div>
         </div>

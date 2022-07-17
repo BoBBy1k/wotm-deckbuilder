@@ -93,7 +93,6 @@ function DisplaySettings ( {settingsAvailableDecks, setSettingsAvailableDecks, c
     checkAvailableDeckCards()
   }
 
-
   return (
     <span>
         {/* Settings Modal Button */}

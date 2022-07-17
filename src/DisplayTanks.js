@@ -3,7 +3,7 @@ import ListTanks from './ListTanks.js'
 import DisplayTanksEquip from './DisplayTanksEquip.js'
 
 //This component allows the modification of tanks and their attached cards from the main page
-function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCards, setProfileTankCards, currentSelectedTankCard, settingsAvailableDecks, settingsUsedDecks, setSettingsUsedDecks, settingsAvailableDeckCards, setSettingsAvailableDeckCards, settingsUsedDeckCards, setSettingsUsedDeckCards, currentDeckTankListItemHighlight, setTotalPoints }) {
+function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCards, setProfileTankCards, currentSelectedTankCard, settingsAvailableDecks, settingsUsedDecks, setSettingsUsedDecks, settingsAvailableDeckCards, setSettingsAvailableDeckCards, settingsUsedDeckCards, setSettingsUsedDeckCards, currentDeckTankListItemHighlight, setTotalPoints, checkAvailableDeckCards }) {
   //Initialize tankCrew variable for incase props.display.crew is empty breaking later mapping function
   let tankCrew = display.crew ? display.crew : []
   //FRAGMENTS CAUSING A UNQIUE KEY ERROR! TODO: Figure out how to make it look more elegant
@@ -58,6 +58,8 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
     //Set state to display selected tank
     setCurrentSelectedTankCard({name: e.target.innerHTML, id: index})
     setDisplay(ListTanks.find(item => item.name === e.target.innerHTML));
+    //TODO: Remove this check - currently a work around to make sure it loads correctly.
+    checkAvailableDeckCards()
     // Get the modal
     handleTankModal()
   }

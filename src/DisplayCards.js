@@ -9,7 +9,7 @@ function DisplayCards( { settingsAvailableDeckCards, settingsUsedDeckCards, setC
     <div className="currentCardList">
       {/* Displays all used equipment cards */}
       {Object.entries(settingsUsedDeckCards).map( ( item )=>{
-        let currentEquip = ListEquipment.find(equip => item[0] == equip.name)
+        let currentEquip = ListEquipment.find(equip => item[0] === equip.name)
         if (item[1]["attached"]["length"] > 0) {
           return (item[1]["attached"].map( (equip, index) => {
             if (placeholders > 0){placeholders--;}
