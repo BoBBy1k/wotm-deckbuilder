@@ -4,7 +4,7 @@ import ListEquipment from './ListEquipment.js'
 //This component handles equipping cards to tanks
 function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards, settingsUsedDeckCards, setSettingsUsedDeckCards, currentSelectedTankCard, handleTankModal, display} ) {
   function handleEquipmentClick(){
-    // Get the modal
+    // This is the modal's id
     var equipModal = document.getElementById("equip-modal");
     // Opens the modal
     equipModal.style.display = "block";
@@ -45,7 +45,9 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
   //Handler for adding cards
   function handleEquipPlus(e){
     let target=e.target.parentElement.parentElement.attributes[1].nodeValue;
+    console.log( "!!!!!!!!!!!!!!!!!!!!!!!!"+ target)
     let value=settingsUsedDeckCards[target].count;
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!"+ value)
     let newAttached=settingsUsedDeckCards[target].attached;
     newAttached.push({ id: currentSelectedTankCard.id, name: currentSelectedTankCard.name })
     value++;
@@ -59,13 +61,9 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
     console.log(settingsUsedDeckCards)
   }
 
-  //TODO: Card equipment sorting system
-  //TODO: Toggle to show or hide each list type
-  //Arrays that hold the 3 tiers of sorted equipment
-
-  //1st Priority: If from the same exp source / has a matching tag (Run checks on High / Low stat thresholds, maybe if the requirement includes this tank)
+  //1st Priority: If from the same exp source (TODO: If the equipment's requirement includes this tank)
   let eqRecommended=[]
-  //2nd Priority: Everything else that is compatable
+  //2nd Priority: Has a matching tag (Run checks on High / Low stat thresholds)
   let eqTag=[]
   //3rd Priority: Everything else that is compatable
   let eqNormal=[]
@@ -73,13 +71,10 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
   let eqNotCompatable=[]
   //TODO: 5th Priority: If the equipment is not available to be picked at all (From unselected expansions)
   let eqNotAvailable=[]
-  //The final combined array that contains everything in render order
-  let eqRender=[]
-  //Test Function that sorts the equipment into these tiers
 
+  //Function that generates the item elements
   function equipmentPrepMap (array, compatable){
     return (array.map( (item, index) => {
-      console.log(item)
       let checkCount = settingsUsedDeckCards[item["name"]].count > item["count"] ? {color: 'red'}: {color: 'black'}
       let currentEquip = ListEquipment.find(equip => equip.name === item["name"])
       return (
@@ -105,16 +100,10 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
     }))
   }
 
-  //Function that preps the three tiers for rendering
+  //Function that preps the equipment sorting tiers for rendering
+  //TODO: Toggle to show or hide each list type
   function handleEquipmentPrep(){
-    eqRender = eqRecommended.concat(eqTag).concat(eqNormal).concat(eqNotCompatable).concat(eqNotAvailable)
-    // console.log(eqRender)
-    // console.log(settingsAvailableDeckCards)
-    //Flexbox class
-    //equipSort
-    //equipSortItem
     if (currentSelectedTankCard["name"] !== "" && currentSelectedTankCard["name"] !== "-") {
-      console.log(          equipmentPrepMap(eqNormal))
       return(
         <div>
           <div className={"equipSort"}>{"Recommended by Source"}{equipmentPrepMap(eqRecommended,true)}</div>
@@ -133,8 +122,6 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
     //Iterate through settingsAvailableDeckCards (state that contains all decks)
     Object.entries(settingsAvailableDeckCards).map( ([item,count], index) =>
       {
-        // console.log(item)
-        // console.log(count)
         let currentEquip = ListEquipment.find(equip => equip.name === item)
         // // TODO: 5th Priority - card not available
         // // else if (count === 0) {
@@ -142,7 +129,7 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
         //If there's a requirement callback and the current equipment/tank pair fails the compatibility test
         if (currentEquip["callback"] !== null && !currentEquip["callback"](display)) {
           eqNotCompatable.push({ name: item, count : count })
-          console.log(currentEquip["name"] + " - Not Compatable!")
+          // console.log(currentEquip["name"] + " - Not Compatable!")
           // console.log(currentSelectedTankCard)
         }
         //If the current card is muturally exclusive with a currently equiped card)
@@ -159,10 +146,8 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
           //   eqRecommendedExclude.push({ item: count, exclude: true })
           // }
           eqRecommended.push({ name: item, count : count })
-          // console.log("Recommended!")
-          // console.log(currentEquip)
-          // console.log(currentSelectedTankCard)
         }
+        //TODO: Finish tag functionality
         else if (false) {
           eqTag.push({ name: item, count : count })
         }
@@ -177,7 +162,7 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
     )
   }
 
-  //Dont need to calculate in the cases where theres no tank
+  //Don't need to calculate in the cases where there is no tank
   if (currentSelectedTankCard["name"] !== "" && currentSelectedTankCard["name"] !== "-") {handleEquipmentSort()}
   if (currentSelectedTankCard["name"] !== "" && currentSelectedTankCard["name"] !== "-")  {handleEquipmentPrep()}
 
@@ -189,7 +174,7 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
           <div className="equip-modal-content">
             <span className="equip-modal-close">&times;</span>
             <div>{" Equipment "}</div>
-            {/* TODO: Add functionality */}
+            {/* TODO: Add Total Point Cost functionality */}
             {/* <div>{" Total Point Cost "}</div> */}
             {handleEquipmentPrep()}
           </div>

@@ -58,8 +58,6 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
     //Set state to display selected tank
     setCurrentSelectedTankCard({name: e.target.innerHTML, id: index})
     setDisplay(ListTanks.find(item => item.name === e.target.innerHTML));
-    //TODO: Remove this check - currently a work around to make sure it loads correctly.
-    checkAvailableDeckCards()
     // Get the modal
     handleTankModal()
   }
@@ -88,6 +86,8 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
         let newValue=settingsUsedDecks[newTank];
         oldValue--;
         newValue++;
+        if (settingsAvailableDecks[newTank] === 0) {alert ("Warning: This tank's expansion is not owned!" + "\n" + "You can still use the tank to compare stats" + "\n" + "but equipment from this expansion wont be shown" + "\n" + "Add the expansion using the settings cog on the front page")}
+        else if (settingsUsedDecks[newTank]+1 > settingsAvailableDecks[newTank]) {alert ("Warning: More tanks of this type used than available" + "\n" + "")}
         setSettingsUsedDecks((prevState) => {return {...prevState, [currentTank]: oldValue, [newTank]: newValue}})
         wipeUsedCards();
         //TODO: Implement feature to move over valid cards
