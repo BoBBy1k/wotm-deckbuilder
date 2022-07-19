@@ -50,6 +50,7 @@ function Profile() {
       //If there is atleast 1 tank expansion set available
         if (settingsAvailableDecks[key] >= 1) {
           //Look for the tank kit's items and include them in the state
+          //TODO: need to account for equipment that have multiple sources!
           ListEquipment.map((item) => {
             if (item.source===key) {
               availableCards[item.name] = settingsAvailableDecks[key]

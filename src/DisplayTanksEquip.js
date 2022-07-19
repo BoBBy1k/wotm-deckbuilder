@@ -66,22 +66,66 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
   //1st Priority: If from the same exp source / has a matching tag (Run checks on High / Low stat thresholds, maybe if the requirement includes this tank)
   let eqRecommended=[]
   //2nd Priority: Everything else that is compatable
+  let eqTag=[]
+  //3rd Priority: Everything else that is compatable
   let eqNormal=[]
-  //3rd Priority: If the equipment is not compatable (Failed requirement, muturally exclusive with other equipment)
+  //4th Priority: If the equipment is not compatable (Failed requirement, muturally exclusive with other equipment)
   let eqNotCompatable=[]
-  //TODO: 4th Priority: If the equipment is not available to be picked at all (From unselected expansions)
+  //TODO: 5th Priority: If the equipment is not available to be picked at all (From unselected expansions)
   let eqNotAvailable=[]
   //The final combined array that contains everything in render order
   let eqRender=[]
-  //Function that sorts the equipment into these tiers
+  //Test Function that sorts the equipment into these tiers
+
+  function equipmentPrepMap (array, compatable){
+    return (array.map( (item, index) => {
+      console.log(item)
+      let checkCount = settingsUsedDeckCards[item["name"]].count > item["count"] ? {color: 'red'}: {color: 'black'}
+      let currentEquip = ListEquipment.find(equip => equip.name === item["name"])
+      return (
+        <div className="flex-container" key={index} item={item["name"]}>
+          {
+          <div className="equipHoverInfo">{ item["name"] + " "}
+            <span className="equipHoverInfoText">
+              <div>{ "Pack: "+ currentEquip["source"]}</div>
+              <span>{ "Type: "+ currentEquip["type1"]}</span>
+              <span>{ currentEquip["type2"] !=="" ? " "+ currentEquip["type2"]: null }</span>
+              <div>{ "Cost: "+ currentEquip["cost"]}</div>
+              <div>{ currentEquip["effect"]}</div>
+            </span>
+          </div>
+          }
+          <div className="">
+          {compatable ? <i className="bi bi-arrow-left-square" onClick={handleEquipMinus}></i> : null}
+          <span style={checkCount}>{" " + settingsUsedDeckCards[item["name"]].count}</span> {" / " + item["count"] + " "}
+          {compatable ? <i className="bi bi-arrow-right-square" onClick={handleEquipPlus}></i> : null}
+          </div>
+        </div>
+      )
+    }))
+  }
 
   //Function that preps the three tiers for rendering
   function handleEquipmentPrep(){
-    eqRender = eqRecommended.concat(eqNormal).concat(eqNotCompatable).concat(eqNotAvailable)
-    console.log(eqRender)
+    eqRender = eqRecommended.concat(eqTag).concat(eqNormal).concat(eqNotCompatable).concat(eqNotAvailable)
+    // console.log(eqRender)
+    // console.log(settingsAvailableDeckCards)
     //Flexbox class
     //equipSort
     //equipSortItem
+    if (currentSelectedTankCard["name"] !== "" && currentSelectedTankCard["name"] !== "-") {
+      console.log(          equipmentPrepMap(eqNormal))
+      return(
+        <div>
+          <div className={"equipSort"}>{"Recommended by Source"}{equipmentPrepMap(eqRecommended,true)}</div>
+          <div className={"equipSort"}>{"Recommended by Tag"}{equipmentPrepMap(eqTag,true)}</div>
+          <div className={"equipSort"}>{"Compatable"}{equipmentPrepMap(eqNormal,true)}</div>
+          <div className={"equipSort"}>{"Not Compatable"}{equipmentPrepMap(eqNotCompatable,false)}</div>
+          <div className={"equipSort"}>{"Not Available"}{equipmentPrepMap(eqNotAvailable, false)}</div>
+        </div>
+      )
+    }
+    else {return (<div>No Selected Tank!</div>)}
   }
 
   //Function that sorts equipment into priority tiers
@@ -92,12 +136,12 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
         // console.log(item)
         // console.log(count)
         let currentEquip = ListEquipment.find(equip => equip.name === item)
-        // // TODO: 4th Priority - card not available
+        // // TODO: 5th Priority - card not available
         // // else if (count === 0) {
         // //   eqNotAvailable.push({ item: count })
         //If there's a requirement callback and the current equipment/tank pair fails the compatibility test
         if (currentEquip["callback"] !== null && !currentEquip["callback"](display)) {
-          eqNotCompatable.push({ [item]: count })
+          eqNotCompatable.push({ name: item, count : count })
           console.log(currentEquip["name"] + " - Not Compatable!")
           // console.log(currentSelectedTankCard)
         }
@@ -108,20 +152,23 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
         //If current equipment card comes from the same source as the current selected tank (excluding starter)
         //TODO: add tag support
         else if (currentEquip["source"] === currentSelectedTankCard["name"]){
-          //TODO: If the current card is muturally exclusive with a currently equiped card)
+          //TODO: If the current card is mutually exclusive with a currently equiped card)
           //Get current tank slot ID and search all cards equipped to it.
           //Check if any of those cards are listed in the current equipments exclude array
           // if (currentEquip["exclude"]) {
           //   eqRecommendedExclude.push({ item: count, exclude: true })
           // }
-          eqRecommended.push({ [item]: count })
+          eqRecommended.push({ name: item, count : count })
           // console.log("Recommended!")
           // console.log(currentEquip)
           // console.log(currentSelectedTankCard)
         }
+        else if (false) {
+          eqTag.push({ name: item, count : count })
+        }
         else {
           //TODO: Copy exclusion check here
-          eqNormal.push({ [item]: count })
+          eqNormal.push({ name: item, count : count })
           // console.log("Normal!")
           // console.log(currentEquip)
           // console.log(currentSelectedTankCard)
@@ -134,40 +181,6 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
   if (currentSelectedTankCard["name"] !== "" && currentSelectedTankCard["name"] !== "-") {handleEquipmentSort()}
   if (currentSelectedTankCard["name"] !== "" && currentSelectedTankCard["name"] !== "-")  {handleEquipmentPrep()}
 
-  function tempDisplay() {
-    if (currentSelectedTankCard["name"] !== "" && currentSelectedTankCard["name"] !== "-") {
-      return Object.entries(settingsAvailableDeckCards).map( ([item,newCount], index) =>
-        {
-          let checkCount = settingsUsedDeckCards[item].count > newCount ? {color: 'red'}: {color: 'black'}
-          let currentEquip = ListEquipment.find(equip => equip.name === item)
-          return (
-            <div className="flex-container" key={index} item={item}>
-              {
-              <div className="equipHoverInfo">{ item + " "}
-                <span className="equipHoverInfoText">
-                  <div>{ "Pack: "+ currentEquip["source"]}</div>
-                  <span>{ "Type: "+ currentEquip["type1"]}</span>
-                  <span>{ currentEquip["type2"] !=="" ? " "+ currentEquip["type2"]: null }</span>
-                  <div>{ "Cost: "+ currentEquip["cost"]}</div>
-                  <div>{ currentEquip["effect"]}</div>
-                </span>
-              </div>
-              }
-              <div className="">
-              <i className="bi bi-arrow-left-square" onClick={handleEquipMinus}></i>
-              <span style={checkCount}>{" " + settingsUsedDeckCards[item].count}</span> {" / " + newCount + " "}
-              <i className="bi bi-arrow-right-square" onClick={handleEquipPlus}></i>
-              </div>
-            </div>
-          )
-        }
-      )
-    }
-    else {return (<div>No Selected Tank!</div>)}
-  }
-
-
-
   return (
     <span>
         {/* Tank Equip Modal */}
@@ -178,7 +191,7 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
             <div>{" Equipment "}</div>
             {/* TODO: Add functionality */}
             {/* <div>{" Total Point Cost "}</div> */}
-            {tempDisplay()}
+            {handleEquipmentPrep()}
           </div>
         </div>
     </span>
