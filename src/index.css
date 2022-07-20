@@ -334,6 +334,37 @@ code {
   margin-bottom: 10px;
 }
 
+.crewSlots {
+  border: 5px solid black;
+  border-radius: 20px;
+  width: 560px;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  align-items: center;
+  justify-content: center;
+  padding:1px;
+}
+
+
+.crewSlotsItem {
+  border: 5px solid black;
+  border-radius: 20px;
+  background: lightgrey;
+  width: 3.3em;
+  height: 3.3em;
+  margin: .15em;
+  border-radius: 10px;
+}
+
+.crewSlotButton{
+  white-space: normal;
+  word-wrap: break-word;
+  cursor: default;
+}
+
+
  /* The Modal (background) */
  .equip-modal {
   display: none; /* Hidden by default */

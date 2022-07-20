@@ -1,17 +1,82 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ListTanks from './ListTanks.js'
+import ListEquipment from './ListEquipment.js'
 import DisplayTanksEquip from './DisplayTanksEquip.js'
 
 //This component allows the modification of tanks and their attached cards from the main page
+//TODO: Its kinda cluttered maybe it needs more components
 function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCards, setProfileTankCards, currentSelectedTankCard, settingsAvailableDecks, settingsUsedDecks, setSettingsUsedDecks, settingsAvailableDeckCards, setSettingsAvailableDeckCards, settingsUsedDeckCards, setSettingsUsedDeckCards, currentDeckTankListItemHighlight, setTotalPoints, checkAvailableDeckCards }) {
+  //State that holds the current displayed crew cards
+  const [currentCrewSlots, setCurrentCrewSlots]=useState({});
   //Initialize tankCrew variable for incase props.display.crew is empty breaking later mapping function
   let tankCrew = display.crew ? display.crew : []
-  //FRAGMENTS CAUSING A UNQIUE KEY ERROR! TODO: Figure out how to make it look more elegant
+  //FRAGMENTS CAUSING A UNQIUE KEY ERROR! TODO: Figure out how to make it more elegant
   let keyCounter = 0;
   function fixKey() {
     keyCounter++;
     return keyCounter;
   }
+
+  const checkCrewSlots = (newDisplay) => {
+    //Variable holding the current working crew slots to update the state with
+    let newCurrentCrewSlots = []
+    //Map through tankCrew and setup the crew slots
+    console.log(newDisplay)
+    //Make sure we aren't trying to map a non-existent tank's crew
+    if(newDisplay["crew"]) {
+        newDisplay["crew"].map( (crew, index)=> {
+        if (crew.includes("/")){
+          newCurrentCrewSlots.push({ specialization: crew.split("/"), equipped: ""})
+        }
+        else {
+          newCurrentCrewSlots.push({ specialization: [crew], equipped: ""})
+        }
+      })
+      setCurrentCrewSlots(newCurrentCrewSlots)
+    }
+  }
+
+  const displayCrewSlots = () => {
+  //Crew Display
+    Object.entries(settingsUsedDeckCards).map( ( item )=>{
+      if (item[1]["attached"]["length"] > 0 && ListEquipment.find( (equip) => equip["type1"]==="crew")) {
+        item[1]["attached"].map( (equip, index) => {
+          if(equip["id"] === currentSelectedTankCard.id) {
+            console.log(item[0])
+          }
+        })
+      }
+    })
+
+      return (
+        <div className="crewSlots">
+        {tankCrew.map( (crew, index)=>
+          {
+            if (crew.includes("/")){
+              let addBreak = crew.split("")
+              addBreak[crew.indexOf("/")]="\n"
+              addBreak = addBreak.join("")
+              return (
+                <span className="crewSlotsItem" key={index}>
+                  <button className="crewSlotButton">{addBreak}</button>
+                  <div style={ {fontSize: 18} }>{"Philip Stulpnagel"}</div>
+                </span>
+              )
+            }
+            else {
+              return (
+              <span className="crewSlotsItem" key={index}>
+                <button className="crewSlotButton">{crew}</button>
+                <div style={ {fontSize: 18} }>{"test"}</div>
+              </span>
+            )
+
+            }}
+        )}
+        </div>
+      )
+  }
+
 
   //Wipe equipped cards from current tank
   const wipeUsedCards = () => {
@@ -53,12 +118,15 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
     }
   }
 
+  //When a tank card is selected by mouse click
   const handleTankClick = (e,index,cardName) => {
     // console.log(e.target)
     //Set state to display selected tank
-    setCurrentSelectedTankCard({name: e.target.innerHTML, id: index})
-    setDisplay(ListTanks.find(item => item.name === e.target.innerHTML));
+    let newDisplay = ListTanks.find(item => item.name === e.target.innerHTML)
+    setCurrentSelectedTankCard({name: e.target.innerHTML, id: index});
+    setDisplay(newDisplay)
     // Get the modal
+    checkCrewSlots(newDisplay)
     handleTankModal()
   }
   //Event handler that handles the changes when a new tank is selected in the modification modal
@@ -86,8 +154,8 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
         let newValue=settingsUsedDecks[newTank];
         oldValue--;
         newValue++;
-        if (settingsAvailableDecks[newTank] === 0) {alert ("Warning: This tank's expansion is not owned!" + "\n" + "You can still use the tank to compare stats" + "\n" + "but equipment from this expansion wont be shown" + "\n" + "Add the expansion using the settings cog on the front page")}
-        else if (settingsUsedDecks[newTank]+1 > settingsAvailableDecks[newTank]) {alert ("Warning: More tanks of this type used than available" + "\n" + "")}
+        if (settingsAvailableDecks[newTank] === 0) {alert ("Warning: This tank's expansion is not owned! \n You can still use the tank to compare stats \n but equipment from this expansion wont be shown \n Add the expansion using the settings cog on the front page")}
+        else if (settingsUsedDecks[newTank]+1 > settingsAvailableDecks[newTank]) {alert ("Warning: More tanks of this type used than available \n")}
         setSettingsUsedDecks((prevState) => {return {...prevState, [currentTank]: oldValue, [newTank]: newValue}})
         wipeUsedCards();
         //TODO: Implement feature to move over valid cards
@@ -139,9 +207,10 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
             {/* Changes current Tank's Crew Cards */}
             <div>Crew Slots</div>
             {/* {TODO: Tank crew functionality} */}
-            <div>{tankCrew.map( (crew, index)=> {return <button key={index}>{crew}</button>})}</div>
+            {/* <div>{tankCrew.map( (crew, index)=> {return <button key={index}>{crew}</button>})}</div> */}
+            <div>{displayCrewSlots()}</div>
             {/* Modal that Changes the Current Tank's attached Cards */}
-            <DisplayTanksEquip settingsAvailableDecks={settingsAvailableDecks} settingsAvailableDeckCards={settingsAvailableDeckCards} setSettingsAvailableDeckCards={setSettingsAvailableDeckCards} settingsUsedDeckCards={settingsUsedDeckCards} setSettingsUsedDeckCards={setSettingsUsedDeckCards} currentSelectedTankCard={currentSelectedTankCard} handleTankModal={handleTankModal} setTotalPoints={setTotalPoints} display={display}/>
+            <DisplayTanksEquip settingsAvailableDecks={settingsAvailableDecks} settingsAvailableDeckCards={settingsAvailableDeckCards} setSettingsAvailableDeckCards={setSettingsAvailableDeckCards} settingsUsedDeckCards={settingsUsedDeckCards} setSettingsUsedDeckCards={setSettingsUsedDeckCards} currentSelectedTankCard={currentSelectedTankCard} handleTankModal={handleTankModal} setTotalPoints={setTotalPoints} display={display} currentCrewSlots={currentCrewSlots} setCurrentCrewSlots={setCurrentCrewSlots}/>
             {/* Display attached Cards*/}
             <div className="DisplayTanksEquipCardList">
             {Object.entries(settingsUsedDeckCards).map( ( item )=>{

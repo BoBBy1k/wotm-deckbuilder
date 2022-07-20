@@ -2,7 +2,7 @@ import React from 'react'
 import ListEquipment from './ListEquipment.js'
 
 //This component handles equipping cards to tanks
-function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards, settingsUsedDeckCards, setSettingsUsedDeckCards, currentSelectedTankCard, handleTankModal, display} ) {
+function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards, settingsUsedDeckCards, setSettingsUsedDeckCards, currentSelectedTankCard, handleTankModal, display, currentCrewSlots, setCurrentCrewSlots} ) {
   function handleEquipmentClick(){
     // This is the modal's id
     var equipModal = document.getElementById("equip-modal");
@@ -42,23 +42,86 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
   // TODO: Limit 1 (Gun Turret Engines Suspension Radio)
   // TODO: Limit 1 (All Crew Positions)
   // TODO: Limit 1 Total (Multi-job crew)
+
   //Handler for adding cards
   function handleEquipPlus(e){
     let target=e.target.parentElement.parentElement.attributes[1].nodeValue;
-    console.log( "!!!!!!!!!!!!!!!!!!!!!!!!"+ target)
     let value=settingsUsedDeckCards[target].count;
-    console.log("!!!!!!!!!!!!!!!!!!!!!!!!"+ value)
     let newAttached=settingsUsedDeckCards[target].attached;
-    newAttached.push({ id: currentSelectedTankCard.id, name: currentSelectedTankCard.name })
-    value++;
-    setSettingsUsedDeckCards((prevState)=> ({
-      ...prevState,
-      [target]: {count: value, attached: newAttached}
-      })
-    )
-    console.log(settingsAvailableDeckCards)
-    console.log(newAttached)
-    console.log(settingsUsedDeckCards)
+    let crewCheck= ListEquipment.find( (equip) => equip["name"] === target)
+
+    //This is a temp handler for universal crew cards until functionalty is added
+    if (crewCheck["type2"] === "Any") {
+      alert("Warning: Functionalty for universal crew hasn't been implemented yet, you can still use them but the app wont handle them")
+      newAttached.push({ id: currentSelectedTankCard.id, name: currentSelectedTankCard.name })
+      value++;
+      setSettingsUsedDeckCards((prevState)=> ({
+        ...prevState,
+        [target]: {count: value, attached: newAttached}
+        })
+      )
+    }
+    //Is this equipment a crew card?
+    else if (crewCheck["type1"] === "Crew") {
+      //Is it a unique card / It hasn't been used?
+      if (crewCheck["unique"] === true && settingsUsedDeckCards[crewCheck["name"]]["count"] === 0) {
+        //Add the card
+        newAttached.push({ id: currentSelectedTankCard.id, name: currentSelectedTankCard.name })
+        value++;
+        setSettingsUsedDeckCards((prevState)=> ({
+          ...prevState,
+          [target]: {count: value, attached: newAttached}
+          })
+        )
+      }
+      //If its not a unique card / It's slot is empty
+      else if (crewCheck["unique"] === false && crewCheck["type2"]) {
+        let newCrewSlot= currentCrewSlots;
+        newCrewSlot.find((slot)=>{
+          console.log(slot)
+          //Crew slot specializations
+          let crewSpecial=slot.specialization.indexOf(crewCheck["type2"])
+          //Find the crew slot
+          if (crewSpecial !== -1) {
+            console.log("Found")
+            //If slot is empty - Add card
+            if (slot["equipped"] === "") {
+              slot["equipped"] = target;
+              console.log(slot)
+              //Add the card and fill the slot
+              console.log("This is a regular card / It's slot is empty")
+              // setCurrentCrewSlots
+              newAttached.push({ id: currentSelectedTankCard.id, name: currentSelectedTankCard.name })
+              value++;
+              setSettingsUsedDeckCards((prevState)=> ({
+                ...prevState,
+                [target]: {count: value, attached: newAttached}
+                })
+              )
+            }
+            else {
+              alert("Crew Slot: " + crewCheck["type2"] +  " is already used!")
+            }
+          }
+        })
+      }
+      else {
+        alert("Limit Reached:\nCrew limit has been reached!")
+      }
+    }
+    //Attach the card
+    else {
+      newAttached.push({ id: currentSelectedTankCard.id, name: currentSelectedTankCard.name })
+      value++;
+      setSettingsUsedDeckCards((prevState)=> ({
+        ...prevState,
+        [target]: {count: value, attached: newAttached}
+        })
+      )
+    }
+    // console.log(settingsAvailableDeckCards)
+    // console.log(newAttached)
+    // console.log(settingsUsedDeckCards)
   }
 
   //1st Priority: If from the same exp source (TODO: If the equipment's requirement includes this tank)
