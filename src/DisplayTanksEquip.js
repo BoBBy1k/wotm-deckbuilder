@@ -1,8 +1,13 @@
-import React from 'react'
+import React, {useState} from 'react'
 import ListEquipment from './ListEquipment.js'
 
 //This component handles equipping cards to tanks
 function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards, settingsUsedDeckCards, setSettingsUsedDeckCards, currentSelectedTankCard, handleTankModal, display, currentCrewSlots, setCurrentCrewSlots} ) {
+  //Initialize tankCrew variable for incase props.display.crew is empty breaking later mapping function
+  let tankCrew = display.crew ? display.crew : []
+  //State that holds current prompt equipment for handling universal crew slots
+  const [currentPromptEquipment, setCurrentPromptEquipment]=useState("");
+
   function handleEquipmentClick(){
     // This is the modal's id
     var equipModal = document.getElementById("equip-modal");
@@ -21,27 +26,70 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
       }
     }
   }
+  //Handles universal crew slot selection
+  function handlePrompt(){
+    // This is the modal's id
+    var equipPromptModal = document.getElementById("equip-prompt-modal");
+    // Opens the modal
+    equipPromptModal.style.display = "block";
+    // Close the modal when X is clicked
+    document.getElementsByClassName("equip-prompt-close")[0].onclick = function() {
+      equipPromptModal.style.display = "none";
+    }
+    // Close the modal when mouse clicks outside the box
+    window.onclick = function(e){
+      if (e.target === equipPromptModal) {
+        equipPromptModal.style.display = "none";
+      //Set ability to close previous modal
+      handleEquipmentClick()
+      }
+    }
+  }
+
+  function handlePromptButton(e) {
+    //Name of the equipment in question
+    console.log(currentPromptEquipment)
+    let newCrewSlot = currentCrewSlots
+    let targetId=e.target.id
+    let targetSlot = newCrewSlot[targetId]
+    let value=settingsUsedDeckCards[currentPromptEquipment].count;
+    let newAttached=settingsUsedDeckCards[currentPromptEquipment].attached;
+    newCrewSlot[targetId]["equipped"] = currentPromptEquipment;
+
+    newAttached.push({ id: currentSelectedTankCard.id, name: currentSelectedTankCard.name })
+    value++;
+    setSettingsUsedDeckCards((prevState)=> ({
+      ...prevState,
+      [currentPromptEquipment]: {count: value, attached: newAttached, crewSlotId: targetId}
+      })
+    )
+    var equipPromptModal = document.getElementById("equip-prompt-modal");
+    equipPromptModal.style.display = "none";
+  }
+
   //Handler for removing a card
   function handleEquipMinus(e){
     let target=e.target.parentElement.parentElement.attributes[1].nodeValue;
     let value=settingsUsedDeckCards[target].count;
     if (value !== 0) {value--}
     let newAttached=settingsUsedDeckCards[target].attached;
+    let crewCheck= ListEquipment.find( (equip) => equip["name"] === target)
+    if (crewCheck["type1"] === "Crew") {
+      let newCrewSlot= currentCrewSlots;
+      newCrewSlot.find( (slot) => slot["equipped"] === crewCheck["name"])["equipped"]="";
+      setCurrentCrewSlots(newCrewSlot)
+    }
     newAttached.pop()
     setSettingsUsedDeckCards((prevState)=> ({
       ...prevState,
       [target]: {count: value, attached: newAttached}
       })
     )
-    console.log(newAttached)
-    console.log(settingsUsedDeckCards)
   }
 
   // Check if card is already equipped
-  // TODO: Limit 3 (Ammo Conusmables Equipment)
+  // TODO: Limit 3 (Ammo Consumables Equipment)
   // TODO: Limit 1 (Gun Turret Engines Suspension Radio)
-  // TODO: Limit 1 (All Crew Positions)
-  // TODO: Limit 1 Total (Multi-job crew)
 
   //Handler for adding cards
   function handleEquipPlus(e){
@@ -52,14 +100,8 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
 
     //This is a temp handler for universal crew cards until functionalty is added
     if (crewCheck["type2"] === "Any") {
-      alert("Warning: Functionalty for universal crew hasn't been implemented yet, you can still use them but the app wont handle them")
-      newAttached.push({ id: currentSelectedTankCard.id, name: currentSelectedTankCard.name })
-      value++;
-      setSettingsUsedDeckCards((prevState)=> ({
-        ...prevState,
-        [target]: {count: value, attached: newAttached}
-        })
-      )
+      setCurrentPromptEquipment(target);
+      handlePrompt()
     }
     //Is this equipment a crew card?
     else if (crewCheck["type1"] === "Crew") {
@@ -77,21 +119,21 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
       //If its not a unique card / It's slot is empty
       else if (crewCheck["unique"] === false && crewCheck["type2"]) {
         let newCrewSlot= currentCrewSlots;
-        newCrewSlot.find((slot)=>{
-          console.log(slot)
+        newCrewSlot.find((slot, index)=>{
           //Crew slot specializations
           let crewSpecial=slot.specialization.indexOf(crewCheck["type2"])
           //Find the crew slot
           if (crewSpecial !== -1) {
-            console.log("Found")
+            // console.log("Found")
             //If slot is empty - Add card
             if (slot["equipped"] === "") {
               slot["equipped"] = target;
+              // slot["equippedId"] = crewSpecial;
               console.log(slot)
               //Add the card and fill the slot
               console.log("This is a regular card / It's slot is empty")
-              // setCurrentCrewSlots
-              newAttached.push({ id: currentSelectedTankCard.id, name: currentSelectedTankCard.name })
+              setCurrentCrewSlots(newCrewSlot)
+              newAttached.push({ id: currentSelectedTankCard.id, name: currentSelectedTankCard.name, crewSlotId: index})
               value++;
               setSettingsUsedDeckCards((prevState)=> ({
                 ...prevState,
@@ -232,7 +274,7 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
   return (
     <span>
         {/* Tank Equip Modal */}
-        <button onClick={handleEquipmentClick} className="equipment-button">Equipment / Consumables</button>
+        <button onClick={handleEquipmentClick} className="equipment-button">Change Equipped Cards</button>
         <div id="equip-modal" className="equip-modal">
           <div className="equip-modal-content">
             <span className="equip-modal-close">&times;</span>
@@ -240,10 +282,51 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
             {/* TODO: Add Total Point Cost functionality */}
             {/* <div>{" Total Point Cost "}</div> */}
             {handleEquipmentPrep()}
+            <span>
+              {/* Equipment Prompt Modal */}
+              <div id="equip-prompt-modal" className="equip-prompt-modal">
+                <div className="equip-prompt-content">
+                  <span className="equip-prompt-close">&times;</span>
+                  <div>{" Select Slot for " + currentPromptEquipment}</div>
+                  {/* TODO: Add Total Point Cost functionality */}
+                  {/* <div>{" Total Point Cost "}</div> */}
+                  <div className="crewSlots">
+                    {tankCrew.map( (crew, index)=>
+                      {
+                        if (crew.includes("/")){
+                          let addBreak = crew.split("")
+                          addBreak[crew.indexOf("/")]="\n"
+                          addBreak = addBreak.join("")
+                          return (
+                            <span className="crewSlotsItem" key={index}>
+                              {currentCrewSlots[index]["equipped"]
+                              ? <button className="crewSlotButton-disable" id={index}>{addBreak}</button>
+                              :<button className="crewSlotButton" onClick={handlePromptButton} id={index}>{addBreak}</button>}
+                              <div style={ {fontSize: 18} }>{currentCrewSlots[index]["equipped"]}</div>
+                            </span>
+                          )
+                        }
+                        else {
+                          return (
+                          <span className="crewSlotsItem" key={index}>
+                            {currentCrewSlots[index]["equipped"]
+                            ? <button className="crewSlotButton-disable" id={index}>{crew}</button>
+                            : <button className="crewSlotButton" onClick={handlePromptButton} id={index}>{crew}</button>}
+                            <div style={ {fontSize: 18} }>{currentCrewSlots[index]["equipped"]}</div>
+                          </span>
+                          )
+                        }
+                      }
+                    )}
+                  </div>
+                </div>
+              </div>
+            </span>
           </div>
         </div>
     </span>
   )
 }
+
 
 export default DisplayTanksEquip

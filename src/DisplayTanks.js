@@ -17,14 +17,15 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
     return keyCounter;
   }
 
+  //Function that sets up the crew slots UI box
   const checkCrewSlots = (newDisplay) => {
     //Variable holding the current working crew slots to update the state with
     let newCurrentCrewSlots = []
-    //Map through tankCrew and setup the crew slots
-    console.log(newDisplay)
-    //Make sure we aren't trying to map a non-existent tank's crew
+    //Make sure we are only mapping tanks that exist
     if(newDisplay["crew"]) {
+        //Map through tankCrew and setup the crew slots
         newDisplay["crew"].map( (crew, index)=> {
+        //Deal with multi role slots
         if (crew.includes("/")){
           newCurrentCrewSlots.push({ specialization: crew.split("/"), equipped: ""})
         }
@@ -32,24 +33,32 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
           newCurrentCrewSlots.push({ specialization: [crew], equipped: ""})
         }
       })
-      setCurrentCrewSlots(newCurrentCrewSlots)
-    }
-  }
 
-  const displayCrewSlots = () => {
-  //Crew Display
-    Object.entries(settingsUsedDeckCards).map( ( item )=>{
-      if (item[1]["attached"]["length"] > 0 && ListEquipment.find( (equip) => equip["type1"]==="crew")) {
-        item[1]["attached"].map( (equip, index) => {
-          if(equip["id"] === currentSelectedTankCard.id) {
-            console.log(item[0])
+    }
+    //Search used deck cards for attached crew cards
+    Object.entries(settingsUsedDeckCards).map( ( usedDeckCards )=>{
+      //Only look at "crew" cards that have been attached
+      if (usedDeckCards[1]["attached"]["length"] > 0 && ListEquipment.find((equip)=> equip["name"]===usedDeckCards[0] && equip["type1"]==="Crew")) {
+        //Check the attachments
+        usedDeckCards[1]["attached"].map( (equip, index) => {
+          //Check if the equipment is attached to the current tank slot ID
+          if (equip["id"] === currentSelectedTankCard.id) {
+            //Get the crew slot ID to determine crew role
+            let targetCrewSlotID =  usedDeckCards[1]["crewSlotId"]
+            //Set card
+            newCurrentCrewSlots[targetCrewSlotID]["equipped"]=usedDeckCards[0]
           }
         })
       }
     })
+    setCurrentCrewSlots(newCurrentCrewSlots)
+  }
 
-      return (
-        <div className="crewSlots">
+  const displayCrewSlots = () => {
+    //Crew Display
+    console.log(currentCrewSlots)
+    return (
+      <div className="crewSlots">
         {tankCrew.map( (crew, index)=>
           {
             if (crew.includes("/")){
@@ -58,23 +67,23 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
               addBreak = addBreak.join("")
               return (
                 <span className="crewSlotsItem" key={index}>
-                  <button className="crewSlotButton">{addBreak}</button>
-                  <div style={ {fontSize: 18} }>{"Philip Stulpnagel"}</div>
+                  <button className="crewSlot" onClick={()=>alert("Upcoming Feature: Ability to change crew cards here")}>{addBreak}</button>
+                  <div style={ {fontSize: 18} }>{currentCrewSlots[index]["equipped"]}</div>
                 </span>
               )
             }
             else {
               return (
               <span className="crewSlotsItem" key={index}>
-                <button className="crewSlotButton">{crew}</button>
-                <div style={ {fontSize: 18} }>{"test"}</div>
+                <button className="crewSlot" onClick={()=>alert("Upcoming Feature: Ability to change crew cards here")}>{crew}</button>
+                <div style={ {fontSize: 18} }>{currentCrewSlots[index]["equipped"]}</div>
               </span>
-            )
-
-            }}
+              )
+            }
+          }
         )}
-        </div>
-      )
+      </div>
+    )
   }
 
 
