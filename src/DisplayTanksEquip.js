@@ -74,23 +74,35 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
   }
 
   //Handler for removing a card
+  //TODO: Make it so you can only remove cards that are also attached to the tank you are currently using
   function handleEquipMinus(e){
     let target=e.target.parentElement.parentElement.attributes[1].nodeValue;
-    let value=settingsUsedDeckCards[target].count;
-    if (value !== 0) {value--}
-    let newAttached=settingsUsedDeckCards[target].attached;
-    let crewCheck= ListEquipment.find( (equip) => equip["name"] === target)
-    if (crewCheck["type1"] === "Crew") {
-      let newCrewSlot= currentCrewSlots;
-      newCrewSlot.find( (slot) => slot["equipped"] === crewCheck["name"])["equipped"]="";
-      setCurrentCrewSlots(newCrewSlot)
+    //Search the target equipment's attached cards
+    for (let i=0; i < settingsUsedDeckCards[target]["attached"].length; i++) {
+      //if its attached to this tank
+      if (settingsUsedDeckCards[target]["attached"][i]["id"]===currentSelectedTankCard.id) {
+        //Prep variables to remove equipment
+        let value=settingsUsedDeckCards[target].count;
+        if (value !== 0) {value--}
+        let newAttached=settingsUsedDeckCards[target].attached;
+        let crewCheck= ListEquipment.find( (equip) => equip["name"] === target)
+        //Handle crew slot
+        if (crewCheck["type1"] === "Crew") {
+          let newCrewSlot= currentCrewSlots;
+          newCrewSlot.find( (slot) => slot["equipped"] === crewCheck["name"])["equipped"]="";
+          setCurrentCrewSlots(newCrewSlot)
+        }
+        //Remove equipment
+        newAttached.pop()
+        setSettingsUsedDeckCards((prevState)=> ({
+          ...prevState,
+          [target]: {count: value, attached: newAttached}
+          })
+        )
+        return true;
+      }
     }
-    newAttached.pop()
-    setSettingsUsedDeckCards((prevState)=> ({
-      ...prevState,
-      [target]: {count: value, attached: newAttached}
-      })
-    )
+    alert("No copies of this card are attached to this tank!") ;
   }
 
   // Check if card is already equipped
@@ -183,7 +195,6 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
                 return 0;
               }
             }
-            alert("Card wasn't found to be used. Attach it")
             newAttached.push({ id: currentSelectedTankCard.id, name: currentSelectedTankCard.name })
             value++;
             setSettingsUsedDeckCards((prevState)=> ({
@@ -192,7 +203,6 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
             }))
           }
           else {
-            alert("Card isnt being used. Attach it")
             newAttached.push({ id: currentSelectedTankCard.id, name: currentSelectedTankCard.name })
             value++;
             setSettingsUsedDeckCards((prevState)=> ({

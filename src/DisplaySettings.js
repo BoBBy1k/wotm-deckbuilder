@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import ListTanks from './ListTanks.js'
 
 //TODO: Adding a deck currently wipes currently attached equipment to prevent errors. Fix this later.
+//TODO: Needs to sync faster.
 //This component allows the addition of expansion packs for availablity calculation and also toggles misc settings
 function DisplaySettings ( {settingsAvailableDecks, setSettingsAvailableDecks, checkAvailableDeckCards}) {
   //State that holds the current settings cog icon (toggles when hovered)
