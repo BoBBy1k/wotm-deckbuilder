@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { flushSync } from 'react-dom'
 import ListTanks from './ListTanks.js'
 import ListEquipment from './ListEquipment.js'
 import DisplayTanksEquip from './DisplayTanksEquip.js'
@@ -7,7 +8,7 @@ import DisplayTanksEquip from './DisplayTanksEquip.js'
 //TODO: Its kinda cluttered maybe it needs more components
 function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCards, setProfileTankCards, currentSelectedTankCard, settingsAvailableDecks, settingsUsedDecks, setSettingsUsedDecks, settingsAvailableDeckCards, setSettingsAvailableDeckCards, settingsUsedDeckCards, setSettingsUsedDeckCards, currentDeckTankListItemHighlight, setTotalPoints, checkAvailableDeckCards }) {
   //State that holds the current displayed crew cards
-  const [currentCrewSlots, setCurrentCrewSlots]=useState({});
+  const [currentCrewSlots, setCurrentCrewSlots]=useState([{equipped:""},{equipped:""},{equipped:""},{equipped:""},{equipped:""}]);
   //Initialize tankCrew variable for incase props.display.crew is empty breaking later mapping function
   let tankCrew = display.crew ? display.crew : []
   //FRAGMENTS CAUSING A UNQIUE KEY ERROR! TODO: Figure out how to make it more elegant
@@ -18,7 +19,10 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
   }
 
   //Function that sets up the crew slots UI box
-  const checkCrewSlots = (newDisplay) => {
+   //BUG HERE SOMEWHERE with slot IDs
+   //Crashes when all slots are filled?
+   //State Doesnt update fast enough maybe needs a settimeout or flushsync
+  const checkCrewSlots = (newDisplay, id) => {
     //Variable holding the current working crew slots to update the state with
     let newCurrentCrewSlots = []
     //Make sure we are only mapping tanks that exist
@@ -33,30 +37,29 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
           newCurrentCrewSlots.push({ specialization: [crew], equipped: ""})
         }
       })
-
+      //Search used deck cards for attached crew cards
+      Object.entries(settingsUsedDeckCards).map( ( usedDeckCards )=>{
+        //Only look at "crew" cards that have been attached
+        if (usedDeckCards[1]["attached"]["length"] > 0 && ListEquipment.find((equip)=> equip["name"]===usedDeckCards[0] && equip["type1"]==="Crew")) {
+          //Check the attachments
+          usedDeckCards[1]["attached"].map( (equip, index) => {
+            //Check if the equipment is attached to the current tank slot ID
+            if (equip["id"] === id) {
+              //Get the crew slot ID to determine crew role
+              let targetCrewSlotID =  usedDeckCards[1]["crewSlotId"]
+              //Set card
+              newCurrentCrewSlots[targetCrewSlotID]["equipped"]=usedDeckCards[0]
+              console.log(newCurrentCrewSlots)
+            }
+          })
+        }
+      })
+      setCurrentCrewSlots(newCurrentCrewSlots)
     }
-    //Search used deck cards for attached crew cards
-    Object.entries(settingsUsedDeckCards).map( ( usedDeckCards )=>{
-      //Only look at "crew" cards that have been attached
-      if (usedDeckCards[1]["attached"]["length"] > 0 && ListEquipment.find((equip)=> equip["name"]===usedDeckCards[0] && equip["type1"]==="Crew")) {
-        //Check the attachments
-        usedDeckCards[1]["attached"].map( (equip, index) => {
-          //Check if the equipment is attached to the current tank slot ID
-          if (equip["id"] === currentSelectedTankCard.id) {
-            //Get the crew slot ID to determine crew role
-            let targetCrewSlotID =  usedDeckCards[1]["crewSlotId"]
-            //Set card
-            newCurrentCrewSlots[targetCrewSlotID]["equipped"]=usedDeckCards[0]
-          }
-        })
-      }
-    })
-    setCurrentCrewSlots(newCurrentCrewSlots)
   }
 
+  //Crew Display
   const displayCrewSlots = () => {
-    //Crew Display
-    console.log(currentCrewSlots)
     return (
       <div className="crewSlots">
         {tankCrew.map( (crew, index)=>
@@ -132,10 +135,12 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
     // console.log(e.target)
     //Set state to display selected tank
     let newDisplay = ListTanks.find(item => item.name === e.target.innerHTML)
-    setCurrentSelectedTankCard({name: e.target.innerHTML, id: index});
-    setDisplay(newDisplay)
     // Get the modal
-    checkCrewSlots(newDisplay)
+    flushSync(() => {
+      setCurrentSelectedTankCard({name: e.target.innerHTML, id: index});
+      setDisplay(newDisplay)
+      checkCrewSlots(newDisplay, index)
+    });
     handleTankModal()
   }
   //Event handler that handles the changes when a new tank is selected in the modification modal

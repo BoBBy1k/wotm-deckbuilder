@@ -1,15 +1,13 @@
-import React, {useState} from 'react'
+import React from 'react'
 import ListTanks from './ListTanks.js'
 import ListEquipment from './ListEquipment.js'
 
 //This component display the calculated points total
 function DisplayPoints({ profileTankCards, settingsUsedDeckCards }) {
-  //State that holds the total cost points of the current profile
-  const [totalPoints, setTotalPoints]=useState(0);
-  //TODO: This is a temp fix for "too many re-renders"
-  let test=0;
+  //Variable that holds total cost points of the current profile
+  let totalPoints=0;
   const handlePoints = ( input ) => {
-    test += input
+    totalPoints += input
     return input
   }
 
@@ -42,7 +40,6 @@ function DisplayPoints({ profileTankCards, settingsUsedDeckCards }) {
   })
   //Prep the render from the array
   const listCards = displayPointSource.map((item,index) =>
-
     <div key={index}>
       <span style={{fontSize: 22}} key={index}>
         {item["name"] + " - " + handlePoints(ListTanks.find((tank) => item["name"] === tank["name"])["cost"])}
@@ -54,18 +51,15 @@ function DisplayPoints({ profileTankCards, settingsUsedDeckCards }) {
       )}
     </div>
   )
-  //TODO: Temp workaround to slow down re-renders. Figure it out later.
-  setTimeout(()=>{setTotalPoints(test); console.log("Calculating Points")})
+
   return (
     <div className="totalPoints">
       {
         <div className="pointHoverInfo">
-          {test === 1 ? test + " Point" : test + " Points"}
+          {totalPoints === 1 ? totalPoints + " Point" : totalPoints + " Points"}
           {/* {totalPoints === 1 ? totalPoints + " Point" : totalPoints + " Points"} */}
             <span className="pointHoverInfoText">
               {listCards}
-              {/* <div>{listTank}</div> */}
-              {/* <div>{listCards}</div> */}
             </span>
         </div>
       }

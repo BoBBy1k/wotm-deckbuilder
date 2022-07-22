@@ -41,6 +41,7 @@ function Profile() {
   const [currentDeckTankListItemHighlight,setCurrentDeckTankListItemHighlight]=useState({});
 
   const checkAvailableDeckCards = (e) => {
+    console.log("CHECKING DECK CARDS")
     let availableCards = {};
     let usedCards ={};
     //For each available expansion. Add all of the corresponding cards that share the same source from ListEquipment to setSettingsAvailableDeckCards

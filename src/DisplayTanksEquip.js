@@ -35,6 +35,7 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
     // Close the modal when X is clicked
     document.getElementsByClassName("equip-prompt-close")[0].onclick = function() {
       equipPromptModal.style.display = "none";
+      handleEquipmentClick()
     }
     // Close the modal when mouse clicks outside the box
     window.onclick = function(e){
@@ -51,7 +52,7 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
     console.log(currentPromptEquipment)
     let newCrewSlot = currentCrewSlots
     let targetId=e.target.id
-    let targetSlot = newCrewSlot[targetId]
+    // let targetSlot = newCrewSlot[targetId]
     let value=settingsUsedDeckCards[currentPromptEquipment].count;
     let newAttached=settingsUsedDeckCards[currentPromptEquipment].attached;
     newCrewSlot[targetId]["equipped"] = currentPromptEquipment;
@@ -63,8 +64,13 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
       [currentPromptEquipment]: {count: value, attached: newAttached, crewSlotId: targetId}
       })
     )
+    //clear Modal
     var equipPromptModal = document.getElementById("equip-prompt-modal");
     equipPromptModal.style.display = "none";
+    //Set ability to close previous modal
+    window.onclick = function(e){
+      handleEquipmentClick()
+    }
   }
 
   //Handler for removing a card
@@ -97,8 +103,7 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
     let value=settingsUsedDeckCards[target].count;
     let newAttached=settingsUsedDeckCards[target].attached;
     let crewCheck= ListEquipment.find( (equip) => equip["name"] === target)
-
-    //This is a temp handler for universal crew cards until functionalty is added
+    //This the handler for unique crew
     if (crewCheck["type2"] === "Any") {
       setCurrentPromptEquipment(target);
       handlePrompt()
@@ -112,19 +117,25 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
         value++;
         setSettingsUsedDeckCards((prevState)=> ({
           ...prevState,
-          [target]: {count: value, attached: newAttached}
+          [target]: {count: value, attached: newAttached }
           })
         )
       }
       //If its not a unique card / It's slot is empty
       else if (crewCheck["unique"] === false && crewCheck["type2"]) {
         let newCrewSlot= currentCrewSlots;
+        console.log("newCrewSlot")
+        console.log(newCrewSlot)
         newCrewSlot.find((slot, index)=>{
+          console.log("slot")
+          console.log(slot)
           //Crew slot specializations
           let crewSpecial=slot.specialization.indexOf(crewCheck["type2"])
+          console.log("crewSpecial")
+          console.log(crewSpecial)
           //Find the crew slot
           if (crewSpecial !== -1) {
-            // console.log("Found")
+            console.log("Found")
             //If slot is empty - Add card
             if (slot["equipped"] === "") {
               slot["equipped"] = target;
@@ -133,11 +144,13 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
               //Add the card and fill the slot
               console.log("This is a regular card / It's slot is empty")
               setCurrentCrewSlots(newCrewSlot)
-              newAttached.push({ id: currentSelectedTankCard.id, name: currentSelectedTankCard.name, crewSlotId: index})
+              newAttached.push({ id: currentSelectedTankCard.id, name: currentSelectedTankCard.name})
+              console.log("newAttached")
+              console.log(newAttached)
               value++;
               setSettingsUsedDeckCards((prevState)=> ({
                 ...prevState,
-                [target]: {count: value, attached: newAttached}
+                [target]: {count: value, attached: newAttached, crewSlotId: index}
                 })
               )
             }
@@ -151,15 +164,44 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
         alert("Limit Reached:\nCrew limit has been reached!")
       }
     }
+    //Is there already one of these cards attached to this tank?
     //Attach the card
     else {
-      newAttached.push({ id: currentSelectedTankCard.id, name: currentSelectedTankCard.name })
-      value++;
-      setSettingsUsedDeckCards((prevState)=> ({
-        ...prevState,
-        [target]: {count: value, attached: newAttached}
-        })
-      )
+      //Needs to limit to current thing
+      //Search through all of the deck cards
+      for (let item in settingsUsedDeckCards) {
+        //Find the card matching the target(item that was clicked)
+        if (item === target) {
+          //Check if the card is attached to anything or not
+          if (settingsUsedDeckCards[item]["attached"].length > 0) {
+            console.log("Card is being used.")
+            //Check if the current tank slot id shows up in the attached array
+            for(let i=0; i < settingsUsedDeckCards[item]["attached"].length; i++) {
+              //If found - card is already used
+              if (settingsUsedDeckCards[item]["attached"][i]["id"]===currentSelectedTankCard.id){
+                alert("Card is already used on this tank!")
+                return 0;
+              }
+            }
+            alert("Card wasn't found to be used. Attach it")
+            newAttached.push({ id: currentSelectedTankCard.id, name: currentSelectedTankCard.name })
+            value++;
+            setSettingsUsedDeckCards((prevState)=> ({
+              ...prevState,
+              [target]: {count: value, attached: newAttached}
+            }))
+          }
+          else {
+            alert("Card isnt being used. Attach it")
+            newAttached.push({ id: currentSelectedTankCard.id, name: currentSelectedTankCard.name })
+            value++;
+            setSettingsUsedDeckCards((prevState)=> ({
+              ...prevState,
+              [target]: {count: value, attached: newAttached}
+            }))
+          }
+        }
+      }
     }
     // console.log(settingsAvailableDeckCards)
     // console.log(newAttached)
