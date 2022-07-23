@@ -125,28 +125,16 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
     //Is this equipment a crew card?
     else if (crewCheck["type1"] === "Crew") {
       //Is it a unique card / It hasn't been used?
-      if (crewCheck["unique"] === true && settingsUsedDeckCards[crewCheck["name"]]["count"] === 0) {
-        //Add the card
-        newAttached.push({ id: currentSelectedTankCard.id, name: currentSelectedTankCard.name })
-        value++;
-        setSettingsUsedDeckCards((prevState)=> ({
-          ...prevState,
-          [target]: {count: value, attached: newAttached }
-          })
-        )
+      if (crewCheck["unique"] === true && settingsUsedDeckCards[crewCheck["name"]]["count"] > 0) {
+        alert("Unique Limit Reached:\nCrew limit has been reached!")
+        return;
       }
       //If its not a unique card / It's slot is empty
-      else if (crewCheck["unique"] === false && crewCheck["type2"]) {
+      if (crewCheck["type2"]) {
         let newCrewSlot= currentCrewSlots;
-        console.log("newCrewSlot")
-        console.log(newCrewSlot)
         newCrewSlot.find((slot, index)=>{
-          console.log("slot")
-          console.log(slot)
           //Crew slot specializations
           let crewSpecial=slot.specialization.indexOf(crewCheck["type2"])
-          console.log("crewSpecial")
-          console.log(crewSpecial)
           //Find the crew slot
           if (crewSpecial !== -1) {
             console.log("Found")
@@ -156,11 +144,8 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
               // slot["equippedId"] = crewSpecial;
               console.log(slot)
               //Add the card and fill the slot
-              console.log("This is a regular card / It's slot is empty")
               setCurrentCrewSlots(newCrewSlot)
               newAttached.push({ id: currentSelectedTankCard.id, name: currentSelectedTankCard.name})
-              console.log("newAttached")
-              console.log(newAttached)
               value++;
               setSettingsUsedDeckCards((prevState)=> ({
                 ...prevState,

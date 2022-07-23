@@ -1,4 +1,4 @@
-Fan-made deck builder for the World of Tanks miniatures tabletop game built with React.
+Fan-made deck builder for the World of Tanks miniatures tabletop game built using React without any additional libraries.
 https://www.gf9games.com/worldoftanks/113/whatis/
 
 Main goal - Facilitating sharing of a single game set between two players or reducing the setup time for a single player.

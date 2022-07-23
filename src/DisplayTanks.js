@@ -22,7 +22,7 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
    //BUG HERE SOMEWHERE with slot IDs
    //Crashes when all slots are filled?
    //State Doesnt update fast enough maybe needs a settimeout or flushsync
-  const checkCrewSlots = (newDisplay, id) => {
+  const checkCrewSlots = (newDisplay, id = -1) => {
     //Variable holding the current working crew slots to update the state with
     let newCurrentCrewSlots = []
     //Make sure we are only mapping tanks that exist
@@ -38,6 +38,7 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
         }
       })
       //Search used deck cards for attached crew cards
+      //TODO: Solution was built from a UI rendering map to save time. Come back and redo as a for in later.
       Object.entries(settingsUsedDeckCards).map( ( usedDeckCards )=>{
         //Only look at "crew" cards that have been attached
         if (usedDeckCards[1]["attached"]["length"] > 0 && ListEquipment.find((equip)=> equip["name"]===usedDeckCards[0] && equip["type1"]==="Crew")) {
@@ -143,7 +144,9 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
     });
     handleTankModal()
   }
+
   //Event handler that handles the changes when a new tank is selected in the modification modal
+  //TODO: Set crew slots when tanks are added or deleted
   const handleTankChange = (e,tankName) => {
     let currentTank = display.name;
     let newTank = tankName;
@@ -154,6 +157,8 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
         let newValue=settingsUsedDecks[newTank];
         newValue++;
         setSettingsUsedDecks((prevState) => {return {...prevState, [newTank]: newValue}})
+        //Clear old crew slots
+        checkCrewSlots(newTank)
       }
       //If replacing an existing tank with blank
       if (newTank === "-") {

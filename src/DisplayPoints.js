@@ -6,6 +6,7 @@ import ListEquipment from './ListEquipment.js'
 function DisplayPoints({ profileTankCards, settingsUsedDeckCards }) {
   //Variable that holds total cost points of the current profile
   let totalPoints=0;
+  //Function that will be used in the UI to pass through a points integer while also adding the value to the total points
   const handlePoints = ( input ) => {
     totalPoints += input
     return input

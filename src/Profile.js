@@ -55,7 +55,7 @@ function Profile() {
           ListEquipment.map((item) => {
             if (item.source===key) {
               availableCards[item.name] = settingsAvailableDecks[key]
-              //TODO: run this later after this map is done to add equipment to more tanks
+              //TODO: run this later after this map is done to add equipment to more tanks for a larger example
               //Set example equipment
               if (example === false && item.name === "Small Repair Kit") {
                 usedCards[item.name] = {count: 1, attached: [{ id: 0, name: "PZ KPFW IV AUSF H" }]}
@@ -91,7 +91,6 @@ function Profile() {
         className="currentDeckName"
         value={profileName} onChange={ (e)=>{setProfileName(e.target.value)}}
       />
-      {/* TODO: Needs to actually calculate points */}
       <DisplayPoints profileTankCards={profileTankCards} settingsUsedDeckCards={settingsUsedDeckCards}/>
       <DisplaySettings settingsAvailableDecks={settingsAvailableDecks} setSettingsAvailableDecks={setSettingsAvailableDecks} checkAvailableDeckCards={checkAvailableDeckCards}/>
       <DisplayTanks tankCards={profileTankCards} currentSelectedTankCard={currentSelectedTankCard} display={display} setDisplay={setDisplay} setCurrentSelectedTankCard={setCurrentSelectedTankCard} setProfileTankCards={setProfileTankCards} settingsAvailableDecks={settingsAvailableDecks} settingsUsedDecks={settingsUsedDecks} setSettingsUsedDecks={setSettingsUsedDecks} settingsAvailableDeckCards={settingsAvailableDeckCards} setSettingsAvailableDeckCards={setSettingsAvailableDeckCards} settingsUsedDeckCards={settingsUsedDeckCards} setSettingsUsedDeckCards={setSettingsUsedDeckCards} currentDeckTankListItemHighlight={currentDeckTankListItemHighlight} checkAvailableDeckCards={checkAvailableDeckCards}/>
