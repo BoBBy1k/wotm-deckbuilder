@@ -81,6 +81,8 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
     for (let i=0; i < settingsUsedDeckCards[target]["attached"].length; i++) {
       //if its attached to this tank
       if (settingsUsedDeckCards[target]["attached"][i]["id"]===currentSelectedTankCard.id) {
+        console.log(settingsUsedDeckCards[target]["attached"])
+        console.log(currentSelectedTankCard.id)
         //Prep variables to remove equipment
         let value=settingsUsedDeckCards[target].count;
         if (value !== 0) {value--}
@@ -93,13 +95,13 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
           setCurrentCrewSlots(newCrewSlot)
         }
         //Remove equipment
-        newAttached.pop()
+        newAttached.splice(i,1)
         setSettingsUsedDeckCards((prevState)=> ({
           ...prevState,
           [target]: {count: value, attached: newAttached}
           })
         )
-        return true;
+        return;
       }
     }
     alert("No copies of this card are attached to this tank!") ;
