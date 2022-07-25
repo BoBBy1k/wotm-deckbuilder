@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { useContext, useMemo } from 'react'
+import { flushSync } from 'react-dom'
+import { debugModeContext } from './contexts/debugModeContext.js'
 
 //This component handles CRUD operations. Save / Load / New / Delete Buttons
 function CRUDButtons( { currentSelectedProfile, setCurrentSelectedProfile, currentProfile, setCurrentProfile, setSavedProfiles, savedProfiles, profileName, setProfileName, usedProfileId, setUsedProfileId, profileTankCards, setProfileTankCards, tankCards, profileDescription, setProfileDescription, settingsUsedDeckCards, setSettingsUsedDeckCards, settingsUsedDecks, setSettingsUsedDecks} ) {
+  const [debugMode, setDebugMode] = useContext(debugModeContext)
 
   //This function clears equipment cards for profiles
   const resetCards = () => {
@@ -41,11 +44,13 @@ function CRUDButtons( { currentSelectedProfile, setCurrentSelectedProfile, curre
 
   //This Function handles the saving and updating of profiles
   const handleSave = (e) => {
-  //Deep Cloning of settingsUsedDeckCards
+    //Deep Cloning of settingsUsedDeckCards
     let deckCardClone = JSON.parse(JSON.stringify(settingsUsedDeckCards))
+    let updateSave = savedProfiles;
     //Save - If the + button (add new profile button) is selected save all states to the savedProfiles array
     if (currentSelectedProfile === 0) {
-      setSavedProfiles([...savedProfiles, {profileName:profileName, id: usedProfileId, tankCards: profileTankCards, usedTankCards:settingsUsedDecks, description:profileDescription, deckCards: deckCardClone}])
+      updateSave=[...savedProfiles, {profileName:profileName, id: usedProfileId, tankCards: profileTankCards, usedTankCards:settingsUsedDecks, description:profileDescription, deckCards: deckCardClone}]
+      setSavedProfiles(updateSave)
       console.log("Saving " + profileName + " to profile: " + usedProfileId)
       setCurrentSelectedProfile(usedProfileId);
       setUsedProfileId(usedProfileId+1);
@@ -70,7 +75,23 @@ function CRUDButtons( { currentSelectedProfile, setCurrentSelectedProfile, curre
         }
         return profile;
       });
-      setSavedProfiles(updateSave);
+      setSavedProfiles(updateSave)
+    }
+
+    //If not in debug mode - Sets saved profiles in local storage
+    if (!debugMode){
+      if (typeof(Storage) !== "undefined") {
+        setTimeout( ()=> {
+          let spaghettifyProfile = JSON.stringify(updateSave)
+          console.log(updateSave)
+          localStorage.setItem("savedProfiles", spaghettifyProfile)
+          localStorage.setItem("usedProfileId", usedProfileId)
+        }, 1000)
+      }
+      else {
+        // Sorry! No Web Storage support..
+        alert("Your browser does not support local storage! Profiles won't be save between sessions")
+      }
     }
     console.log(savedProfiles)
   }

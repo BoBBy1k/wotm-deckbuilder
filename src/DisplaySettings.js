@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import ListTanks from './ListTanks.js'
+import { debugModeContext } from './contexts/debugModeContext.js'
 
 //TODO: Adding a deck currently wipes currently attached equipment to prevent errors. Fix this later.
 //TODO: Needs to sync faster.
@@ -9,6 +10,8 @@ function DisplaySettings ( {settingsAvailableDecks, setSettingsAvailableDecks, c
   const [settingsIcon, setSettingsIcon]=useState("bi bi-gear");
   //State of the settings cog highlighting (changes when active)
   const [settingsIconHighlight, setSettingsIconHighlight]=useState({color: ""});
+  //
+  const [debugMode, setDebugMode] = useContext(debugModeContext)
 
   //Handle Settings Modal
   const handleSettingsClick = (e) => {
@@ -144,6 +147,16 @@ function DisplaySettings ( {settingsAvailableDecks, setSettingsAvailableDecks, c
             }
             {/* TODO: Add Misc settings here  */}
             <div>Misc Settings</div>
+            <button onClick={()=> {alert("Debug Mode: " + !debugMode); setDebugMode(!debugMode)}}>Toggle Debug Mode</button>
+            <div/>
+            <button onClick={()=> {
+              if (window.confirm("Delete all local storage data and refresh App?") === true) {
+                console.log("Deleting all local storage data!")
+                localStorage.clear();
+                window.location.reload();
+              }
+            }}>Delete All Local Data</button>
+            <div>Share Code for Profile</div>
             <div>TODO: Disable warning popups</div>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import DisplayProfiles from './DisplayProfiles.js'
 import DisplayTanks from './DisplayTanks.js'
 import DisplayCards from './DisplayCards.js'
@@ -7,6 +7,7 @@ import DisplayDescription from './DisplayDescription.js'
 import DisplayPoints from './DisplayPoints.js'
 import ListEquipment from './ListEquipment.js'
 import CRUDButtons from './CRUDButtons.js'
+import { debugModeContext } from './contexts/debugModeContext.js'
 
 function Profile() {
   //State that holds saved profiles
@@ -39,9 +40,11 @@ function Profile() {
   const [example, setExample]=useState(false);
   //State that highlights the tank slot the hovered-over equipment card is equipped to
   const [currentDeckTankListItemHighlight,setCurrentDeckTankListItemHighlight]=useState({});
+  //States that the useContext API to handle debug mode
+  const [debugMode, setDebugMode] = useContext(debugModeContext)
 
-  const checkAvailableDeckCards = (e) => {
-    console.log("CHECKING DECK CARDS")
+    const checkAvailableDeckCards = (e) => {
+    console.log("Initializing...\nChecking Deck Cards")
     let availableCards = {};
     let usedCards ={};
     //For each available expansion. Add all of the corresponding cards that share the same source from ListEquipment to setSettingsAvailableDeckCards
@@ -79,6 +82,12 @@ function Profile() {
   //Used to set the available/used deck cards of the default display
   useEffect(()=>{
     checkAvailableDeckCards()
+    if(!debugMode && localStorage.length > 0) {
+      console.log("Reading Local Storage")
+      console.log(JSON.parse(localStorage.getItem("savedProfiles")))
+      setSavedProfiles(JSON.parse(localStorage.getItem("savedProfiles")))
+      setUsedProfileId(JSON.parse(localStorage.getItem("usedProfileId")));
+    }
     }, [])
 
   return (
@@ -91,13 +100,13 @@ function Profile() {
         className="currentDeckName"
         value={profileName} onChange={ (e)=>{setProfileName(e.target.value)}}
       />
-      <DisplayPoints profileTankCards={profileTankCards} settingsUsedDeckCards={settingsUsedDeckCards}/>
-      <DisplaySettings settingsAvailableDecks={settingsAvailableDecks} setSettingsAvailableDecks={setSettingsAvailableDecks} checkAvailableDeckCards={checkAvailableDeckCards}/>
-      <DisplayTanks tankCards={profileTankCards} currentSelectedTankCard={currentSelectedTankCard} display={display} setDisplay={setDisplay} setCurrentSelectedTankCard={setCurrentSelectedTankCard} setProfileTankCards={setProfileTankCards} settingsAvailableDecks={settingsAvailableDecks} settingsUsedDecks={settingsUsedDecks} setSettingsUsedDecks={setSettingsUsedDecks} settingsAvailableDeckCards={settingsAvailableDeckCards} setSettingsAvailableDeckCards={setSettingsAvailableDeckCards} settingsUsedDeckCards={settingsUsedDeckCards} setSettingsUsedDeckCards={setSettingsUsedDeckCards} currentDeckTankListItemHighlight={currentDeckTankListItemHighlight} checkAvailableDeckCards={checkAvailableDeckCards}/>
-      <DisplayDescription profileDescription={profileDescription} setProfileDescription={setProfileDescription}/>
-      <DisplayCards settingsAvailableDeckCards={settingsAvailableDeckCards} settingsUsedDeckCards={settingsUsedDeckCards} setCurrentDeckTankListItemHighlight={setCurrentDeckTankListItemHighlight}/>
-      <DisplayProfiles savedProfiles={savedProfiles} currentSelectedProfile={currentSelectedProfile} setCurrentSelectedProfile={setCurrentSelectedProfile} />
-      <CRUDButtons currentSelectedProfile={currentSelectedProfile} setCurrentSelectedProfile={setCurrentSelectedProfile} currentProfile={currentProfile} setCurrentProfile={setCurrentProfile} setSavedProfiles={setSavedProfiles} savedProfiles={savedProfiles} profileName={profileName} setProfileName={setProfileName} usedProfileId={usedProfileId} setUsedProfileId={setUsedProfileId} profileTankCards={profileTankCards} setProfileTankCards={setProfileTankCards} profileDescription={profileDescription} setProfileDescription={setProfileDescription} settingsUsedDeckCards={settingsUsedDeckCards} setSettingsUsedDeckCards={setSettingsUsedDeckCards} settingsUsedDecks={settingsUsedDecks} setSettingsUsedDecks={setSettingsUsedDecks}/>
+        <DisplayPoints profileTankCards={profileTankCards} settingsUsedDeckCards={settingsUsedDeckCards}/>
+        <DisplaySettings settingsAvailableDecks={settingsAvailableDecks} setSettingsAvailableDecks={setSettingsAvailableDecks} checkAvailableDeckCards={checkAvailableDeckCards}/>
+        <DisplayTanks tankCards={profileTankCards} currentSelectedTankCard={currentSelectedTankCard} display={display} setDisplay={setDisplay} setCurrentSelectedTankCard={setCurrentSelectedTankCard} setProfileTankCards={setProfileTankCards} settingsAvailableDecks={settingsAvailableDecks} settingsUsedDecks={settingsUsedDecks} setSettingsUsedDecks={setSettingsUsedDecks} settingsAvailableDeckCards={settingsAvailableDeckCards} setSettingsAvailableDeckCards={setSettingsAvailableDeckCards} settingsUsedDeckCards={settingsUsedDeckCards} setSettingsUsedDeckCards={setSettingsUsedDeckCards} currentDeckTankListItemHighlight={currentDeckTankListItemHighlight} checkAvailableDeckCards={checkAvailableDeckCards}/>
+        <DisplayDescription profileDescription={profileDescription} setProfileDescription={setProfileDescription}/>
+        <DisplayCards settingsAvailableDeckCards={settingsAvailableDeckCards} settingsUsedDeckCards={settingsUsedDeckCards} setCurrentDeckTankListItemHighlight={setCurrentDeckTankListItemHighlight}/>
+        <DisplayProfiles savedProfiles={savedProfiles} currentSelectedProfile={currentSelectedProfile} setCurrentSelectedProfile={setCurrentSelectedProfile} />
+        <CRUDButtons currentSelectedProfile={currentSelectedProfile} setCurrentSelectedProfile={setCurrentSelectedProfile} currentProfile={currentProfile} setCurrentProfile={setCurrentProfile} setSavedProfiles={setSavedProfiles} savedProfiles={savedProfiles} profileName={profileName} setProfileName={setProfileName} usedProfileId={usedProfileId} setUsedProfileId={setUsedProfileId} profileTankCards={profileTankCards} setProfileTankCards={setProfileTankCards} profileDescription={profileDescription} setProfileDescription={setProfileDescription} settingsUsedDeckCards={settingsUsedDeckCards} setSettingsUsedDeckCards={setSettingsUsedDeckCards} settingsUsedDecks={settingsUsedDecks} setSettingsUsedDecks={setSettingsUsedDecks}/>
     </div>
   )
 }
