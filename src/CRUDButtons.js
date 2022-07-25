@@ -1,5 +1,4 @@
-import React, { useContext, useMemo } from 'react'
-import { flushSync } from 'react-dom'
+import React, { useContext } from 'react'
 import { debugModeContext } from './contexts/debugModeContext.js'
 
 //This component handles CRUD operations. Save / Load / New / Delete Buttons
@@ -75,24 +74,23 @@ function CRUDButtons( { currentSelectedProfile, setCurrentSelectedProfile, curre
         }
         return profile;
       });
-      setSavedProfiles(updateSave)
+      //If not in debug mode - Sets saved profiles in local storage
+      if (!debugMode){
+        if (typeof(Storage) !== "undefined") {
+          setTimeout( ()=> {
+            let spaghettifyProfile = JSON.stringify(updateSave)
+            console.log(updateSave)
+            localStorage.setItem("savedProfiles", spaghettifyProfile)
+            localStorage.setItem("usedProfileId", usedProfileId)
+          }, 1000)
+        }
+        else {
+          // Sorry! No Web Storage support..
+          alert("Your browser does not support local storage! Profiles won't be save between sessions")
+        }
+      }
     }
 
-    //If not in debug mode - Sets saved profiles in local storage
-    if (!debugMode){
-      if (typeof(Storage) !== "undefined") {
-        setTimeout( ()=> {
-          let spaghettifyProfile = JSON.stringify(updateSave)
-          console.log(updateSave)
-          localStorage.setItem("savedProfiles", spaghettifyProfile)
-          localStorage.setItem("usedProfileId", usedProfileId)
-        }, 1000)
-      }
-      else {
-        // Sorry! No Web Storage support..
-        alert("Your browser does not support local storage! Profiles won't be save between sessions")
-      }
-    }
     console.log(savedProfiles)
   }
   //Function that loads the selected profile
@@ -125,7 +123,19 @@ function CRUDButtons( { currentSelectedProfile, setCurrentSelectedProfile, curre
     setCurrentSelectedProfile(usedProfileId)
     console.log("Saving " + profileName + " to profile: " + usedProfileId)
     setUsedProfileId(usedProfileId+1);
-   }
+    //If not in debug mode - Sets new id in local storage
+    if (!debugMode){
+      if (typeof(Storage) !== "undefined") {
+        setTimeout( ()=> {
+          localStorage.setItem("usedProfileId", usedProfileId)
+        }, 1000)
+      }
+      else {
+        // Sorry! No Web Storage support..
+        alert("Your browser does not support local storage! Profiles won't be save between sessions")
+      }
+    }
+  }
   //Function that deletes currently selected profile sets everything back to default
   const handleDelete = (e) => {
     //Do nothing if + (save to new profile button) is selected

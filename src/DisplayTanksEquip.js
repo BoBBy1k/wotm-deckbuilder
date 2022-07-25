@@ -175,6 +175,7 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
           if (settingsUsedDeckCards[item]["attached"].length > 0) {
             console.log("Card is being used.")
             //Check if the current tank slot id shows up in the attached array
+            //TODO: State is updating every iteration of this loop. Could probably be optimized to only update a temp variable afterwards
             for(let i=0; i < settingsUsedDeckCards[item]["attached"].length; i++) {
               //If found - card is already used
               if (settingsUsedDeckCards[item]["attached"][i]["id"]===currentSelectedTankCard.id){
