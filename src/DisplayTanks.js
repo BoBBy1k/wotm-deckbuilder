@@ -22,9 +22,13 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
    //BUG HERE SOMEWHERE with slot IDs
    //Crashes when all slots are filled?
    //State Doesnt update fast enough maybe needs a settimeout or flushsync
-  const checkCrewSlots = (newDisplay, id = -1) => {
+  const checkCrewSlots = (newDisplay=null, id = -1) => {
     //Variable holding the current working crew slots to update the state with
     let newCurrentCrewSlots = []
+    //This is a fix for the M3 Lee not updating fast enough and breaking the UI
+    if (newDisplay === null) {
+      newDisplay=ListTanks.find(item => item.name === currentSelectedTankCard["name"])
+    }
     //Make sure we are only mapping tanks that exist
     if(newDisplay["crew"]) {
         //Map through tankCrew and setup the crew slots
@@ -60,6 +64,7 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
   }
 
   //Crew Display
+  //Note: Added a weird undefined check to fix bug with M3 Lee's extra crew memember not updating fast enough and breaking the UI
   const displayCrewSlots = () => {
     return (
       <div className="crewSlots">
@@ -80,7 +85,7 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
               return (
               <span className="crewSlotsItem" key={index}>
                 <button className="crewSlot" onClick={()=>alert("Upcoming Feature: Ability to change crew cards here")}>{crew}</button>
-                <div style={ {fontSize: 18} }>{currentCrewSlots[index]["equipped"]}</div>
+                <div style={ {fontSize: 18} }>{currentCrewSlots[index] === undefined ? checkCrewSlots(): currentCrewSlots[index]["equipped"]}</div>
               </span>
               )
             }
@@ -176,6 +181,7 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
         if (settingsAvailableDecks[newTank] === 0) {alert ("Warning: This tank's expansion is not owned! \n You can still use the tank to compare stats \n but equipment from this expansion wont be shown \n Add the expansion using the settings cog on the front page")}
         else if (settingsUsedDecks[newTank]+1 > settingsAvailableDecks[newTank]) {alert ("Warning: More tanks of this type used than available \n")}
         setSettingsUsedDecks((prevState) => {return {...prevState, [currentTank]: oldValue, [newTank]: newValue}})
+        checkCrewSlots(newTank)
         wipeUsedCards();
         //TODO: Implement feature to move over valid cards
       }
