@@ -74,23 +74,22 @@ function CRUDButtons( { currentSelectedProfile, setCurrentSelectedProfile, curre
         }
         return profile;
       });
-      //If not in debug mode - Sets saved profiles in local storage
-      if (!debugMode){
-        if (typeof(Storage) !== "undefined") {
-          setTimeout( ()=> {
-            let spaghettifyProfile = JSON.stringify(updateSave)
-            console.log(updateSave)
-            localStorage.setItem("savedProfiles", spaghettifyProfile)
-            localStorage.setItem("usedProfileId", usedProfileId)
-          }, 1000)
-        }
-        else {
-          // Sorry! No Web Storage support..
-          alert("Your browser does not support local storage! Profiles won't be save between sessions")
-        }
+    }
+    //If not in debug mode - Sets saved profiles in local storage
+    if (!debugMode){
+      if (typeof(Storage) !== "undefined") {
+        setTimeout( ()=> {
+          let spaghettifyProfile = JSON.stringify(updateSave)
+          console.log(updateSave)
+          localStorage.setItem("savedProfiles", spaghettifyProfile)
+          localStorage.setItem("usedProfileId", usedProfileId)
+        }, 1000)
+      }
+      else {
+        // Sorry! No Web Storage support..
+        alert("Your browser does not support local storage! Profiles won't be save between sessions")
       }
     }
-
     console.log(savedProfiles)
   }
   //Function that loads the selected profile
