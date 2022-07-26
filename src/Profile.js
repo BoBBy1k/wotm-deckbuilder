@@ -84,9 +84,13 @@ function Profile() {
     checkAvailableDeckCards()
     if(!debugMode && localStorage.length > 0) {
       console.log("Reading Local Storage")
-      console.log(JSON.parse(localStorage.getItem("savedProfiles")))
-      setSavedProfiles(JSON.parse(localStorage.getItem("savedProfiles")))
-      setUsedProfileId(JSON.parse(localStorage.getItem("usedProfileId")));
+      let loadProfiles = JSON.parse(localStorage.getItem("savedProfiles"))
+      //Sets used IDs by checking the last index of the profile array which should have the largest used id
+      let loadUsedIDs = loadProfiles[loadProfiles.length-1]["id"] + 1;
+      console.log(loadProfiles)
+      setCurrentProfile(loadProfiles[0]["id"])
+      setSavedProfiles(loadProfiles)
+      setUsedProfileId(loadUsedIDs);
     }
     }, [])
 
@@ -105,7 +109,7 @@ function Profile() {
         <DisplayTanks tankCards={profileTankCards} currentSelectedTankCard={currentSelectedTankCard} display={display} setDisplay={setDisplay} setCurrentSelectedTankCard={setCurrentSelectedTankCard} setProfileTankCards={setProfileTankCards} settingsAvailableDecks={settingsAvailableDecks} settingsUsedDecks={settingsUsedDecks} setSettingsUsedDecks={setSettingsUsedDecks} settingsAvailableDeckCards={settingsAvailableDeckCards} setSettingsAvailableDeckCards={setSettingsAvailableDeckCards} settingsUsedDeckCards={settingsUsedDeckCards} setSettingsUsedDeckCards={setSettingsUsedDeckCards} currentDeckTankListItemHighlight={currentDeckTankListItemHighlight} checkAvailableDeckCards={checkAvailableDeckCards}/>
         <DisplayDescription profileDescription={profileDescription} setProfileDescription={setProfileDescription}/>
         <DisplayCards settingsAvailableDeckCards={settingsAvailableDeckCards} settingsUsedDeckCards={settingsUsedDeckCards} setCurrentDeckTankListItemHighlight={setCurrentDeckTankListItemHighlight}/>
-        <DisplayProfiles savedProfiles={savedProfiles} currentSelectedProfile={currentSelectedProfile} setCurrentSelectedProfile={setCurrentSelectedProfile} />
+        <DisplayProfiles savedProfiles={savedProfiles} currentSelectedProfile={currentSelectedProfile} setCurrentSelectedProfile={setCurrentSelectedProfile} setProfileName={setProfileName} setCurrentProfile={setCurrentProfile} setProfileTankCards={setProfileTankCards} setSettingsUsedDecks={setSettingsUsedDecks} setProfileDescription={setProfileDescription} setSettingsUsedDeckCards={setSettingsUsedDeckCards} currentProfile={currentProfile}/>
         <CRUDButtons currentSelectedProfile={currentSelectedProfile} setCurrentSelectedProfile={setCurrentSelectedProfile} currentProfile={currentProfile} setCurrentProfile={setCurrentProfile} setSavedProfiles={setSavedProfiles} savedProfiles={savedProfiles} profileName={profileName} setProfileName={setProfileName} usedProfileId={usedProfileId} setUsedProfileId={setUsedProfileId} profileTankCards={profileTankCards} setProfileTankCards={setProfileTankCards} profileDescription={profileDescription} setProfileDescription={setProfileDescription} settingsUsedDeckCards={settingsUsedDeckCards} setSettingsUsedDeckCards={setSettingsUsedDeckCards} settingsUsedDecks={settingsUsedDecks} setSettingsUsedDecks={setSettingsUsedDecks}/>
     </div>
   )
