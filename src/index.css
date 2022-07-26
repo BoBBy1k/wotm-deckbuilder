@@ -73,7 +73,7 @@ code {
   top: 0;
   width: 100%;
   height: 100%;
-  overflow: auto; /* Enable scroll if needed */
+  overflow: auto;
   background-color: rgb(0,0,0); /* Fallback color */
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
@@ -81,17 +81,20 @@ code {
 /* Modal Content/Box */
 .settings-modal-content {
   background-color: whitesmoke;
-  margin: 15% auto; /* 15% from the top and centered */
+  margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 50%; /* Could be more or less, depending on screen size */
+  width: 50%;
   color: black;
-  z-index: 1; /* Sit on top */
+  z-index: 1;
+  background-color: #282c34;
+  border-radius: 10px;
+  color: white
 }
 
 /* The Close Button */
 .settings-modal-close {
-  color: #aaa;
+  color: white;
   float: right;
   font-size: 28px;
   font-weight: bold;
@@ -99,7 +102,8 @@ code {
 
 .settings-modal-close:hover,
 .settings-modal-close:focus {
-  color: black;
+  color: red;
+  font-size: 28px;
   text-decoration: none;
   cursor: pointer;
 }
@@ -115,7 +119,6 @@ code {
 .starterHoverInfo {
   position: relative;
   display: inline-block;
-  border-bottom: 1px dotted black;
 }
 
 .starterHoverInfo .starterHoverInfoText {
@@ -279,7 +282,9 @@ code {
   padding: 20px;
   border: 1px solid #888;
   width: 50%; /* Could be more or less, depending on screen size */
-  color: black
+  background-color: #282c34;
+  border-radius: 10px;
+  color: white
 }
 
 .currentDeckTankListItem-change-selected {
@@ -288,7 +293,7 @@ code {
 
 /* The Close Button */
 .currentDeckTankListItem-modal-close {
-  color: #aaa;
+  color: white;
   float: right;
   font-size: 28px;
   font-weight: bold;
@@ -296,7 +301,7 @@ code {
 
 .currentDeckTankListItem-modal-close:hover,
 .currentDeckTankListItem-modal-close:focus {
-  color: black;
+  color: red;
   text-decoration: none;
   cursor: pointer;
 }
@@ -370,6 +375,8 @@ code {
   cursor: default;
   border-color:green;
   border-radius: 5px;
+  border-width: 4px;
+  cursor: pointer;
 }
 
 .crewSlotButton-disable{
@@ -379,18 +386,19 @@ code {
   pointer-events: none;
   border-color:red;
   border-radius: 5px;
+  border-width: 4px;
 }
 
  /* The Modal (background) */
  .equip-modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 2; /* Sit on top */
+  display: none;
+  position: fixed;
+  z-index: 2;
   left: 0;
   top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
+  width: 100%;
+  height: 100%;
+  overflow: auto;
   background-color: rgb(0,0,0); /* Fallback color */
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
@@ -398,17 +406,19 @@ code {
 /* Modal Content/Box */
 .equip-modal-content {
   background-color: whitesmoke;
-  margin: 15% auto; /* 15% from the top and centered */
+  margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 50%; /* Could be more or less, depending on screen size */
-  color: black;
-  z-index: 1; /* Sit on top */
+  width: 50%;
+  z-index: 1;
+  background-color: #282c34;
+  border-radius: 10px;
+  color: white
 }
 
 /* The Close Button */
 .equip-modal-close {
-  color: #aaa;
+  color: white;
   float: right;
   font-size: 28px;
   font-weight: bold;
@@ -416,7 +426,7 @@ code {
 
 .equip-modal-close:hover,
 .equip-modal-close:focus {
-  color: black;
+  color: red;
   text-decoration: none;
   cursor: pointer;
 }
@@ -441,13 +451,15 @@ code {
   padding: 20px;
   border: 1px solid #888;
   width: 50%; /* Could be more or less, depending on screen size */
-  color: black;
   z-index: 1; /* Sit on top */
+  background-color: #282c34;
+  border-radius: 10px;
+  color: white
 }
 
 /* The Close Button */
 .equip-prompt-close {
-  color: #aaa;
+  color: white;
   float: right;
   font-size: 28px;
   font-weight: bold;
@@ -455,7 +467,7 @@ code {
 
 .equip-prompt-close:hover,
 .equip-prompt-close:focus {
-  color: black;
+  color: red;
   text-decoration: none;
   cursor: pointer;
 }

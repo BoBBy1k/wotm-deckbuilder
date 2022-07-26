@@ -109,7 +109,7 @@ function DisplaySettings ( {settingsAvailableDecks, setSettingsAvailableDecks, c
           {/* Settings Modal content */}
           <div className="settings-modal-content">
             <span className="settings-modal-close">&times;</span>
-            <div className="starterHoverInfo">Available Expansion Packs
+            <div className="starterHoverInfo" style={ { borderBottom: "1px solid white", marginBottom: 5 } } >Available Expansion Packs
               <span className="starterHoverInfoHelpText">All expansion tanks can be selected regardless if the expansion has been added. Adding an expansion will allow access to that pack's equipment cards and keeps track of how many total are available / being used</span>
             </div>
             {Object.entries(settingsAvailableDecks).map( ([pack, count], index) =>

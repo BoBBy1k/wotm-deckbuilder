@@ -77,7 +77,7 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
               return (
                 <span className="crewSlotsItem" key={index}>
                   <button className="crewSlot" onClick={()=>alert("Upcoming Feature: Ability to change crew cards here")}>{addBreak}</button>
-                  <div style={ {fontSize: 18} }>{currentCrewSlots[index]["equipped"]}</div>
+                  <div style={ {fontSize: 15, color: "black", overflowWrap: "break-word"} }>{currentCrewSlots[index]["equipped"]}</div>
                 </span>
               )
             }
@@ -85,7 +85,7 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
               return (
               <span className="crewSlotsItem" key={index}>
                 <button className="crewSlot" onClick={()=>alert("Upcoming Feature: Ability to change crew cards here")}>{crew}</button>
-                <div style={ {fontSize: 18} }>{currentCrewSlots[index] === undefined ? checkCrewSlots(): currentCrewSlots[index]["equipped"]}</div>
+                <div style={ {fontSize: 15, color: "black", overflowWrap: "break-word"} }>{currentCrewSlots[index] === undefined ? checkCrewSlots(): currentCrewSlots[index]["equipped"]}</div>
               </span>
               )
             }

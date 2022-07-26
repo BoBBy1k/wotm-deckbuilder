@@ -220,7 +220,7 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
   //Function that generates the item elements
   function equipmentPrepMap (array, compatable){
     return (array.map( (item, index) => {
-      let checkCount = settingsUsedDeckCards[item["name"]].count > item["count"] ? {color: 'red'}: {color: 'black'}
+      let checkCount = settingsUsedDeckCards[item["name"]].count > item["count"] ? {color: 'red'}: {color: 'white'}
       let currentEquip = ListEquipment.find(equip => equip.name === item["name"])
       return (
         <div className="flex-container" key={index} item={item["name"]}>
@@ -342,7 +342,7 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
                               {currentCrewSlots[index]["equipped"]
                               ? <button className="crewSlotButton-disable" id={index}>{addBreak}</button>
                               :<button className="crewSlotButton" onClick={handlePromptButton} id={index}>{addBreak}</button>}
-                              <div style={ {fontSize: 18} }>{currentCrewSlots[index]["equipped"]}</div>
+                              <div style={ {fontSize: 15, color: "black", overflowWrap: "break-word"} }>{currentCrewSlots[index]["equipped"]}</div>
                             </span>
                           )
                         }
@@ -352,7 +352,7 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
                             {currentCrewSlots[index]["equipped"]
                             ? <button className="crewSlotButton-disable" id={index}>{crew}</button>
                             : <button className="crewSlotButton" onClick={handlePromptButton} id={index}>{crew}</button>}
-                            <div style={ {fontSize: 18} }>{currentCrewSlots[index]["equipped"]}</div>
+                            <div style={ {fontSize: 15, color: "black", overflowWrap: "break-word"} }>{currentCrewSlots[index]["equipped"]}</div>
                           </span>
                           )
                         }
