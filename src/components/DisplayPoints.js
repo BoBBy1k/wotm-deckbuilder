@@ -1,14 +1,17 @@
 import React from 'react'
-import ListTanks from './ListTanks.js'
-import ListEquipment from './ListEquipment.js'
+import ListTanks from '../data/ListTanks.js'
+import ListEquipment from '../data/ListEquipment.js'
 
 //This component display the calculated points total
 function DisplayPoints({ profileTankCards, settingsUsedDeckCards }) {
   //Variable that holds total cost points of the current profile
   let totalPoints=0;
+  let maxPoints=200;
+  let warning={color: "white"}
   //Function that will be used in the UI to pass through a points integer while also adding the value to the total points
   const handlePoints = ( input ) => {
     totalPoints += input
+    totalPoints > maxPoints ? warning={color: "red"}: warning={color: "white"}
     return input
   }
 
@@ -56,10 +59,11 @@ function DisplayPoints({ profileTankCards, settingsUsedDeckCards }) {
   return (
     <div className="totalPoints">
       {
-        <div className="pointHoverInfo">
+        <div className="pointHoverInfo" style={warning}>
           {totalPoints === 1 ? totalPoints + " Point" : totalPoints + " Points"}
           {/* {totalPoints === 1 ? totalPoints + " Point" : totalPoints + " Points"} */}
             <span className="pointHoverInfoText">
+              {totalPoints > maxPoints ? "Exceeded Limit: " + maxPoints:null}
               {listCards}
             </span>
         </div>

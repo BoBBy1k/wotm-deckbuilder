@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { flushSync } from 'react-dom'
-import ListTanks from './ListTanks.js'
-import ListEquipment from './ListEquipment.js'
+import ListTanks from '../data/ListTanks.js'
+import ListEquipment from '../data/ListEquipment.js'
 import DisplayTanksEquip from './DisplayTanksEquip.js'
 
 //This component allows the modification of tanks and their attached cards from the main page
@@ -76,7 +76,7 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
               addBreak = addBreak.join("")
               return (
                 <span className="crewSlotsItem" key={index}>
-                  <button className="crewSlot" onClick={()=>alert("Upcoming Feature: Ability to change crew cards here")}>{addBreak}</button>
+                  <button className="crewSlot" onClick={()=>alert("Upcoming Feature:\nPlease use the 'CHANGE EQUIPPED CARDS' to modify crew cards")}>{addBreak}</button>
                   <div style={ {fontSize: 15, color: "black", overflowWrap: "break-word"} }>{currentCrewSlots[index]["equipped"]}</div>
                 </span>
               )
@@ -84,7 +84,7 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
             else {
               return (
               <span className="crewSlotsItem" key={index}>
-                <button className="crewSlot" onClick={()=>alert("Upcoming Feature: Ability to change crew cards here")}>{crew}</button>
+                <button className="crewSlot" onClick={()=>alert("Upcoming Feature:\nPlease use the 'CHANGE EQUIPPED CARDS' to modify crew cards")}>{crew}</button>
                 <div style={ {fontSize: 15, color: "black", overflowWrap: "break-word"} }>{currentCrewSlots[index] === undefined ? checkCrewSlots(): currentCrewSlots[index]["equipped"]}</div>
               </span>
               )
@@ -205,22 +205,22 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
             <span>{" Wave: " + display.wave}</span>
             <div></div>
             <span className="statHoverInfo">
-              <img width="30" height="30" src={require('./icons/firepower.jpg')} alt="Firepower" />
+              <img width="30" height="30" src={require('../icons/firepower.jpg')} alt="Firepower" />
               <span className="statHoverInfoText">Firepower</span>
               <span>{": " + display.firepower + " "}</span>
             </span>
             <span className="statHoverInfo">
-              <img width="30" height="30" src={require('./icons/survivability.jpg')} alt="Survivability"/>
+              <img width="30" height="30" src={require('../icons/survivability.jpg')} alt="Survivability"/>
               <span className="statHoverInfoText">Survivability</span>
               <span>{": " + display.survivability + " "}</span>
             </span>
             <span className="statHoverInfo">
-              <img width="30" height="30" src={require('./icons/mobility.jpg')} alt="Mobility" />
+              <img width="30" height="30" src={require('../icons/mobility.jpg')} alt="Mobility" />
               <span className="statHoverInfoText">Mobility</span>
               <span>{": " + display.mobility + " "}</span>
             </span>
             <span className="statHoverInfo">
-              <img width="30" height="30" src={require('./icons/initiative.jpg')} alt="Initiative" />
+              <img width="30" height="30" src={require('../icons/initiative.jpg')} alt="Initiative" />
               <span className="statHoverInfoText">Initiative</span>
               <span>{": " + display.initiative + " "}</span>
             </span>

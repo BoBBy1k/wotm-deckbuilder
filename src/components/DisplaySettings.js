@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react'
-import ListTanks from './ListTanks.js'
-import { debugModeContext } from './contexts/debugModeContext.js'
+import ListTanks from '../data/ListTanks.js'
+import DefaultProfiles from '../data/DefaultProfiles.js'
+import { debugModeContext } from '../contexts/debugModeContext.js'
 
 //TODO: Adding a deck currently wipes currently attached equipment to prevent errors. Fix this later.
 //TODO: Needs to sync faster.
@@ -10,7 +11,7 @@ function DisplaySettings ( {settingsAvailableDecks, setSettingsAvailableDecks, c
   const [settingsIcon, setSettingsIcon]=useState("bi bi-gear");
   //State of the settings cog highlighting (changes when active)
   const [settingsIconHighlight, setSettingsIconHighlight]=useState({color: ""});
-  //
+  //State of local storage
   const [debugMode, setDebugMode] = useContext(debugModeContext)
 
   //Handle Settings Modal
@@ -146,18 +147,24 @@ function DisplaySettings ( {settingsAvailableDecks, setSettingsAvailableDecks, c
               )
             }
             {/* TODO: Add Misc settings here  */}
-            <div>Misc Settings</div>
-            <button onClick={()=> {alert("Debug Mode: " + !debugMode); setDebugMode(!debugMode)}}>Toggle Debug Mode</button>
-            <div/>
+            <h3 style={ { borderTop: "1px solid white", marginTop: 10 } }>Misc Settings</h3>
+            <span>Debug Mode (Disable Local Storage) </span>
+            <label className="switch">
+              <input type="checkbox" onClick={()=> {alert("Debug Mode: " + !debugMode); setDebugMode(!debugMode)}}/>
+              <span className="slider"></span>
+            </label><div/>
             <button onClick={()=> {
               if (window.confirm("Delete all local storage data and refresh App?") === true) {
                 console.log("Deleting all local storage data!")
                 localStorage.clear();
+                localStorage.setItem("savedProfiles", JSON.stringify(DefaultProfiles))
                 window.location.reload();
               }
-            }}>Delete All Local Data</button>
-            <div>Share Code for Profile</div>
-            <div>TODO: Disable warning popups</div>
+            }}>Delete All Local Data</button><div/>
+            <button>TODO: Set Deck Point Limit</button><div/>
+            <button>TODO: Share Code for Profile</button><div/>
+            <button>TODO: Disable warning popups</button><div/>
+            <button>TODO: Day/Night Mode Toggle</button>
           </div>
         </div>
     </span>

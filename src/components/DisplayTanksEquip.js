@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import ListEquipment from './ListEquipment.js'
+import ListEquipment from '../data/ListEquipment.js'
 
 //This component handles equipping cards to tanks
 function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards, settingsUsedDeckCards, setSettingsUsedDeckCards, currentSelectedTankCard, handleTankModal, display, currentCrewSlots, setCurrentCrewSlots} ) {

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { debugModeContext } from './contexts/debugModeContext.js'
+import { debugModeContext } from '../contexts/debugModeContext.js'
 
 //This component handles CRUD operations. Save / Load / New / Delete Buttons
 function CRUDButtons( { currentSelectedProfile, setCurrentSelectedProfile, currentProfile, setCurrentProfile, setSavedProfiles, savedProfiles, profileName, setProfileName, usedProfileId, setUsedProfileId, profileTankCards, setProfileTankCards, tankCards, profileDescription, setProfileDescription, settingsUsedDeckCards, setSettingsUsedDeckCards, settingsUsedDecks, setSettingsUsedDecks} ) {
@@ -74,6 +74,7 @@ function CRUDButtons( { currentSelectedProfile, setCurrentSelectedProfile, curre
         }
         return profile;
       });
+      setSavedProfiles(updateSave)
     }
     //If not in debug mode - Sets saved profiles in local storage
     if (!debugMode){
@@ -129,7 +130,8 @@ function CRUDButtons( { currentSelectedProfile, setCurrentSelectedProfile, curre
       //Safety confirmation
       if (window.confirm("Are you sure you want to delete this profile?") === true){
         //Note: nonstrict comparsion is required because of profile.id is a string from being read from html tag. TODO: Maybe fix it?
-        setSavedProfiles(savedProfiles.filter((profile) => profile.id === currentSelectedProfile ? false: true))
+        let updateSave=savedProfiles.filter((profile) => profile.id === currentSelectedProfile ? false: true)
+        setSavedProfiles(updateSave)
         setCurrentProfile(0);
         setCurrentSelectedProfile(0);
         setProfileTankCards(["-","-","-","-","-","-","-","-"]);
@@ -137,6 +139,16 @@ function CRUDButtons( { currentSelectedProfile, setCurrentSelectedProfile, curre
         resetCards();
         wipeUsedTanks();
         console.log("Deleting " + profileName + " from profile: " + usedProfileId);
+        //If not in debug mode - Sets saved profiles in local storage
+        if (!debugMode){
+          if (typeof(Storage) !== "undefined") {
+            setTimeout( ()=> {
+              let spaghettifyProfile = JSON.stringify(updateSave)
+              console.log(updateSave)
+              localStorage.setItem("savedProfiles", spaghettifyProfile)
+            }, 1000)
+          }
+        }
       }
     }
   }

@@ -1,6 +1,6 @@
 import React from 'react'
 import './App.css';
-import Profile from './Profile.js';
+import Profile from './components/Profile.js';
 //Provider for context api
 import { DebugModeContextProvider} from './contexts/debugModeContext.js'
 

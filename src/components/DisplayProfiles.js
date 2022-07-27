@@ -41,10 +41,11 @@ function DisplayProfiles( {currentSelectedProfile, setCurrentSelectedProfile, sa
   return (
     <div className="profileList">
         {savedProfiles.map((profile, index)=>(
-          profile.id === currentSelectedProfile
-          ? <button className="profileListItemSelected" key={profile.id} id={profile.id}  onClick={handleProfileButton}>{profile.profileName}</button>
-          : profile.id === currentProfile
-          ? <button className="profileListItemCurrent" key={profile.id} id={profile.id} onClick={handleProfileButton}>{profile.profileName}</button>
+
+          profile.id ===  currentProfile
+          ? <button className="profileListItemCurrent" key={profile.id} id={profile.id}  onClick={handleProfileButton}>{profile.profileName}</button>
+          : profile.id === currentSelectedProfile
+          ? <button className="profileListItemSelected" key={profile.id} id={profile.id} onClick={handleProfileButton}>{profile.profileName}</button>
           : <button className="profileListItem" key={profile.id} id={profile.id} onClick={handleProfileButton}>{profile.profileName}</button>
         ))}
         {currentSelectedProfile === 0

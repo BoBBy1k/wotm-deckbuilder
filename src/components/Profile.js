@@ -5,9 +5,10 @@ import DisplayCards from './DisplayCards.js'
 import DisplaySettings from './DisplaySettings.js'
 import DisplayDescription from './DisplayDescription.js'
 import DisplayPoints from './DisplayPoints.js'
-import ListEquipment from './ListEquipment.js'
+import ListEquipment from '../data/ListEquipment.js'
+import DefaultProfiles from '../data/DefaultProfiles.js'
 import CRUDButtons from './CRUDButtons.js'
-import { debugModeContext } from './contexts/debugModeContext.js'
+import { debugModeContext } from '../contexts/debugModeContext.js'
 
 function Profile() {
   //State that holds saved profiles
@@ -21,7 +22,7 @@ function Profile() {
   //State that holds the name of the current profile (TODO: Probably dont need this one)
   const [profileName, setProfileName]=useState("Big Tonks");
   //State that holds the current profile's tank cards (Used to display on UI)
-  const [profileTankCards, setProfileTankCards]=useState(["PZ KPFW IV AUSF H","T-34","M4A1 Sherman","Cromwell","Stug III Ausf G","-","-","-"]);
+  const [profileTankCards, setProfileTankCards]=useState(["-","-","-","-","-","-","-","-"]);
   //State that holds the current displayed card (To display in modal for modification)
   const [display, setDisplay] = useState({});
   //State that holds the current displayed card modal's selected card
@@ -31,13 +32,11 @@ function Profile() {
   //State that holds how many of each expansion is avaiable (Only effects equipment cards)
   const [settingsAvailableDecks, setSettingsAvailableDecks]=useState({"Starter": 1,"PZ KPFW IV AUSF H": 1, "T-34": 1, "M4A1 Sherman": 1, "Cromwell": 1, "Stug III Ausf G": 1, "SU-100": 1, "M3 Lee": 1, "Valentine": 1, "PZ KPFW IV AUSF H (II)": 1, "T-34 (II)": 1, "M4A1 Sherman (II)": 1, "Cromwell (II)": 1, "PZ KPFW III AUSF J": 1, "KV-1S": 1, "M10 Wolverine": 1, "Sherman VC Firefly": 1, "Tiger I": 1, "IS-2": 1, "M26 Pershing": 1, "Comet": 1, "Panther": 1, "ISU-152": 1, "M4A1 Sherman (76mm)": 1, "Churchill VII": 1, "Jagdpanzer 38(t) Hetzer": 1, "T-70": 1, "M24 Chaffee": 1, "Crusader": 1, "Tiger II": 1, "T-34-85": 1, "M4A3E8 Sherman": 1, "Challenger": 1});
   //State that keeps track of tanks used
-  const [settingsUsedDecks, setSettingsUsedDecks]=useState({"Starter": 0,"PZ KPFW IV AUSF H": 1, "T-34": 1, "M4A1 Sherman": 1, "Cromwell": 1, "Stug III Ausf G": 1, "SU-100": 0, "M3 Lee": 0, "Valentine": 0, "PZ KPFW IV AUSF H (II)": 0, "T-34 (II)": 0, "M4A1 Sherman (II)": 0, "Cromwell (II)": 0, "PZ KPFW III AUSF J": 0, "KV-1S": 0, "M10 Wolverine": 0, "Sherman VC Firefly": 0, "Tiger I": 0, "IS-2": 0, "M26 Pershing": 0, "Comet": 0, "Panther": 0, "ISU-152": 0, "M4A1 Sherman (76mm)": 0, "Churchill VII": 0, "Jagdpanzer 38(t) Hetzer": 0, "T-70": 0, "M24 Chaffee": 0, "Crusader": 0, "Tiger II": 0, "T-34-85": 0, "M4A3E8 Sherman": 0, "Challenger": 0});
+  const [settingsUsedDecks, setSettingsUsedDecks]=useState({"Starter": 0,"PZ KPFW IV AUSF H": 0, "T-34": 0, "M4A1 Sherman": 0, "Cromwell": 0, "Stug III Ausf G": 0, "SU-100": 0, "M3 Lee": 0, "Valentine": 0, "PZ KPFW IV AUSF H (II)": 0, "T-34 (II)": 0, "M4A1 Sherman (II)": 0, "Cromwell (II)": 0, "PZ KPFW III AUSF J": 0, "KV-1S": 0, "M10 Wolverine": 0, "Sherman VC Firefly": 0, "Tiger I": 0, "IS-2": 0, "M26 Pershing": 0, "Comet": 0, "Panther": 0, "ISU-152": 0, "M4A1 Sherman (76mm)": 0, "Churchill VII": 0, "Jagdpanzer 38(t) Hetzer": 0, "T-70": 0, "M24 Chaffee": 0, "Crusader": 0, "Tiger II": 0, "T-34-85": 0, "M4A3E8 Sherman": 0, "Challenger": 0});
   //State that keeps track of what equipment cards are available to pick
   const [settingsAvailableDeckCards, setSettingsAvailableDeckCards]=useState({});
   //State that keeps track of which equipment cards have been used
   const [settingsUsedDeckCards, setSettingsUsedDeckCards]=useState({});
-  //State that makes the example equipment seed only happen once
-  const [example, setExample]=useState(false);
   //State that highlights the tank slot the hovered-over equipment card is equipped to
   const [currentDeckTankListItemHighlight,setCurrentDeckTankListItemHighlight]=useState({});
   //States that the useContext API to handle debug mode
@@ -58,15 +57,8 @@ function Profile() {
           ListEquipment.map((item) => {
             if (item.source===key) {
               availableCards[item.name] = settingsAvailableDecks[key]
-              //TODO: run this later after this map is done to add equipment to more tanks for a larger example
-              //Set example equipment
-              if (example === false && item.name === "Small Repair Kit") {
-                usedCards[item.name] = {count: 1, attached: [{ id: 0, name: "PZ KPFW IV AUSF H" }]}
-                setExample(true)
-              }
-              else {
-                usedCards[item.name] = {count: 0, attached: []}
-              }
+              usedCards[item.name] = {count: 0, attached: []}
+
             }
           })
         }
@@ -81,16 +73,30 @@ function Profile() {
 
   //Used to set the available/used deck cards of the default display
   useEffect(()=>{
+    console.log("Reading Local Storage")
+    let loadProfiles = JSON.parse(localStorage.getItem("savedProfiles"))
+    console.log(loadProfiles)
+    if (!debugMode && loadProfiles.length === 0){
+      if (window.confirm("Local storage is empty! Do you want to load the default profiles?") === true) {
+        console.log("Loading default profiles!")
+        localStorage.setItem("savedProfiles", JSON.stringify(DefaultProfiles))
+        window.location.reload();
+      }
+    }
     checkAvailableDeckCards()
-    if(!debugMode && localStorage.length > 0) {
-      console.log("Reading Local Storage")
-      let loadProfiles = JSON.parse(localStorage.getItem("savedProfiles"))
+    if(!debugMode && loadProfiles.length > 0) {
+      console.log("Loading Local Storage")
       //Sets used IDs by checking the last index of the profile array which should have the largest used id
       let loadUsedIDs = loadProfiles[loadProfiles.length-1]["id"] + 1;
-      console.log(loadProfiles)
       setCurrentProfile(loadProfiles[0]["id"])
       setSavedProfiles(loadProfiles)
       setUsedProfileId(loadUsedIDs);
+      setProfileName(loadProfiles[0].profileName)
+      setProfileTankCards(loadProfiles[0].tankCards)
+      setSettingsUsedDecks(loadProfiles[0].usedTankCards)
+      setProfileDescription(loadProfiles[0].description)
+      setSettingsUsedDeckCards(loadProfiles[0].deckCards)
+      setCurrentSelectedProfile(loadProfiles[0]["id"])
     }
     }, [])
 

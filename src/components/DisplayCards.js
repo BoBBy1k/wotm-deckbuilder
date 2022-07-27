@@ -1,5 +1,5 @@
 import React from 'react'
-import ListEquipment from './ListEquipment.js'
+import ListEquipment from '../data/ListEquipment.js'
 
 //This component displays used equipment/consumables/crew cards on the main page
 function DisplayCards( { settingsAvailableDeckCards, settingsUsedDeckCards, setCurrentDeckTankListItem, setCurrentDeckTankListItemHighlight } ) {
