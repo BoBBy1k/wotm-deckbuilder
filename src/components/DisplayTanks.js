@@ -38,8 +38,7 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
         }
       })
       //Search used deck cards for attached crew cards
-      //TODO: Solution was built from a UI rendering map to save time. Come back and redo as a for in later.
-      Object.entries(settingsUsedDeckCards).map( ( usedDeckCards )=>{
+      Object.entries(settingsUsedDeckCards).forEach( (usedDeckCards) => {
         //Only look at "crew" cards that have been attached
         if (usedDeckCards[1]["attached"]["length"] > 0 && ListEquipment.find((equip)=> equip["name"]===usedDeckCards[0] && equip["type1"]==="Crew")) {
           //Check the attachments
@@ -114,7 +113,6 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
   }
 
   //Event handler that handles the changes when a new tank is selected in the modification modal
-  //TODO: Set crew slots when tanks are added or deleted
   const handleTankChange = (e,tankName) => {
     let currentTank = display.name;
     let newTank = tankName;
@@ -157,36 +155,35 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
 
   return (
     <div className="currentDeckTankList">
-        {/* Tank Modal */}
-        <div id="currentDeckTankListItem-modal" className="currentDeckTankListItem-modal">
-          <div className="currentDeckTankListItem-modal-content">
-            <span className="currentDeckTankListItem-modal-close">&times;</span>
-            <div>{display.name}</div>
-            <div>{display.cost +" Points"}</div>
-            <span>{display.nation + " "}</span>
-            <TankType display={display}/>
-            <span>{" Wave: " + display.wave}</span>
-            <StatIcons display={display}/>
-            <span>{"HP: " + display.hp}</span>
-            <SpecialTraits display={display}/>
-            <div>Crew Slots</div>
-            <DisplayCrewSlots tankCrew={tankCrew} currentCrewSlots={currentCrewSlots} checkCrewSlots={checkCrewSlots} />
-            <DisplayTanksEquip settingsAvailableDecks={settingsAvailableDecks} settingsAvailableDeckCards={settingsAvailableDeckCards} setSettingsAvailableDeckCards={setSettingsAvailableDeckCards} settingsUsedDeckCards={settingsUsedDeckCards} setSettingsUsedDeckCards={setSettingsUsedDeckCards} currentSelectedTankCard={currentSelectedTankCard} handleTankModal={handleTankModal} setTotalPoints={setTotalPoints} display={display} currentCrewSlots={currentCrewSlots} setCurrentCrewSlots={setCurrentCrewSlots}/>
-            <DisplayAttachedCards settingsUsedDeckCards={settingsUsedDeckCards} currentSelectedTankCard={currentSelectedTankCard}/>
-            <div>Change Tanks</div>
-            <ChangeTanks handleTankChange={handleTankChange} currentSelectedTankCard={currentSelectedTankCard}/>
-          </div>
+      {/* Tank Modal */}
+      <div id="currentDeckTankListItem-modal" className="currentDeckTankListItem-modal">
+        <div className="currentDeckTankListItem-modal-content">
+          <span className="currentDeckTankListItem-modal-close">&times;</span>
+          <div>{display.name}</div>
+          <div>{display.cost +" Points"}</div>
+          <span>{display.nation + " "}</span>
+          <TankType display={display}/>
+          <span>{" Wave: " + display.wave}</span>
+          <StatIcons display={display}/>
+          <span>{"HP: " + display.hp}</span>
+          <SpecialTraits display={display}/>
+          <div>Crew Slots</div>
+          <DisplayCrewSlots tankCrew={tankCrew} currentCrewSlots={currentCrewSlots} checkCrewSlots={checkCrewSlots} />
+          <DisplayTanksEquip settingsAvailableDecks={settingsAvailableDecks} settingsAvailableDeckCards={settingsAvailableDeckCards} setSettingsAvailableDeckCards={setSettingsAvailableDeckCards} settingsUsedDeckCards={settingsUsedDeckCards} setSettingsUsedDeckCards={setSettingsUsedDeckCards} currentSelectedTankCard={currentSelectedTankCard} handleTankModal={handleTankModal} setTotalPoints={setTotalPoints} display={display} currentCrewSlots={currentCrewSlots} setCurrentCrewSlots={setCurrentCrewSlots}/>
+          <DisplayAttachedCards settingsUsedDeckCards={settingsUsedDeckCards} currentSelectedTankCard={currentSelectedTankCard}/>
+          <div>Change Tanks</div>
+          <ChangeTanks handleTankChange={handleTankChange} currentSelectedTankCard={currentSelectedTankCard}/>
         </div>
-        {/* TODO: Already organized by wave but create a label */}
-        {tankCards.map((tank, index)=>{
-              if (tank === "") {
-                return <span className={currentDeckTankListItemHighlight === index ? "currentDeckTankListItemHighlight" : "currentDeckTankListItem"} onClick={(e)=>{handleTankClick(e, index, currentSelectedTankCard.name)}} key={index}></span>
-              }
-              else {
-                return <span className={currentDeckTankListItemHighlight === index ? "currentDeckTankListItemHighlight" : "currentDeckTankListItem"} onClick={(e)=>{handleTankClick(e, index, currentSelectedTankCard.name)}} key={index}>{tank}</span>
-              }
-            })
-            }
+      </div>
+      {/*This is the tank UI box on the front page */}
+      {tankCards.map((tank, index)=>{
+        if (tank === "") {
+          return <span className={currentDeckTankListItemHighlight === index ? "currentDeckTankListItemHighlight" : "currentDeckTankListItem"} onClick={(e)=>{handleTankClick(e, index, currentSelectedTankCard.name)}} key={index}></span>
+        }
+        else {
+          return <span className={currentDeckTankListItemHighlight === index ? "currentDeckTankListItemHighlight" : "currentDeckTankListItem"} onClick={(e)=>{handleTankClick(e, index, currentSelectedTankCard.name)}} key={index}>{tank}</span>
+        }
+      })}
     </div>
   )
 }

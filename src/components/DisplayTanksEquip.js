@@ -74,7 +74,6 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
   }
 
   //Handler for removing a card
-  //TODO: Make it so you can only remove cards that are also attached to the tank you are currently using
   function handleEquipMinus(e){
     let target=e.target.parentElement.parentElement.attributes[1].nodeValue;
     //Search the target equipment's attached cards
@@ -107,7 +106,6 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
     alert("No copies of this card are attached to this tank!") ;
   }
 
-  // Check if card is already equipped
   // TODO: Limit 3 (Ammo Consumables Equipment)
   // TODO: Limit 1 (Gun Turret Engines Suspension Radio)
 
@@ -217,23 +215,30 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
   //TODO: 5th Priority: If the equipment is not available to be picked at all (From unselected expansions)
   let eqNotAvailable=[]
 
-  //Function that generates the item elements
+  //Function that generates the equipment UI display
   function equipmentPrepMap (array, compatable){
+    //Check through the provided sorted priority array
     return (array.map( (item, index) => {
+      //Check if we are exceeding the maximum available cards of this type
       let checkCount = settingsUsedDeckCards[item["name"]].count > item["count"] ? {color: 'red'}: {color: 'white'}
+      //Find a single equipment set that matches the current target
       let currentEquip = ListEquipment.find(equip => equip.name === item["name"])
+      //Find all equipment sets that matches the current target
+      let allEquip = ListEquipment.filter(equip=> equip.name === item["name"])
       return (
         <div className="flex-container" key={index} item={item["name"]}>
           {
-          <div className="equipHoverInfo">{ item["name"] + " "}
-            <span className="equipHoverInfoText">
-              <div>{ "Pack: "+ currentEquip["source"]}</div>
-              <span>{ "Type: "+ currentEquip["type1"]}</span>
-              <span>{ currentEquip["type2"] !=="" ? " "+ currentEquip["type2"]: null }</span>
-              <div>{ "Cost: "+ currentEquip["cost"]}</div>
-              <div>{ currentEquip["effect"]}</div>
-            </span>
-          </div>
+            //Tooltip that displays equipment info
+            <div className="equipHoverInfo">{ item["name"] + " "}
+              <span className="equipHoverInfoText">
+                {/* Display all sources for the current equipment */}
+                <div>{ "Pack: "+ allEquip.map((item)=> {return (item["source"])})}</div>
+                <span>{ "Type: "+ currentEquip["type1"]}</span>
+                <span>{ currentEquip["type2"] !=="" ? " "+ currentEquip["type2"]: null }</span>
+                <div>{ "Cost: "+ currentEquip["cost"]}</div>
+                <div>{ currentEquip["effect"]}</div>
+              </span>
+            </div>
           }
           <div className="">
           {compatable ? <i className="bi bi-arrow-left-square" onClick={handleEquipMinus}></i> : null}
