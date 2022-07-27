@@ -12,14 +12,10 @@ function DisplayProfiles( {currentSelectedProfile, setCurrentSelectedProfile, sa
     //On single clicks do nothing
     if (e.detail === 1) {
       doubleClickTimer = setTimeout(() => {
-        // console.log("click");
       }, 200)
     }
     //On double click set profile
     if (e.detail === 2) {
-      // console.log("double click");
-      //TODO: This is the same functionality as the Load button, but copied here for quick testing of an idea for handling double click.
-      //If it works lift up the function and share it with both components later.
       //Do nothing if + (Save to new profile) is selected
       if (clickedProfile !== 0) {
         //Look for the selected profile by id from saved profiles then load everything from it into state
@@ -41,7 +37,7 @@ function DisplayProfiles( {currentSelectedProfile, setCurrentSelectedProfile, sa
   return (
     <div className="profileList">
         {savedProfiles.map((profile, index)=>(
-
+          //Handle highlighting for current / selected / non-selected profiles
           profile.id ===  currentProfile
           ? <button className="profileListItemCurrent" key={profile.id} id={profile.id}  onClick={handleProfileButton}>{profile.profileName}</button>
           : profile.id === currentSelectedProfile

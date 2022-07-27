@@ -343,7 +343,7 @@ input:checked + .slider:before {
 }
 
 .currentDeckTankListItem-change-selected {
-  border: 3px solid red;
+  border: 3px solid green;
 }
 
 /* The Close Button */

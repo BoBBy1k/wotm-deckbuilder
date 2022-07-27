@@ -3,25 +3,21 @@ import { flushSync } from 'react-dom'
 import ListTanks from '../data/ListTanks.js'
 import ListEquipment from '../data/ListEquipment.js'
 import DisplayTanksEquip from './DisplayTanksEquip.js'
+import SpecialTraits from './DisplayTanks/SpecialTraits.js'
+import StatIcons from './DisplayTanks/StatIcons.js'
+import DisplayAttachedCards from './DisplayTanks/DisplayAttachedCards.js'
+import ChangeTanks from './DisplayTanks/ChangeTanks.js'
+import TankType from './DisplayTanks/TankType.js'
+import DisplayCrewSlots from './DisplayTanks/DisplayCrewSlots.js'
 
 //This component allows the modification of tanks and their attached cards from the main page
-//TODO: Its kinda cluttered maybe it needs more components
-function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCards, setProfileTankCards, currentSelectedTankCard, settingsAvailableDecks, settingsUsedDecks, setSettingsUsedDecks, settingsAvailableDeckCards, setSettingsAvailableDeckCards, settingsUsedDeckCards, setSettingsUsedDeckCards, currentDeckTankListItemHighlight, setTotalPoints, checkAvailableDeckCards }) {
+function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCards, setProfileTankCards, currentSelectedTankCard, settingsAvailableDecks, settingsUsedDecks, setSettingsUsedDecks, settingsAvailableDeckCards, setSettingsAvailableDeckCards, settingsUsedDeckCards, setSettingsUsedDeckCards, currentDeckTankListItemHighlight, setTotalPoints, checkAvailableDeckCards, setCurrentDeckTankListItemHighlight}) {
   //State that holds the current displayed crew cards
   const [currentCrewSlots, setCurrentCrewSlots]=useState([{equipped:""},{equipped:""},{equipped:""},{equipped:""},{equipped:""}]);
   //Initialize tankCrew variable for incase props.display.crew is empty breaking later mapping function
   let tankCrew = display.crew ? display.crew : []
-  //FRAGMENTS CAUSING A UNQIUE KEY ERROR! TODO: Figure out how to make it more elegant
-  let keyCounter = 0;
-  function fixKey() {
-    keyCounter++;
-    return keyCounter;
-  }
 
   //Function that sets up the crew slots UI box
-   //BUG HERE SOMEWHERE with slot IDs
-   //Crashes when all slots are filled?
-   //State Doesnt update fast enough maybe needs a settimeout or flushsync
   const checkCrewSlots = (newDisplay=null, id = -1) => {
     //Variable holding the current working crew slots to update the state with
     let newCurrentCrewSlots = []
@@ -63,39 +59,6 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
     }
   }
 
-  //Crew Display
-  //Note: Added a weird undefined check to fix bug with M3 Lee's extra crew memember not updating fast enough and breaking the UI
-  const displayCrewSlots = () => {
-    return (
-      <div className="crewSlots">
-        {tankCrew.map( (crew, index)=>
-          {
-            if (crew.includes("/")){
-              let addBreak = crew.split("")
-              addBreak[crew.indexOf("/")]="\n"
-              addBreak = addBreak.join("")
-              return (
-                <span className="crewSlotsItem" key={index}>
-                  <button className="crewSlot" onClick={()=>alert("Upcoming Feature:\nPlease use the 'CHANGE EQUIPPED CARDS' to modify crew cards")}>{addBreak}</button>
-                  <div style={ {fontSize: 15, color: "black", overflowWrap: "break-word"} }>{currentCrewSlots[index]["equipped"]}</div>
-                </span>
-              )
-            }
-            else {
-              return (
-              <span className="crewSlotsItem" key={index}>
-                <button className="crewSlot" onClick={()=>alert("Upcoming Feature:\nPlease use the 'CHANGE EQUIPPED CARDS' to modify crew cards")}>{crew}</button>
-                <div style={ {fontSize: 15, color: "black", overflowWrap: "break-word"} }>{currentCrewSlots[index] === undefined ? checkCrewSlots(): currentCrewSlots[index]["equipped"]}</div>
-              </span>
-              )
-            }
-          }
-        )}
-      </div>
-    )
-  }
-
-
   //Wipe equipped cards from current tank
   const wipeUsedCards = () => {
     let wipeUsedCards=settingsUsedDeckCards;
@@ -114,7 +77,7 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
         }
       }
     }
-    setSettingsUsedDeckCards(wipeUsedCards)
+    flushSync(()=>{setSettingsUsedDeckCards(wipeUsedCards)})
   }
 
   //Event handler that opens a modification modal when a tank card is clicked
@@ -201,93 +164,26 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
             <div>{display.name}</div>
             <div>{display.cost +" Points"}</div>
             <span>{display.nation + " "}</span>
-            <span>{display.type}</span>
+            <TankType display={display}/>
             <span>{" Wave: " + display.wave}</span>
-            <div></div>
-            <span className="statHoverInfo">
-              <img width="30" height="30" src={require('../icons/firepower.jpg')} alt="Firepower" />
-              <span className="statHoverInfoText">Firepower</span>
-              <span>{": " + display.firepower + " "}</span>
-            </span>
-            <span className="statHoverInfo">
-              <img width="30" height="30" src={require('../icons/survivability.jpg')} alt="Survivability"/>
-              <span className="statHoverInfoText">Survivability</span>
-              <span>{": " + display.survivability + " "}</span>
-            </span>
-            <span className="statHoverInfo">
-              <img width="30" height="30" src={require('../icons/mobility.jpg')} alt="Mobility" />
-              <span className="statHoverInfoText">Mobility</span>
-              <span>{": " + display.mobility + " "}</span>
-            </span>
-            <span className="statHoverInfo">
-              <img width="30" height="30" src={require('../icons/initiative.jpg')} alt="Initiative" />
-              <span className="statHoverInfoText">Initiative</span>
-              <span>{": " + display.initiative + " "}</span>
-            </span>
-            <div></div>
+            <StatIcons display={display}/>
             <span>{"HP: " + display.hp}</span>
-            {/* <span>{" / " + display.criticalHP}</span> */}
-            <div>{"Special Traits: " + display.special}</div>
-            {/* TODO: Componentize */}
-            {/* Changes current Tank's Crew Cards */}
+            <SpecialTraits display={display}/>
             <div>Crew Slots</div>
-            {/* {TODO: Tank crew functionality} */}
-            {/* <div>{tankCrew.map( (crew, index)=> {return <button key={index}>{crew}</button>})}</div> */}
-            <div>{displayCrewSlots()}</div>
-            {/* Modal that Changes the Current Tank's attached Cards */}
+            <DisplayCrewSlots tankCrew={tankCrew} currentCrewSlots={currentCrewSlots} checkCrewSlots={checkCrewSlots} />
             <DisplayTanksEquip settingsAvailableDecks={settingsAvailableDecks} settingsAvailableDeckCards={settingsAvailableDeckCards} setSettingsAvailableDeckCards={setSettingsAvailableDeckCards} settingsUsedDeckCards={settingsUsedDeckCards} setSettingsUsedDeckCards={setSettingsUsedDeckCards} currentSelectedTankCard={currentSelectedTankCard} handleTankModal={handleTankModal} setTotalPoints={setTotalPoints} display={display} currentCrewSlots={currentCrewSlots} setCurrentCrewSlots={setCurrentCrewSlots}/>
-            {/* Display attached Cards*/}
-            <div className="DisplayTanksEquipCardList">
-            {Object.entries(settingsUsedDeckCards).map( ( item )=>{
-              if (item[1]["attached"]["length"] > 0) {
-                return (item[1]["attached"].map( (equip, index) => {
-                  if(equip["id"] === currentSelectedTankCard.id) {
-                    return (<div key={index} className="DisplayTanksEquipCardListItem">{item[0]}</div>)
-                  }
-                }))
-                }
-            })}
-            </div>
-            {/* Changes Current Selected Tank */}
-            {/* TODO: Componentize */}
+            <DisplayAttachedCards settingsUsedDeckCards={settingsUsedDeckCards} currentSelectedTankCard={currentSelectedTankCard}/>
             <div>Change Tanks</div>
-            {ListTanks.map((tank, index, array)=>{
-              //Create new line if array[index] is larger than array[index-1] but not if array[index] === 0
-              if (currentSelectedTankCard.name === tank.name) {
-                if(index === 0) {
-                  return <React.Fragment key={fixKey()}><button className="currentDeckTankListItem-change-selected" key={fixKey()} onClick={(e)=>{handleTankChange(e,tank.name)}}>{tank.name}</button><div key={fixKey()}>{""}</div></React.Fragment>
-                }
-                if (array[index].wave > array[index-1].wave) {
-                  return <React.Fragment key={fixKey()}><div key={fixKey()}>{""}</div><button className="currentDeckTankListItem-change-selected" key={fixKey()} onClick={(e)=>{handleTankChange(e,tank.name)}}>{tank.name}</button></React.Fragment>
-                }
-                else {
-                  return <button className="currentDeckTankListItem-change-selected" key={fixKey()} onClick={(e)=>{handleTankChange(e,tank.name)}}>{tank.name}</button>
-                }
-              }
-              else {
-                if(index === 0) {
-                  return <React.Fragment key={fixKey()}><button className="currentDeckTankListItem-change" key={fixKey()} onClick={(e)=>{handleTankChange(e,tank.name)}}>{tank.name}</button><div key={fixKey()}>{""}</div></React.Fragment>
-                }
-                if (array[index].wave > array[index-1].wave) {
-                  return <React.Fragment key={fixKey()}><div key={fixKey()}>{""}</div><button className="currentDeckTankListItem-change" key={fixKey()} onClick={(e)=>{handleTankChange(e,tank.name)}}>{tank.name}</button></React.Fragment>
-                }
-                else {
-                  return <button className="currentDeckTankListItem-change" key={fixKey()} onClick={(e)=>{handleTankChange(e,tank.name)}}>{tank.name}</button>
-                }
-              }
-            })
-            }
+            <ChangeTanks handleTankChange={handleTankChange} currentSelectedTankCard={currentSelectedTankCard}/>
           </div>
         </div>
-        {/* Display buttons for all possible tanks choices */}
         {/* TODO: Already organized by wave but create a label */}
-          {/* TODO: Change active highlight to different color so red can be used for over-capacity selections */}
         {tankCards.map((tank, index)=>{
               if (tank === "") {
-                return <span className={currentDeckTankListItemHighlight === index ? "currentDeckTankListItemHighlight" : "currentDeckTankListItem"} onClick={(e)=>{handleTankClick(e, index, currentSelectedTankCard.name)}} key={fixKey()}></span>
+                return <span className={currentDeckTankListItemHighlight === index ? "currentDeckTankListItemHighlight" : "currentDeckTankListItem"} onClick={(e)=>{handleTankClick(e, index, currentSelectedTankCard.name)}} key={index}></span>
               }
               else {
-                return <span className={currentDeckTankListItemHighlight === index ? "currentDeckTankListItemHighlight" : "currentDeckTankListItem"} onClick={(e)=>{handleTankClick(e, index, currentSelectedTankCard.name)}} key={fixKey()}>{tank}</span>
+                return <span className={currentDeckTankListItemHighlight === index ? "currentDeckTankListItemHighlight" : "currentDeckTankListItem"} onClick={(e)=>{handleTankClick(e, index, currentSelectedTankCard.name)}} key={index}>{tank}</span>
               }
             })
             }

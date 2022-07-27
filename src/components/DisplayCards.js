@@ -19,7 +19,7 @@ function DisplayCards( { settingsAvailableDeckCards, settingsUsedDeckCards, setC
               onMouseEnter={() => { setCurrentDeckTankListItemHighlight(equip.id) }}
               onMouseLeave={() => { setCurrentDeckTankListItemHighlight("") } }>
               {
-                // Highlight tank the card is attached to
+                //Display tooltip for card info
                 <div className="cardHoverInfo">
                   <span className="cardHoverInfoText">
                     <div>{"Attached to: " + equip.name }</div>

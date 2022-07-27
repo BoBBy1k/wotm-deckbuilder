@@ -4,7 +4,6 @@ import DefaultProfiles from '../data/DefaultProfiles.js'
 import { debugModeContext } from '../contexts/debugModeContext.js'
 
 //TODO: Adding a deck currently wipes currently attached equipment to prevent errors. Fix this later.
-//TODO: Needs to sync faster.
 //This component allows the addition of expansion packs for availablity calculation and also toggles misc settings
 function DisplaySettings ( {settingsAvailableDecks, setSettingsAvailableDecks, checkAvailableDeckCards}) {
   //State that holds the current settings cog icon (toggles when hovered)
@@ -68,7 +67,7 @@ function DisplaySettings ( {settingsAvailableDecks, setSettingsAvailableDecks, c
   }
 
   //Adds to the total cards available
-  //TODO: Bug when adding exp decks. It removes all attached cards. Probably replaces the array.
+  //TODO: Bug when adding exp decks. It removes all attached cards. Probably because it replaces the array.
   const handleArrowPlus = (e) => {
     //Grab the name displayed on the UI for which target tank to access
     let target=e.target.parentElement.parentElement.attributes.pack.nodeValue;
@@ -121,7 +120,6 @@ function DisplaySettings ( {settingsAvailableDecks, setSettingsAvailableDecks, c
                     return (
                       <div className="flex-container" key={index} pack={pack}>
                         {/* //TODO: onhover tooltip to display equipment contents of pack */}
-                        {/* //TODO: onhover tooltip to displays basic information the of pack */}
                         {pack === "Starter"
                           ? <div className="starterHoverInfo">{ pack + " "}
                               <span className="starterHoverInfoText">PZ KPFW IV AUSF H, T-34, M4A1 Sherman, Cromwell</span>
@@ -146,7 +144,6 @@ function DisplaySettings ( {settingsAvailableDecks, setSettingsAvailableDecks, c
                 }
               )
             }
-            {/* TODO: Add Misc settings here  */}
             <h3 style={ { borderTop: "1px solid white", marginTop: 10 } }>Misc Settings</h3>
             <span>Debug Mode (Disable Local Storage) </span>
             <label className="switch">

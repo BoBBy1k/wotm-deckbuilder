@@ -8,21 +8,24 @@ function DisplayPoints({ profileTankCards, settingsUsedDeckCards }) {
   let totalPoints=0;
   let maxPoints=200;
   let warning={color: "white"}
-  //Function that will be used in the UI to pass through a points integer while also adding the value to the total points
+
+  //Function that will be used during the mapping of the UI to display a points integer while also adding it to the total
   const handlePoints = ( input ) => {
     totalPoints += input
+    //If the total points exceeds the maximum display a warning color
     totalPoints > maxPoints ? warning={color: "red"}: warning={color: "white"}
     return input
   }
 
-  //The array of the origins of point usage that the tooltip will display
+  //The origins of point usage that the tooltip will display
   let displayPointSource=[];
-  //Search through the used tanks cards and add them to the array
+  //Search through the used tanks cards and add them to the origins array
   profileTankCards.forEach((item, index)=>{
     if (item !== "-") {
       displayPointSource.push({id:index, name: item, attached: []})
     }
   })
+
   //Search through the used equipment cards and add them to the array at the slot id that it contains
   Object.entries(settingsUsedDeckCards).forEach((item)=>{
     //This is the current equipment
@@ -42,6 +45,7 @@ function DisplayPoints({ profileTankCards, settingsUsedDeckCards }) {
       }
     }
   })
+
   //Prep the render from the array
   const listCards = displayPointSource.map((item,index) =>
     <div key={index}>
@@ -55,13 +59,12 @@ function DisplayPoints({ profileTankCards, settingsUsedDeckCards }) {
       )}
     </div>
   )
-
+  //If the total points exceeds the maximum display a warning message
   return (
     <div className="totalPoints">
       {
         <div className="pointHoverInfo" style={warning}>
           {totalPoints === 1 ? totalPoints + " Point" : totalPoints + " Points"}
-          {/* {totalPoints === 1 ? totalPoints + " Point" : totalPoints + " Points"} */}
             <span className="pointHoverInfoText">
               {totalPoints > maxPoints ? "Exceeded Limit: " + maxPoints:null}
               {listCards}

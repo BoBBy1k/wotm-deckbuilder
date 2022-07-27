@@ -1,6 +1,7 @@
 //TODO: Tank with Module (Challenger with Advenger Turret) Edge case - Figure this out later
 //TODO: Finish Unqiue crews and their exclusions
-//TODO:Double Check list. Error was found
+//TODO: Double Check list. Error was found
+//TODO: Double check if the starter deck's actual contents to see if it has duplicate cards
 
 const ListEquipment = [
 {wave: 0, source: "",                        name: "",                            requirement: "",                                                        type1: "",            type2:"",           unique:false, cost: 0, callback: null,                                                                                                                                                                                                    exclude:[],                                              tags:[],                                         effect:""},
