@@ -217,7 +217,7 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
 
   //Function that generates the equipment UI display
   function equipmentPrepMap (array, compatable){
-    //Check through the provided sorted priority array
+    //Check through the provided array
     return (array.map( (item, index) => {
       //Check if we are exceeding the maximum available cards of this type
       let checkCount = settingsUsedDeckCards[item["name"]].count > item["count"] ? {color: 'red'}: {color: 'white'}
