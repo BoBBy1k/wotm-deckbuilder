@@ -49,7 +49,6 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
               let targetCrewSlotID =  usedDeckCards[1]["crewSlotId"]
               //Set card
               newCurrentCrewSlots[targetCrewSlotID]["equipped"]=usedDeckCards[0]
-              console.log(newCurrentCrewSlots)
             }
           })
         }

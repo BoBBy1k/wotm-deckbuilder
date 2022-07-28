@@ -7,7 +7,7 @@ function CRUDButtons( { currentSelectedProfile, setCurrentSelectedProfile, curre
 
   //This function clears equipment cards for profiles
   const resetCards = () => {
-    //Deep Cloning of settingsUsedDeckCards since it contains nested objects. Maybe convert to structuredClone() when compatable.
+    //Deep Cloning of settingsUsedDeckCards since it contains nested objects. Maybe convert to structuredClone() when compatible.
     let resetCards = JSON.parse(JSON.stringify(settingsUsedDeckCards));
     //Search the settingsUsedDeckCards state
     for (let key in resetCards) {

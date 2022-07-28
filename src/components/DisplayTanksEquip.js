@@ -110,6 +110,7 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
   // TODO: Limit 1 (Gun Turret Engines Suspension Radio)
 
   //Handler for adding cards
+  //TODO: Add exclusion checker for unique crew vs crew skills
   function handleEquipPlus(e){
     let target=e.target.parentElement.parentElement.attributes[1].nodeValue;
     let value=settingsUsedDeckCards[target].count;
@@ -166,6 +167,7 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
     else {
       //Needs to limit to current thing
       //Search through all of the deck cards
+      //TODO: dont update state in the loop. Make a temp variable and update after the loop
       for (let item in settingsUsedDeckCards) {
         //Find the card matching the target(item that was clicked)
         if (item === target) {
@@ -204,19 +206,23 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
     // console.log(settingsUsedDeckCards)
   }
 
-  //1st Priority: If from the same exp source (TODO: If the equipment's requirement includes this tank)
+  //1st Priority: If from the same exp source
   let eqRecommended=[]
-  //2nd Priority: Has a matching tag (Run checks on High / Low stat thresholds)
-  let eqTag=[]
-  //3rd Priority: Everything else that is compatable
+  //2nd Priority: If the equipment specifically lists target tank as a requirement
+  let eqRequirement=[]
+  //3rd Priority: Buffs strengths (Run checks on High stat thresholds)
+  let eqStrong=[]
+  //4th Priority: Covers weaknesses (Run checks on Low stat thresholds)
+  let eqWeak=[]
+  //5th Priority: Everything else that is compatible
   let eqNormal=[]
-  //4th Priority: If the equipment is not compatable (Failed requirement, muturally exclusive with other equipment)
-  let eqNotCompatable=[]
-  //TODO: 5th Priority: If the equipment is not available to be picked at all (From unselected expansions)
+  //6th Priority: If the equipment is not compatible (Failed requirement, muturally exclusive with other equipment)
+  let eqNotCompatible=[]
+  //TODO: 7th Priority: If the equipment is not available to be picked at all (From unselected expansions)
   let eqNotAvailable=[]
 
   //Function that generates the equipment UI display
-  function equipmentPrepMap (array, compatable){
+  function equipmentPrepMap (array, compatible){
     //Check through the provided array
     return (array.map( (item, index) => {
       //Check if we are exceeding the maximum available cards of this type
@@ -241,9 +247,9 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
             </div>
           }
           <div className="">
-          {compatable ? <i className="bi bi-arrow-left-square" onClick={handleEquipMinus}></i> : null}
+          {compatible ? <i className="bi bi-arrow-left-square" onClick={handleEquipMinus}></i> : null}
           <span style={checkCount}>{" " + settingsUsedDeckCards[item["name"]].count}</span> {" / " + item["count"] + " "}
-          {compatable ? <i className="bi bi-arrow-right-square" onClick={handleEquipPlus}></i> : null}
+          {compatible ? <i className="bi bi-arrow-right-square" onClick={handleEquipPlus}></i> : null}
           </div>
         </div>
       )
@@ -257,9 +263,11 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
       return(
         <div>
           <div className={"equipSort"}>{"Recommended by Source"}{equipmentPrepMap(eqRecommended,true)}</div>
-          <div className={"equipSort"}>{"Recommended by Tag"}{equipmentPrepMap(eqTag,true)}</div>
-          <div className={"equipSort"}>{"Compatable"}{equipmentPrepMap(eqNormal,true)}</div>
-          <div className={"equipSort"}>{"Not Compatable"}{equipmentPrepMap(eqNotCompatable,false)}</div>
+          <div className={"equipSort"}>{"Recommended by Requirement"}{equipmentPrepMap(eqRequirement,true)}</div>
+          <div className={"equipSort"}>{"Recommended by Strength"}{equipmentPrepMap(eqStrong,true)}</div>
+          <div className={"equipSort"}>{"Recommended by Weakness"}{equipmentPrepMap(eqWeak,true)}</div>
+          <div className={"equipSort"}>{"Compatible"}{equipmentPrepMap(eqNormal,true)}</div>
+          <div className={"equipSort"}>{"Not Compatible"}{equipmentPrepMap(eqNotCompatible,false)}</div>
           <div className={"equipSort"}>{"Not Available"}{equipmentPrepMap(eqNotAvailable, false)}</div>
         </div>
       )
@@ -267,49 +275,61 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
     else {return (<div>No Selected Tank!</div>)}
   }
 
+  //This function checks the strenths of a tank to determine if the current equipment would help it
+  function handleStrong(current, equip){
+    if (equip["tags"].includes("Firepower")     && current.firepower >=6)      {return true}
+    if (equip["tags"].includes("Survivability") && current.survivability >=3)  {return true}
+    if (equip["tags"].includes("Mobility")      && current.mobility >=3 )      {return true}
+    if (equip["tags"].includes("Initiative")    && current.initiative >=7)     {return true}
+    if (equip["tags"].includes("Repair")        && current.hp >=7)             {return true}
+    else{ return false }
+  }
+  //This function checks the weaknesses of a tank to determine if the current equipment would help it
+  function handleWeak(current, equip){
+    if (equip["tags"].includes("Firepower")     && current.firepower <=3)      {return true}
+    if (equip["tags"].includes("Survivability") && current.survivability <=0)  {return true}
+    if (equip["tags"].includes("Mobility")      && current.mobility <=1 )      {return true}
+    if (equip["tags"].includes("Initiative")    && current.initiative <=4)     {return true}
+    if (equip["tags"].includes("Repair")        && current.hp <=4 )            {return true}
+    else{ return false }
+  }
+
+
   //Function that sorts equipment into priority tiers
   function handleEquipmentSort(){
     //Iterate through settingsAvailableDeckCards (state that contains all decks)
     Object.entries(settingsAvailableDeckCards).map( ([item,count], index) =>
       {
+        //Find one equipment sets that matches the current target
         let currentEquip = ListEquipment.find(equip => equip.name === item)
         //Find all equipment sets that matches the current target
         let allEquip = ListEquipment.filter(equip=> equip.name === item)
-        console.log(currentSelectedTankCard["name"])
-        // // TODO: 5th Priority - card not available
+        // // TODO: 7th Priority - card not available
         // // else if (count === 0) {
         // //   eqNotAvailable.push({ item: count })
-        //If there's a requirement callback and the current equipment/tank pair fails the compatibility test
+        //6th: If there's a requirement callback and the current equipment/tank pair fails the compatibility test
         if (currentEquip["callback"] !== null && !currentEquip["callback"](display)) {
-          eqNotCompatable.push({ name: item, count : count })
-          // console.log(currentEquip["name"] + " - Not Compatable!")
-          // console.log(currentSelectedTankCard)
+          eqNotCompatible.push({ name: item, count : count })
         }
-        //If the current card is muturally exclusive with a currently equiped card)
-        // else if () {
-
-        // }
-        //If current equipment card comes from the same source as the current selected tank (excluding starter)
-        //TODO: add tag support
+        //1st: If an equipment card comes from the same source as the current tank (excluding starter)
         else if (allEquip.some((item)=> item["source"] === currentSelectedTankCard["name"] )){
-          //TODO: If the current card is mutually exclusive with a currently equiped card)
-          //Get current tank slot ID and search all cards equipped to it.
-          //Check if any of those cards are listed in the current equipments exclude array
-          // if (currentEquip["exclude"]) {
-          //   eqRecommendedExclude.push({ item: count, exclude: true })
-          // }
           eqRecommended.push({ name: item, count : count })
         }
-        //TODO: Finish tag functionality
-        else if (false) {
-          eqTag.push({ name: item, count : count })
+        //2nd: If an equipment's requirement includes this tank
+        else if (currentEquip["callback"] && currentEquip["callback"].toString().includes("name")){
+          eqRequirement.push({ name: item, count : count })
         }
+        //3rd: Buffs strengths (Run checks on High stat thresholds)
+        else if (handleStrong(display, currentEquip)) {
+          eqStrong.push({ name: item, count : count })
+        }
+        //4th: Covers weaknesses (Run checks on Low stat thresholds)
+        else if (handleWeak(display, currentEquip)) {
+          eqWeak.push({ name: item, count : count })
+        }
+        //5th: Everything else compatible
         else {
-          //TODO: Copy exclusion check here
           eqNormal.push({ name: item, count : count })
-          // console.log("Normal!")
-          // console.log(currentEquip)
-          // console.log(currentSelectedTankCard)
         }
       }
     )
