@@ -273,6 +273,9 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
     Object.entries(settingsAvailableDeckCards).map( ([item,count], index) =>
       {
         let currentEquip = ListEquipment.find(equip => equip.name === item)
+        //Find all equipment sets that matches the current target
+        let allEquip = ListEquipment.filter(equip=> equip.name === item)
+        console.log(currentSelectedTankCard["name"])
         // // TODO: 5th Priority - card not available
         // // else if (count === 0) {
         // //   eqNotAvailable.push({ item: count })
@@ -288,7 +291,7 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
         // }
         //If current equipment card comes from the same source as the current selected tank (excluding starter)
         //TODO: add tag support
-        else if (currentEquip["source"] === currentSelectedTankCard["name"]){
+        else if (allEquip.some((item)=> item["source"] === currentSelectedTankCard["name"] )){
           //TODO: If the current card is mutually exclusive with a currently equiped card)
           //Get current tank slot ID and search all cards equipped to it.
           //Check if any of those cards are listed in the current equipments exclude array
