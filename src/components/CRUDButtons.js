@@ -120,7 +120,9 @@ function CRUDButtons( { currentSelectedProfile, setCurrentSelectedProfile, curre
     setSavedProfiles([...savedProfiles, {profileName:"New Profile", id: usedProfileId, tankCards: ["-","-","-","-","-","-","-","-"], usedTankCards:newTanks, description: "Description", deckCards: newCards }]);
     setCurrentProfile(usedProfileId)
     setCurrentSelectedProfile(usedProfileId)
-    console.log("Saving " + profileName + " to profile: " + usedProfileId)
+    resetCards();
+    wipeUsedTanks();
+    console.log("New Profile: " + usedProfileId)
     setUsedProfileId(usedProfileId+1);
   }
   //Function that deletes currently selected profile sets everything back to default

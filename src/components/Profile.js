@@ -71,6 +71,7 @@ function Profile() {
   }
 
   //Mobile device checker
+  //TODO: Doesn't work
   const isTouchScreenDevice = () => {
     if ("maxTouchPoints" in navigator && navigator.maxTouchPoints > 0) {
       alert("Mobile Device Warning: Some functionality such as description tooltips aren't compatible with mobile devices!")
