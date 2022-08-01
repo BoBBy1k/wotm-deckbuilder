@@ -262,13 +262,55 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
     if (currentSelectedTankCard["name"] !== "" && currentSelectedTankCard["name"] !== "-") {
       return(
         <div>
-          <div className={"equipSort"}>{"Recommended by Source"}{equipmentPrepMap(eqRecommended,true)}</div>
-          <div className={"equipSort"}>{"Recommended by Requirement"}{equipmentPrepMap(eqRequirement,true)}</div>
-          <div className={"equipSort"}>{"Recommended by Strength"}{equipmentPrepMap(eqStrong,true)}</div>
-          <div className={"equipSort"}>{"Recommended by Weakness"}{equipmentPrepMap(eqWeak,true)}</div>
-          <div className={"equipSort"}>{"Compatible"}{equipmentPrepMap(eqNormal,true)}</div>
-          <div className={"equipSort"}>{"Not Compatible"}{equipmentPrepMap(eqNotCompatible,false)}</div>
-          <div className={"equipSort"}>{"Not Available"}{equipmentPrepMap(eqNotAvailable, false)}</div>
+          <div className="equipSort">
+            <span className="equipSortInfo">
+              {"Recommended by Source"}
+              <span className="equipSortInfoText">These cards that are from the same expansion pack as this tank</span>
+            </span>
+              {equipmentPrepMap(eqRecommended,true)}
+          </div>
+          <div className="equipSort">
+            <span className="equipSortInfo">
+              {"Recommended by Requirement"}
+              <span className="equipSortInfoText">These cards specifically require this tank</span>
+            </span>
+              {equipmentPrepMap(eqRequirement,true)}
+          </div>
+          <div className="equipSort">
+            <span className="equipSortInfo">
+              {"Recommended by Strength"}
+              <span className="equipSortInfoText">These cards buff the strengths of this tank</span>
+            </span>
+              {equipmentPrepMap(eqStrong,true)}
+          </div>
+          <div className="equipSort">
+            <span className="equipSortInfo">
+              {"Recommended by Weakness"}
+              <span className="equipSortInfoText">These cards cover the weaknesses of this tank</span>
+            </span>
+              {equipmentPrepMap(eqWeak,true)}
+          </div>
+          <div className="equipSort">
+            <span className="equipSortInfo">
+              {"Compatible"}
+              <span className="equipSortInfoText">These cards are compatible</span>
+            </span>
+              {equipmentPrepMap(eqNormal,true)}
+          </div>
+          <div className="equipSort">
+            <span className="equipSortInfo">
+              {"Not Compatible"}
+              <span className="equipSortInfoText">These cards are not Compatible with this tank</span>
+            </span>
+              {equipmentPrepMap(eqNotCompatible,false)}
+          </div>
+          <div className="equipSort">
+            <span className="equipSortInfo">
+              {"Not Available"}
+              <span className="equipSortInfoText">Add the corresponding expansion to use these cards</span>
+            </span>
+              {equipmentPrepMap(eqNotAvailable,false)}
+          </div>
         </div>
       )
     }

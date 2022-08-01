@@ -70,13 +70,21 @@ function Profile() {
     setSettingsUsedDeckCards(usedCards)
   }
 
+  //Mobile device checker
+  const isTouchScreenDevice = () => {
+    if ("maxTouchPoints" in navigator && navigator.maxTouchPoints > 0) {
+      alert("Mobile Device Warning: Some functionality such as description tooltips aren't compatible with mobile devices!")
+    } else if ("msMaxTouchPoints" in navigator && navigator.msMaxTouchPoints > 0) {
+      alert("Mobile Device Warning: Some functionality such as description tooltips aren't compatible with mobile devices!")
+    }
+}
+
   //Startup profile loading
   useEffect(()=>{
     console.log("Reading Local Storage")
     let loadProfiles = JSON.parse(localStorage.getItem("savedProfiles"))
     console.log(loadProfiles)
     //Debug mode check
-
     if (!debugMode){
       if (loadProfiles === null || loadProfiles.length === 0){
         if (window.confirm("Local storage is empty! Do you want to load the default profiles?") === true) {
@@ -102,6 +110,7 @@ function Profile() {
       setSettingsUsedDeckCards(loadProfiles[0].deckCards)
       setCurrentSelectedProfile(loadProfiles[0]["id"])
     }
+    isTouchScreenDevice()
   }, [])
 
   return (

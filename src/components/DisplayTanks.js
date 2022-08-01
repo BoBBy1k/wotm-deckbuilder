@@ -164,7 +164,6 @@ function DisplayTanks( { display, setDisplay, setCurrentSelectedTankCard, tankCa
           <TankType display={display}/>
           <span>{" Wave: " + display.wave}</span>
           <StatIcons display={display}/>
-          <span>{"HP: " + display.hp}</span>
           <SpecialTraits display={display}/>
           <div>Crew Slots</div>
           <DisplayCrewSlots tankCrew={tankCrew} currentCrewSlots={currentCrewSlots} checkCrewSlots={checkCrewSlots} />

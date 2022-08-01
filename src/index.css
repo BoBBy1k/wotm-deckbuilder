@@ -564,6 +564,35 @@ input:checked + .slider:before {
   margin-bottom: 5px
 }
 
+.equipSortInfo {
+  position: relative;
+  display: inline-block;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.equipSortInfo .equipSortInfoText {
+  visibility: hidden;
+  height: auto;
+  width: auto;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  top: -320%;
+  left: -0%;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.equipSortInfo:hover .equipSortInfoText {
+  visibility: visible;
+  opacity: 1;
+}
+
 .equipSortItem {
   border: 5px solid black;
   height: 80px;
