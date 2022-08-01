@@ -76,11 +76,14 @@ function Profile() {
     let loadProfiles = JSON.parse(localStorage.getItem("savedProfiles"))
     console.log(loadProfiles)
     //Debug mode check
-    if (!debugMode && loadProfiles.length === 0){
-      if (window.confirm("Local storage is empty! Do you want to load the default profiles?") === true) {
-        console.log("Loading default profiles!")
-        localStorage.setItem("savedProfiles", JSON.stringify(DefaultProfiles))
-        window.location.reload();
+
+    if (!debugMode){
+      if (loadProfiles === null || loadProfiles.length === 0){
+        if (window.confirm("Local storage is empty! Do you want to load the default profiles?") === true) {
+          console.log("Loading default profiles!")
+          localStorage.setItem("savedProfiles", JSON.stringify(DefaultProfiles))
+          window.location.reload();
+        }
       }
     }
     checkAvailableDeckCards()
