@@ -225,9 +225,8 @@ input:checked + .slider:before {
 }
 
 .flex-container {
-  column-count:2;
+  column-count: 2;
   column-gap: 0%;
-  column-width: 50%;
   width: 100%;
 }
 
