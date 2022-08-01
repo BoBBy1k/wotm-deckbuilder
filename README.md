@@ -21,9 +21,9 @@ CRUD operation buttons. (Note Double clicking on saved profiles will also load t
 
 Settings to Delete Local Storage and reset default (Reach it using the Settings Cog on the main page)
 
-![example-settings](https://user-images.githubusercontent.com/43594857/182104502-ea03b3df-6d2e-41d1-a7c0-213b6fff7f47.jpg)
+![example-settings](https://user-images.githubusercontent.com/43594857/182107651-4c3e4a73-894d-4b09-b80f-706cdb0b7404.jpg)
 
-Tank Stats Screen.
+Tank Stats Screen. (Note: You can click outside of any modal to quickly return to the previous screen)
 
 ![example tank](https://user-images.githubusercontent.com/43594857/182103594-79ae3d74-fbf1-437c-8076-66ff3870ea03.jpg)
 
