@@ -1,3 +1,5 @@
+Hosted: https://wot-miniature-game-deckbuilder.herokuapp.com/
+
 Fan-made deck builder for the World of Tanks miniatures tabletop game built using React without any additional libraries.
 https://www.gf9games.com/worldoftanks/113/whatis/
 
@@ -5,7 +7,7 @@ Main goal - Facilitating sharing of a single game set between two players or red
 
 Features - Full CRUD profiles, profile sharing, filtering of available game expansions, fully detailed card stats, deck point usage breakdowns, modeled crew slots, modeled mutual exclusions or special requirements of cards and recommendations based on stats and pre-defined tags.
 
-Project is WIP and in active daily development until all features are complete.
+This Project is at a usable functionality stage. It will continue to recieve weekly updates until completed.
 
 Main Profile Screen:
 
