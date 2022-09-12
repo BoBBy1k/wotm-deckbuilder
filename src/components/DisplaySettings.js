@@ -125,7 +125,8 @@ function DisplaySettings ( {settingsAvailableDecks, setSettingsAvailableDecks, c
                     return (
                       <div className="flex-container" key={index} pack={pack}>
                         {/* //TODO: onhover tooltip to display equipment contents of pack */}
-                        {pack === "Starter"
+                        <div className="">
+                          {pack === "Starter"
                           ? <div className="starterHoverInfo">{ pack + " "}
                               <span className="starterHoverInfoText">PZ KPFW IV AUSF H, T-34, M4A1 Sherman, Cromwell</span>
                             </div>
@@ -137,6 +138,7 @@ function DisplaySettings ( {settingsAvailableDecks, setSettingsAvailableDecks, c
                               </span>
                             </div>
                         }
+                        </div>
                         {/* Buttons to Add/Remove an expansion set */}
                         <div className="">
                           <i className="bi bi-arrow-left-square" onClick={handleArrowMinus}></i>

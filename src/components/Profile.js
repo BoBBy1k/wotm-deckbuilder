@@ -71,7 +71,6 @@ function Profile() {
   }
 
   //Mobile device checker
-  //TODO: Doesn't work
   const isTouchScreenDevice = () => {
     let hasTouchScreen = false;
     if ("maxTouchPoints" in navigator) {
