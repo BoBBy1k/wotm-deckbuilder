@@ -73,12 +73,23 @@ function Profile() {
   //Mobile device checker
   //TODO: Doesn't work
   const isTouchScreenDevice = () => {
-    if ("maxTouchPoints" in navigator && navigator.maxTouchPoints > 0) {
-      alert("Mobile Device Warning: Some functionality such as description tooltips aren't compatible with mobile devices!")
-    } else if ("msMaxTouchPoints" in navigator && navigator.msMaxTouchPoints > 0) {
-      alert("Mobile Device Warning: Some functionality such as description tooltips aren't compatible with mobile devices!")
+    let hasTouchScreen = false;
+    if ("maxTouchPoints" in navigator) {
+        hasTouchScreen = navigator.maxTouchPoints > 0;
+    } else if ("msMaxTouchPoints" in navigator) {
+        hasTouchScreen = navigator['msMaxTouchPoints'] > 0;
+    } else {
+        let mQ = window.matchMedia && matchMedia("(pointer:coarse)");
+        if (mQ && mQ.media === "(pointer:coarse)") {
+            hasTouchScreen = !!mQ.matches;
+        } else if ('orientation' in window) {
+            hasTouchScreen = true; // deprecated, but good fallback
+        }
     }
+    hasTouchScreen ? alert("Mobile Detected") : alert("PC Detected")
 }
+
+
 
   //Startup profile loading
   useEffect(()=>{
@@ -86,8 +97,13 @@ function Profile() {
     let loadProfiles = JSON.parse(localStorage.getItem("savedProfiles"))
     console.log(loadProfiles)
     //Debug mode check
+    if (loadProfiles === null){
+      console.log("Loading default profiles!")
+      localStorage.setItem("savedProfiles", JSON.stringify(DefaultProfiles))
+      window.location.reload();
+    }
     if (!debugMode){
-      if (loadProfiles === null || loadProfiles.length === 0){
+      if (loadProfiles.length === 0){
         if (window.confirm("Local storage is empty! Do you want to load the default profiles?") === true) {
           console.log("Loading default profiles!")
           localStorage.setItem("savedProfiles", JSON.stringify(DefaultProfiles))
