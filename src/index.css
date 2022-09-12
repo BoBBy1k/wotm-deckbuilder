@@ -225,11 +225,20 @@ input:checked + .slider:before {
 }
 
 .flex-container {
-  column-count: 2;
+  /* column-count: 2;
   column-gap: 0%;
-  width: 100%;
+  width: 100%; */
+  display:flex;
+  justify-content: space-evenly;
 }
 
+.flex-item1 {
+    width:100%;
+}
+
+.flex-item2 {
+  width: 60%;
+}
 .cardHoverInfo {
   position: relative;
   display: inline-block;

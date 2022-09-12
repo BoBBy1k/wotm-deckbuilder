@@ -233,6 +233,7 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
       let allEquip = ListEquipment.filter(equip=> equip.name === item["name"])
       return (
         <div className="flex-container" key={index} item={item["name"]}>
+          <div className="flex-item1">
           {
             //Tooltip that displays equipment info
             <div className="equipHoverInfo">{ item["name"] + " "}
@@ -246,7 +247,8 @@ function DisplayTanksEquip ( {settingsAvailableDecks, settingsAvailableDeckCards
               </span>
             </div>
           }
-          <div className="">
+          </div>
+          <div className="flex-item2">
           {compatible ? <i className="bi bi-arrow-left-square" onClick={handleEquipMinus}></i> : null}
           <span style={checkCount}>{" " + settingsUsedDeckCards[item["name"]].count}</span> {" / " + item["count"] + " "}
           {compatible ? <i className="bi bi-arrow-right-square" onClick={handleEquipPlus}></i> : null}
