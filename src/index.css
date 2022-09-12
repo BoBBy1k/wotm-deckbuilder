@@ -81,7 +81,7 @@ code {
   margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 50%;
+  width: 60%;
   color: black;
   z-index: 1;
   background-color: #282c34;
@@ -338,7 +338,7 @@ input:checked + .slider:before {
   margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 50%;
+  width: 60%;
   background-color: #282c34;
   border-radius: 10px;
   color: white
@@ -465,7 +465,7 @@ input:checked + .slider:before {
   margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 50%;
+  width: 60%;
   z-index: 1;
   background-color: #282c34;
   border-radius: 10px;
@@ -720,16 +720,22 @@ input:checked + .slider:before {
 .profileListItem {
   border: 4px solid black;
   border-radius: 10px;
+  color: black;
+  background-color: white
 }
 
 .profileListItemSelected {
   border: 4px solid red;
   border-radius: 10px;
+  color: black;
+  background-color: white
 }
 
 .profileListItemCurrent {
   border: 4px solid green;
   border-radius: 10px;
+  color: black;
+  background-color: white
 }
 
 .profile-button-group button {
