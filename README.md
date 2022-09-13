@@ -30,7 +30,7 @@ Tank Stats Screen. (Note: You can click outside of any modal to quickly return t
 ![example tank](https://user-images.githubusercontent.com/43594857/182103594-79ae3d74-fbf1-437c-8076-66ff3870ea03.jpg)
 
 Tank Equipment screen.
-Notes: Hover over the equipment to see its description (Only on desktop. TODO: Mobile tap functionality)
+Notes: Hover over the equipment to see its description
 1. This screen keeps track of every aspect of card limits (Tank, Nation, Crew Slot, Unique Limit, Tank Stats requirements, etc.)
 2. Keeps track of which tank each card is attached to. Allowing you to freely add and remove cards without issue.
 3. Keeps track of how many available cards you have depending on the configured expansion set ownership in the settings.
