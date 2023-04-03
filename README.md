@@ -1,5 +1,4 @@
 Hosted: https://wot-miniature-game-deckbuilder.herokuapp.com/
-Note: Not currently available due to Heroku ending it's free tier
 
 Fan-made deck builder for the World of Tanks miniatures tabletop game built using React.
 https://www.gf9games.com/worldoftanks/113/whatis/
